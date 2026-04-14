@@ -6,11 +6,11 @@
 <link rel="index" title="색인" href="../../../genindex.html"><link rel="search" title="검색" href="../../../search.html"><link rel="next" title="uCA v002 아키텍처" href="../../v002/index.html"><link rel="prev" title="아카이브" href="../index.html">
 
     <!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
-        <title>아카이브: v001 실험적 아키텍처 - uCA 문서</title>
+        <title>아카이브: v001 실험적 아키텍처 - pccx 문서</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=acfd86a5" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?v=8dab3a3b" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/language-switcher.css?v=9e1e8780" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/language-switcher.css?v=089c0429" />
     
     
 
@@ -162,7 +162,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">uCA 문서</div></a>
+      <a href="../../../index.html"><div class="brand">pccx 문서</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -183,7 +183,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
   
-  <span class="sidebar-brand-text">uCA 문서</span>
+  <span class="sidebar-brand-text">pccx 문서</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder="검색" name="q" aria-label="검색">
@@ -193,9 +193,9 @@
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <p class="caption" role="heading"><span class="caption-text">목차</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../../index.html">uCA: 마이크로 컴퓨트 아키텍처</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">pccx: 병렬 컴퓨트 코어 익스큐터</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../Devices/index.html">지원 디바이스</a><input aria-label="Toggle navigation of 지원 디바이스" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../Devices/kv260.html">uCA: 마이크로 컴퓨트 아키텍처</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Devices/kv260.html">pccx: 병렬 컴퓨트 코어 익스큐터</a></li>
 </ul>
 </li>
 <li class="toctree-l1 current has-children"><a class="reference internal" href="../index.html">아카이브</a><input aria-label="Toggle navigation of 아카이브" checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
@@ -203,9 +203,9 @@
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../v002/index.html">uCA v002 아키텍처</a><input aria-label="Toggle navigation of uCA v002 아키텍처" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../v002/v002_isa.html">uCA: 마이크로 컴퓨트 아키텍처</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../v002/Architecture/v002_architecture.html">uCA: 마이크로 컴퓨트 아키텍처</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../v002/Drivers/v002_driver.html">uCA: 마이크로 컴퓨트 아키텍처</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v002/v002_isa.html">pccx: 병렬 컴퓨트 코어 익스큐터</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v002/Architecture/v002_architecture.html">pccx: 병렬 컴퓨트 코어 익스큐터</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../v002/Drivers/v002_driver.html">pccx: 병렬 컴퓨트 코어 익스큐터</a></li>
 </ul>
 </li>
 </ul>
@@ -259,7 +259,7 @@ GEMV(벡터) 연산에 의해 제한되므로, 이 브랜치는 최적화된 구
 <hr class="docutils" />
 <section id="id1">
 <h2>프로젝트 개요<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h2>
-<p><strong>uXC</strong> 는 베어메탈 Xilinx Kria KV260 FPGA(400 MHz)에서 양자화된
+<p><strong>pccx</strong> 는 베어메탈 Xilinx Kria KV260 FPGA(400 MHz)에서 양자화된
 <strong>Gemma 3N E4B</strong> 대규모 언어 모델을 가속하기 위해 처음부터 맞춤 설계된
 SystemVerilog 기반 신경망 처리 장치(NPU)입니다. 이 아키텍처는 KV260 플랫폼의
 1,248개 DSP48E2 슬라이스와 144개 BRAM을 기능적 한계까지 활용하도록 세밀하게 설계되었습니다.</p>
@@ -435,6 +435,6 @@ SystemVerilog 기반 신경망 처리 장치(NPU)입니다. 이 아키텍처는 
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/scripts/furo.js?v=46bd48cc"></script>
     <script src="../../../_static/translations.js?v=afa94a99"></script>
-    <script src="../../../_static/language-switcher.js?v=ca7cce85"></script>
+    <script src="../../../_static/language-switcher.js?v=41d9910c"></script>
     </body>
 </html>
