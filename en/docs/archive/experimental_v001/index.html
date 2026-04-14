@@ -329,7 +329,7 @@
 <li class="toctree-l2"><a class="reference internal" href="Architecture/v001_architecture.html">pccx: Parallel Compute Core eXecutor</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Drivers/ISA.html">pccx ISA Specification</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Drivers/ISA_Spreadsheet.html">pccx ISA Spreadsheet View</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Drivers/v001_API.html">Developer Reference for uCA v001 Host API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Drivers/v001_API.html">Developer Reference for pccx v001 Host API</a></li>
 </ul>
 </details></li>
 </ul>
@@ -408,7 +408,7 @@ structure.</p>
 <hr class="docutils" />
 <section id="project-overview">
 <h2>Project Overview<a class="headerlink" href="#project-overview" title="Link to this heading">#</a></h2>
-<p><strong>uXC</strong> is a customized SystemVerilog-based Neural Processing Unit (NPU)
+<p><strong>pccx</strong> (formerly uXC) is a customized SystemVerilog-based Neural Processing Unit (NPU)
 engineered fundamentally from the ground up to accelerate the quantized
 <strong>Gemma 3N E4B</strong> Large Language Model on the bare-metal Xilinx Kria
 KV260 FPGA (400 MHz). The architecture is meticulously designed to push
@@ -441,8 +441,8 @@ mappings, and pipeline scheduling methodologies.</p>
 modular ISA structure.</p>
 </li>
 <li><p><a class="reference external" href="Drivers/v001_API.md">C API Detail</a></p>
-<p>Focuses on the primary wrapping interfaces of <code class="docutils literal notranslate"><span class="pre">uCA_v1_api.c</span></code> and
-<code class="docutils literal notranslate"><span class="pre">uCA_v1_api.h</span></code> targeting the active NPU host controller.</p>
+<p>Focuses on the primary wrapping interfaces of <code class="docutils literal notranslate"><span class="pre">pccx_v1_api.c</span></code> and
+<code class="docutils literal notranslate"><span class="pre">pccx_v1_api.h</span></code> targeting the active NPU host controller.</p>
 </li>
 <li><p><a class="reference external" href="agents.md">Agents Architecture</a></p>
 <p>Concept logic on the autonomous agent micro-scheduling model
@@ -539,8 +539,7 @@ Input</p></th>
 <th class="head"><p>Activation
 Fetch</p></th>
 <th class="head"><p>Ac
-cumulator
-Unit</p></th>
+cumulator</p></th>
 </tr>
 </thead>
 <tbody>

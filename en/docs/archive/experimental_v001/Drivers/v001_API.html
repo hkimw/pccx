@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Developer Reference for uCA v001 Host API &#8212; pccx Documentation</title>
+    <title>Developer Reference for pccx v001 Host API &#8212; pccx Documentation</title>
   
   
   
@@ -329,7 +329,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../Architecture/v001_architecture.html">pccx: Parallel Compute Core eXecutor</a></li>
 <li class="toctree-l2"><a class="reference internal" href="ISA.html">pccx ISA Specification</a></li>
 <li class="toctree-l2"><a class="reference internal" href="ISA_Spreadsheet.html">pccx ISA Spreadsheet View</a></li>
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">Developer Reference for uCA v001 Host API</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Developer Reference for pccx v001 Host API</a></li>
 </ul>
 </details></li>
 </ul>
@@ -378,7 +378,7 @@
     
     <li class="breadcrumb-item"><a href="../index.html" class="nav-link">Archive: v001 Experimental Architecture</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Developer Reference for uCA v001 Host API</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Developer Reference for pccx v001 Host API</span></li>
   </ul>
 </nav>
 </div>
@@ -395,8 +395,8 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="developer-reference-for-uca-v001-host-api">
-<h1>Developer Reference for uCA v001 Host API<a class="headerlink" href="#developer-reference-for-uca-v001-host-api" title="Link to this heading">#</a></h1>
+  <section id="developer-reference-for-pccx-v001-host-api">
+<h1>Developer Reference for pccx v001 Host API<a class="headerlink" href="#developer-reference-for-pccx-v001-host-api" title="Link to this heading">#</a></h1>
 <blockquote>
 <div><p>[!NOTE] This document covers the High-Level C API used by the host
 application to control the NPU. It is designed for the v001 NPU
@@ -406,14 +406,14 @@ architecture and directly wraps the Hardware Abstraction Layer (HAL).</p>
 <h2>API Architecture Overview<a class="headerlink" href="#api-architecture-overview" title="Link to this heading">#</a></h2>
 <p>The current API layer pursues an experience similar to CUDA. Developers
 can utilize the asynchronous hardware accelerator by simply making
-<code class="docutils literal notranslate"><span class="pre">uca_*</span></code> C function calls without needing to understand the 64-bit VLIW
+<code class="docutils literal notranslate"><span class="pre">pccx_*</span></code> C function calls without needing to understand the 64-bit VLIW
 instruction assembly.</p>
 <ul class="simple">
 <li><p><strong>Non-blocking (Asynchronous)</strong>: All computation functions simply
 queue the instructions into the NPU FIFO via the HAL and return
 immediately.</p></li>
 <li><p><strong>Sync Point</strong>: The host execution flow stops and synchronizes with
-the hardware state only when the <code class="docutils literal notranslate"><span class="pre">uca_sync()</span></code> function is
+the hardware state only when the <code class="docutils literal notranslate"><span class="pre">pccx_sync()</span></code> function is
 explicitly called.</p></li>
 </ul>
 </section>
@@ -425,22 +425,22 @@ explicitly called.</p></li>
 <p>These fundamental functions initialize the NPU device handles and
 release the resources. They ensure the NPU is responsive before
 proceeding.</p>
-<p>=== “Header (uCA_v1_api.h)”</p>
+<p>=== “Header (pccx_v1_api.h)”</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>```c
-int  uca_init(void);
+int  pccx_init(void);
 
-void uca_deinit(void);
+void pccx_deinit(void);
 ```
 </pre></div>
 </div>
-<p>=== “Implementation (uCA_v1_api.c)”</p>
+<p>=== “Implementation (pccx_v1_api.c)”</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>```c
-int uca_init(void) {
-    return uca_hal_init();
+int pccx_init(void) {
+    return pccx_hal_init();
 }
 
-void uca_deinit(void) {
-    uca_hal_deinit();
+void pccx_deinit(void) {
+    pccx_hal_deinit();
 }
 ```
 </pre></div>
@@ -454,24 +454,24 @@ a 64-bit VLIW format and pushes it to the hardware FIFO.</p>
 <p><strong>Parameters:</strong> - <code class="docutils literal notranslate"><span class="pre">dest_reg</span></code> : Destination register or L2 memory
 address (17-bit). - <code class="docutils literal notranslate"><span class="pre">src_addr</span></code> : Starting location of the Source
 Feature Map buffer (17-bit). - <code class="docutils literal notranslate"><span class="pre">flags</span></code> : Configuration flags
-(<code class="docutils literal notranslate"><span class="pre">UCA_FLAG_FINDEMAX</span></code>, <code class="docutils literal notranslate"><span class="pre">UCA_FLAG_ACCM</span></code>, etc). - <code class="docutils literal notranslate"><span class="pre">size_ptr</span></code> :
+(<code class="docutils literal notranslate"><span class="pre">PCCX_FLAG_FINDEMAX</span></code>, <code class="docutils literal notranslate"><span class="pre">PCCX_FLAG_ACCM</span></code>, etc). - <code class="docutils literal notranslate"><span class="pre">size_ptr</span></code> :
 Pointer to the size descriptor inside the shape cache (6-bit). -
 <code class="docutils literal notranslate"><span class="pre">shape_ptr</span></code> : Pointer to the shape descriptor inside the shape cache
 (6-bit). - <code class="docutils literal notranslate"><span class="pre">lanes</span></code> : The number of parallel μV-Core lanes to utilize
 (1 to 4).</p>
-<p>=== “Header (uCA_v1_api.h)”</p>
+<p>=== “Header (pccx_v1_api.h)”</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>```c
-void uca_gemv(uint32_t dest_reg,   uint32_t src_addr,
-              uint8_t  flags,      uint8_t  size_ptr,
-              uint8_t  shape_ptr,  uint8_t  lanes);
+void pccx_gemv(uint32_t dest_reg,   uint32_t src_addr,
+               uint8_t  flags,      uint8_t  size_ptr,
+               uint8_t  shape_ptr,  uint8_t  lanes);
 
-void uca_gemm(uint32_t dest_reg,   uint32_t src_addr,
-              uint8_t  flags,      uint8_t  size_ptr,
-              uint8_t  shape_ptr,  uint8_t  lanes);
+void pccx_gemm(uint32_t dest_reg,   uint32_t src_addr,
+               uint8_t  flags,      uint8_t  size_ptr,
+               uint8_t  shape_ptr,  uint8_t  lanes);
 ```
 </pre></div>
 </div>
-<p>=== “Implementation (uCA_v1_api.c)”</p>
+<p>=== “Implementation (pccx_v1_api.c)”</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>```c
 static uint64_t build_compute_instr(...) {
     uint64_t instr = 0;
@@ -485,9 +485,9 @@ static uint64_t build_compute_instr(...) {
     return instr;
 }
 
-void uca_gemv(...) {
-    uint64_t instr = build_compute_instr(UCA_OP_GEMV, dest_reg, src_addr, flags, size_ptr, shape_ptr, lanes);
-    uca_hal_issue_instr(instr);
+void pccx_gemv(...) {
+    uint64_t instr = build_compute_instr(PCCX_OP_GEMV, dest_reg, src_addr, flags, size_ptr, shape_ptr, lanes);
+    pccx_hal_issue_instr(instr);
 }
 ```
 </pre></div>
@@ -498,22 +498,22 @@ void uca_gemv(...) {
 <p>Controls the non-linear math functions (SFU and CORDIC) utilized for
 attention weight scaling such as Softmax, RMSNorm, GELU, and RoPE.</p>
 <p><strong>Parameters:</strong> - <code class="docutils literal notranslate"><span class="pre">cvo_func</span></code> : The function code constant, such as
-<code class="docutils literal notranslate"><span class="pre">UCA_CVO_EXP</span></code>, <code class="docutils literal notranslate"><span class="pre">UCA_CVO_SQRT</span></code>. - <code class="docutils literal notranslate"><span class="pre">src_addr</span></code> : Source cache
+<code class="docutils literal notranslate"><span class="pre">PCCX_CVO_EXP</span></code>, <code class="docutils literal notranslate"><span class="pre">PCCX_CVO_SQRT</span></code>. - <code class="docutils literal notranslate"><span class="pre">src_addr</span></code> : Source cache
 address. - <code class="docutils literal notranslate"><span class="pre">dst_addr</span></code> : Destination cache address. - <code class="docutils literal notranslate"><span class="pre">length</span></code> : The
 number of vector operations to process sequentially.</p>
-<p>=== “Header (uCA_v1_api.h)”</p>
+<p>=== “Header (pccx_v1_api.h)”</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>```c
-void uca_cvo(uint8_t  cvo_func,  uint32_t src_addr,
-             uint32_t dst_addr,  uint16_t length,
-             uint8_t  flags,     uint8_t  async);
+void pccx_cvo(uint8_t  cvo_func,  uint32_t src_addr,
+              uint32_t dst_addr,  uint16_t length,
+              uint8_t  flags,     uint8_t  async);
 ```
 </pre></div>
 </div>
-<p>=== “Implementation (uCA_v1_api.c)”</p>
+<p>=== “Implementation (pccx_v1_api.c)”</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>```c
 static uint64_t build_cvo_instr(...) {
     uint64_t instr = 0;
-    instr |= ((uint64_t)(UCA_OP_CVO &amp; 0xF)   &lt;&lt; 60);
+    instr |= ((uint64_t)(PCCX_OP_CVO &amp; 0xF)   &lt;&lt; 60);
     instr |= ((uint64_t)(cvo_func  &amp; 0xF)    &lt;&lt; 56);
     instr |= ((uint64_t)(src_addr  &amp; 0x1FFFF)&lt;&lt; 39);
     instr |= ((uint64_t)(dst_addr  &amp; 0x1FFFF)&lt;&lt; 22);
@@ -523,9 +523,9 @@ static uint64_t build_cvo_instr(...) {
     return instr;
 }
 
-void uca_cvo(...) {
+void pccx_cvo(...) {
     uint64_t instr = build_cvo_instr(cvo_func, src_addr, dst_addr, length, flags, async);
-    uca_hal_issue_instr(instr);
+    pccx_hal_issue_instr(instr);
 }
 ```
 </pre></div>
@@ -538,29 +538,29 @@ L2 Cache, and L1 engine local caches.</p>
 <p><strong>DMA Transfer Parameters:</strong> - <code class="docutils literal notranslate"><span class="pre">route</span></code> : The routing bus constant
 identifying flow source and destination. - <code class="docutils literal notranslate"><span class="pre">dest_addr</span></code> : Transfer
 target local address. - <code class="docutils literal notranslate"><span class="pre">src_addr</span></code> : Source buffer address.</p>
-<p>=== “Header (uCA_v1_api.h)”</p>
+<p>=== “Header (pccx_v1_api.h)”</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>```c
-void uca_memcpy(uint8_t route, uint32_t dest_addr, uint32_t src_addr, uint8_t shape_ptr, uint8_t async);
+void pccx_memcpy(uint8_t route, uint32_t dest_addr, uint32_t src_addr, uint8_t shape_ptr, uint8_t async);
 
-void uca_memset(uint8_t dest_cache, uint8_t dest_addr, uint16_t a, uint16_t b, uint16_t c);
+void pccx_memset(uint8_t dest_cache, uint8_t dest_addr, uint16_t a, uint16_t b, uint16_t c);
 ```
 </pre></div>
 </div>
-<p>=== “Implementation (uCA_v1_api.c)”</p>
+<p>=== “Implementation (pccx_v1_api.c)”</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>```c
-void uca_memcpy(...) {
+void pccx_memcpy(...) {
     uint8_t from_dev = (route &gt;&gt; 4) &amp; 0xF;
     uint8_t to_dev   = (route &gt;&gt; 0) &amp; 0xF;
 
     uint64_t instr = 0;
-    instr |= ((uint64_t)(UCA_OP_MEMCPY &amp; 0xF) &lt;&lt; 60);
+    instr |= ((uint64_t)(PCCX_OP_MEMCPY &amp; 0xF) &lt;&lt; 60);
     instr |= ((uint64_t)(from_dev  &amp; 0x1)      &lt;&lt; 59);
     instr |= ((uint64_t)(to_dev    &amp; 0x1)      &lt;&lt; 58);
     instr |= ((uint64_t)(dest_addr &amp; 0x1FFFF)  &lt;&lt; 41);
     instr |= ((uint64_t)(src_addr  &amp; 0x1FFFF)  &lt;&lt; 24);
     instr |= ((uint64_t)(shape_ptr &amp; 0x3F)     &lt;&lt;  1);
     instr |= ((uint64_t)(async     &amp; 0x1)      &lt;&lt;  0);
-    uca_hal_issue_instr(instr);
+    pccx_hal_issue_instr(instr);
 }
 ```
 </pre></div>
@@ -572,16 +572,16 @@ void uca_memcpy(...) {
 registered in the FIFO queue have completed their tasks.</p>
 <p><strong>Parameters:</strong> - <code class="docutils literal notranslate"><span class="pre">timeout_us</span></code> : Threshold timeout in microseconds
 before returning an error state.</p>
-<p>=== “Header (uCA_v1_api.h)”</p>
+<p>=== “Header (pccx_v1_api.h)”</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>```c
-int uca_sync(uint32_t timeout_us);
+int pccx_sync(uint32_t timeout_us);
 ```
 </pre></div>
 </div>
-<p>=== “Implementation (uCA_v1_api.c)”</p>
+<p>=== “Implementation (pccx_v1_api.c)”</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>```c
-int uca_sync(uint32_t timeout_us) {
-    return uca_hal_wait_idle(timeout_us);
+int pccx_sync(uint32_t timeout_us) {
+    return pccx_hal_wait_idle(timeout_us);
 }
 ```
 </pre></div>
