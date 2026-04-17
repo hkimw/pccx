@@ -31,7 +31,10 @@
 <link href="../_static/styles/pydata-sphinx-theme.css?digest=7f76b32a3354e82990f2" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
     <link rel="stylesheet" type="text/css" href="../_static/language-switcher.css?v=5ec28b56" />
+    <link rel="stylesheet" type="text/css" href="../_static/mermaid-theme.css?v=87bd70f5" />
+    <link rel="stylesheet" type="text/css" href="../_static/image-lightbox.css?v=884c9d5a" />
   
   <!-- So that users can add custom icons -->
   <script defer src="../_static/scripts/fontawesome.js?digest=7f76b32a3354e82990f2"></script>
@@ -44,7 +47,8 @@
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'docs/index';</script>
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
-    <script src="../_static/language-switcher.js?v=0e12a82b"></script>
+    <script src="../_static/language-switcher.js?v=e91f783c"></script>
+    <script src="../_static/image-lightbox.js?v=dec353f8"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Devices" href="Devices/index.html" />
@@ -199,6 +203,18 @@
           <a href="https://github.com/hwkim-dev/pccx" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
             <span class="sr-only">GitHub</span></a>
         </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://hwkim-dev.github.io/hwkim-dev/" title="Personal Site" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-solid fa-user fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">Personal Site</span></a>
+        </li>
 </ul></div>
       
     </div>
@@ -306,6 +322,18 @@
           <a href="https://github.com/hwkim-dev/pccx" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
             <span class="sr-only">GitHub</span></a>
         </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://hwkim-dev.github.io/hwkim-dev/" title="Personal Site" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-solid fa-user fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">Personal Site</span></a>
+        </li>
 </ul></div>
         
       </div>
@@ -384,46 +412,44 @@
 <h1>pccx: Parallel Compute Core eXecutor<a class="headerlink" href="#pccx-parallel-compute-core-executor" title="Link to this heading">#</a></h1>
 <p><img alt="License" src="https://img.shields.io/badge/License-Apache_2.0-blue.svg" /> <img alt="Architecture" src="https://img.shields.io/badge/Architecture-Scalable_NPU-purple" /> <img alt="Target" src="https://img.shields.io/badge/Target-Edge_AI-orange" /> <img alt="Precision" src="https://img.shields.io/badge/Precision-W4A8_Promotion-green" /></p>
 <blockquote>
-<div><p><strong>Notice: Active Development in Progress</strong> &gt; pccx is a scalable and
+<div><p><strong>Notice: Active Development in Progress.</strong> pccx is a scalable,
 modular Neural Processing Unit (NPU) architecture designed to
-accelerate Transformer-based Large Language Models (LLMs) on
+accelerate Transformer-based large language models (LLMs) on
 resource-constrained edge devices.</p>
 </div></blockquote>
 <hr class="docutils" />
 <section id="architecture-overview">
 <h2>1. Architecture Overview<a class="headerlink" href="#architecture-overview" title="Link to this heading">#</a></h2>
 <p>pccx is a device-agnostic hardware-software co-design framework. It
-focuses on breaking the memory bandwidth and compute bottlenecks of edge
-hardware by scaling the core architecture to the specific physical
-resource budget of the target device.</p>
+attacks the memory-bandwidth and compute bottlenecks of edge hardware
+by scaling the core architecture to match the physical resource budget
+of each target device.</p>
 <section id="ecosystem-structure">
 <h3>1.1 Ecosystem Structure<a class="headerlink" href="#ecosystem-structure" title="Link to this heading">#</a></h3>
-<p>The project is strictly separated into three layers to ensure maximum
-portability and scalability:</p>
+<p>The project is strictly separated into three layers for maximum
+portability and scalability.</p>
 <ul class="simple">
-<li><p><strong>``/architecture`` (The Logic Layer)</strong> * Contains the core RTL
-(Register Transfer Level) logic and generation parameters.</p>
+<li><p><code class="docutils literal notranslate"><span class="pre">/architecture</span></code> <strong>(Logic Layer)</strong> — core RTL and generate
+parameters.</p>
 <ul>
 <li><p>Defines the logical pipeline, instruction scheduling, and the
-<strong>Custom 64-bit ISA</strong>.</p></li>
-<li><p>This layer is independent of any specific hardware vendor or
-interface protocol.</p></li>
+<strong>custom 64-bit ISA</strong>.</p></li>
+<li><p>Independent of any specific hardware vendor or interface protocol.</p></li>
 </ul>
 </li>
-<li><p><strong>``/device`` (The Implementation Layer)</strong> * Mappings of the pccx
-architecture onto specific hardware targets.</p>
+<li><p><code class="docutils literal notranslate"><span class="pre">/device</span></code> <strong>(Implementation Layer)</strong> — maps the pccx architecture
+onto a specific hardware target.</p>
 <ul>
-<li><p>Adjusts the number of compute cores, systolic array dimensions,
-and memory port widths based on the available resource budget
-(e.g., DSP count, local memory size).</p></li>
-<li><p>Handles the physical constraints of different hardware platforms.</p></li>
+<li><p>Adjusts core count, systolic-array dimensions, and memory port
+widths to the available resource budget (DSP count, local memory
+size, etc.).</p></li>
 </ul>
 </li>
-<li><p><strong>``/driver`` (The Software Layer)</strong> * Provides a C/C++ Hardware
-Abstraction Layer (HAL) and high-level API.</p>
+<li><p><code class="docutils literal notranslate"><span class="pre">/driver</span></code> <strong>(Software Layer)</strong> — a C/C++ hardware abstraction layer
+(HAL) and high-level API.</p>
 <ul>
-<li><p>Manages instruction dispatching and memory mapping, acting as the
-bridge between high-level AI models and the pccx hardware.</p></li>
+<li><p>Handles instruction dispatch and memory mapping, bridging
+high-level AI models with the pccx hardware.</p></li>
 </ul>
 </li>
 </ul>
@@ -434,55 +460,59 @@ bridge between high-level AI models and the pccx hardware.</p></li>
 <h2>2. Key Technical Features<a class="headerlink" href="#key-technical-features" title="Link to this heading">#</a></h2>
 <section id="decoupled-dataflow-custom-isa">
 <h3>2.1 Decoupled Dataflow &amp; Custom ISA<a class="headerlink" href="#decoupled-dataflow-custom-isa" title="Link to this heading">#</a></h3>
-<p>The architecture utilizes a <strong>Custom 64-bit ISA</strong> optimized for matrix
-and vector operations. It employs a <strong>Decoupled Dataflow</strong> pipeline,
-separating instruction decoding from execution to eliminate pipeline
-stalls and maximize throughput.</p>
+<p>pccx uses a <strong>custom 64-bit ISA</strong> tuned for matrix and vector
+operations. A <strong>decoupled-dataflow</strong> pipeline separates instruction
+decode from execution, eliminating dispatch-side stalls and maximizing
+throughput.</p>
 </section>
 <section id="w4a8-dynamic-precision-promotion">
 <h3>2.2 W4A8 Dynamic Precision Promotion<a class="headerlink" href="#w4a8-dynamic-precision-promotion" title="Link to this heading">#</a></h3>
-<div class="line-block">
-<div class="line">To maintain both efficiency and accuracy:</div>
-<div class="line">* <strong>Compute:</strong> Parallel 2D Systolic Array executes high-density
-<strong>INT4 (Weight) × INT8 (Activation)</strong> operations.</div>
-<div class="line">* <strong>Promotion:</strong> During non-linear operations (Softmax, RMSNorm,
-GeLU), the architecture automatically promotes precision to <strong>BF16 /
-FP32</strong> within the Complex Vector Operation (CVO) core to preserve
-numerical integrity.</div>
-</div>
+<p>pccx balances efficiency with accuracy:</p>
+<ul class="simple">
+<li><p><strong>Compute</strong>: a parallel 2D systolic array executes dense
+<strong>INT4 (weight) × INT8 (activation)</strong> operations.</p></li>
+<li><p><strong>Promotion</strong>: during non-linear operations (Softmax, RMSNorm, GELU),
+the CVO core automatically promotes precision to <strong>BF16 / FP32</strong> so
+numerical integrity is preserved.</p></li>
+</ul>
 </section>
 <section id="tiered-memory-hierarchy">
 <h3>2.3 Tiered Memory Hierarchy<a class="headerlink" href="#tiered-memory-hierarchy" title="Link to this heading">#</a></h3>
 <ul class="simple">
-<li><p><strong>Matrix Core:</strong> Dedicated to GEMM operations with a scalable array
-size.</p></li>
-<li><p><strong>Vector Core:</strong> Handles GEMV and element-wise operations.</p></li>
-<li><p><strong>Shared Interconnect:</strong> A flexible data bus system that allows
-simultaneous access between cores and local caches without
-arbitration overhead.</p></li>
+<li><p><strong>Matrix core</strong>: dedicated GEMM, with a scalable array size.</p></li>
+<li><p><strong>Vector core</strong>: GEMV and element-wise operations.</p></li>
+<li><p><strong>Shared interconnect</strong>: a flexible bus that lets cores and local
+caches access each other concurrently without arbitration overhead.</p></li>
 </ul>
 </section>
 </section>
 <hr class="docutils" />
 <section id="documentation">
 <h2>3. Documentation<a class="headerlink" href="#documentation" title="Link to this heading">#</a></h2>
-<div class="line-block">
-<div class="line">Detailed technical specifications are located in the <code class="docutils literal notranslate"><span class="pre">/docs</span></code>
-directory:</div>
-<div class="line">1. <code class="docutils literal notranslate"><span class="pre">pccx_ISA_Spec.md</span></code>: Specification of the 64-bit Custom Instruction
-Set.</div>
-<div class="line">2. <code class="docutils literal notranslate"><span class="pre">Architecture_Scaling.md</span></code>: Guidelines for mapping logic to
-physical resources.</div>
-<div class="line">3. <code class="docutils literal notranslate"><span class="pre">API_Reference.md</span></code>: Documentation for the pccx Driver and SDK.</div>
-</div>
+<p>Detailed technical specifications live under <a class="reference internal" href="v002/index.html"><span class="doc">pccx v002 Architecture</span></a>:</p>
+<ol class="arabic simple">
+<li><p><a class="reference internal" href="v002/ISA/index.html"><span class="doc">Instruction Set Architecture (ISA)</span></a> — 64-bit custom instruction set.</p></li>
+<li><p><a class="reference internal" href="v002/Architecture/index.html"><span class="doc">Hardware Architecture</span></a> — hardware architecture and
+floorplan.</p></li>
+<li><p><a class="reference internal" href="v002/Drivers/index.html"><span class="doc">Software Stack</span></a> — driver and SDK documentation.</p></li>
+</ol>
+<p>The v001 architecture is archived at
+<a class="reference internal" href="archive/experimental_v001/index.html"><span class="doc">Archive: v001 Experimental Architecture</span></a>.</p>
 </section>
 <hr class="docutils" />
 <section id="license">
 <h2>4. License<a class="headerlink" href="#license" title="Link to this heading">#</a></h2>
-<p>This project is licensed under the <strong>Apache License 2.0</strong>. It provides
-freedom of use and modification while protecting the architecture
-against patent-related risks, ensuring a safe ecosystem for open-source
-hardware development.</p>
+<p>Licensed under the <strong>Apache License 2.0</strong>. This provides freedom of use
+and modification while protecting the architecture from patent-related
+risks, keeping the ecosystem safe for open-source hardware development.</p>
+</section>
+<hr class="docutils" />
+<section id="links">
+<h2>5. Links<a class="headerlink" href="#links" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Source · Issues: <a class="reference external" href="https://github.com/hwkim-dev/pccx">github.com/hwkim-dev/pccx</a></p></li>
+<li><p>Author site: <a class="reference external" href="https://hwkim-dev.github.io/hwkim-dev/">hwkim-dev.github.io/hwkim-dev</a></p></li>
+</ul>
 </section>
 </section>
 
@@ -545,6 +575,7 @@ hardware development.</p>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#documentation">3. Documentation</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#license">4. License</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#links">5. Links</a></li>
 </ul>
   </nav></div>
 
@@ -578,6 +609,12 @@ hardware development.</p>
     
   </p>
 </div>
+      
+        <div class="footer-item"><p class="personal-link">
+  <a href="https://hwkim-dev.github.io/hwkim-dev/" target="_blank" rel="noopener">
+    hwkim-dev.github.io
+  </a>
+</p></div>
       
     </div>
   

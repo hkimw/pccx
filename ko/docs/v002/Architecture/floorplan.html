@@ -1,0 +1,692 @@
+
+<!DOCTYPE html>
+
+
+<html lang="ko" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>물리 플로어플랜 &#8212; pccx 문서</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=7f76b32a3354e82990f2" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=7f76b32a3354e82990f2" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/language-switcher.css?v=5ec28b56" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/mermaid-theme.css?v=87bd70f5" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/image-lightbox.css?v=884c9d5a" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=7f76b32a3354e82990f2"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=7f76b32a3354e82990f2" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=7f76b32a3354e82990f2" />
+
+    <script src="../../../_static/documentation_options.js?v=0893e0c8"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../_static/translations.js?v=afa94a99"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'docs/v002/Architecture/floorplan';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <script src="../../../_static/language-switcher.js?v=e91f783c"></script>
+    <script src="../../../_static/image-lightbox.js?v=dec353f8"></script>
+    <link rel="index" title="색인" href="../../../genindex.html" />
+    <link rel="search" title="검색" href="../../../search.html" />
+    <link rel="next" title="메모리 계층" href="memory_hierarchy.html" />
+    <link rel="prev" title="탑레벨 아키텍처" href="top_level.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="ko"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../../../_static/searchtools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script src="../../../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="pccx 문서 검색..."
+         aria-label="pccx 문서 검색..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">pccx</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../index.html">
+    pccx: 병렬 컴퓨트 코어 익스큐터
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../Devices/index.html">
+    지원 디바이스
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../archive/index.html">
+    아카이브
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../index.html">
+    pccx v002 아키텍처
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="검색" aria-label="검색" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">검색</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/hwkim-dev/pccx" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://hwkim-dev.github.io/hwkim-dev/" title="개인 사이트" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-solid fa-user fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">개인 사이트</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="검색" aria-label="검색" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">검색</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../index.html">
+    pccx: 병렬 컴퓨트 코어 익스큐터
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../Devices/index.html">
+    지원 디바이스
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../archive/index.html">
+    아카이브
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../index.html">
+    pccx v002 아키텍처
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/hwkim-dev/pccx" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://hwkim-dev.github.io/hwkim-dev/" title="개인 사이트" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-solid fa-user fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">개인 사이트</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar"><svg class="pst-icon svg-inline--fa" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
+  </svg>
+  <span class="pst-collapse-sidebar-label">Collapse Sidebar</span>
+  <span class="pst-expand-sidebar-label">Expand Sidebar</span>
+</button></div>
+        <div class="sidebar-primary-item">
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><p aria-level="2" class="caption" role="heading"><span class="caption-text">개요</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">개요</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">하드웨어 아키텍처</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="index.html">하드웨어 아키텍처</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="rationale.html">v001 → v002 설계 근거</a></li>
+<li class="toctree-l2"><a class="reference internal" href="top_level.html">탑레벨 아키텍처</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">물리 플로어플랜</a></li>
+<li class="toctree-l2"><a class="reference internal" href="memory_hierarchy.html">메모리 계층</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kv_cache.html">KV 캐시 최적화 전략</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gemm_core.html">GEMM 코어 (시스톨릭 어레이)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gemv_core.html">GEMV 코어</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sfu_core.html">SFU 코어 (Complex Vector Operations)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dsp48e2_w4a8.html">DSP48E2 W4A8 비트 패킹과 부호 복원</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">명령어 세트 아키텍처 (ISA)</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ISA/index.html">명령어 세트 아키텍처 (ISA)</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ISA/encoding.html">명령어 인코딩</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ISA/instructions.html">명령어 상세 인코딩</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ISA/dataflow.html">명령어별 데이터플로우</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">소프트웨어 스택</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../Drivers/index.html">소프트웨어 스택</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../Drivers/api.html">C API 개요</a></li>
+</ul>
+</details></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../index.html" class="nav-link">pccx v002 아키텍처</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="index.html" class="nav-link">하드웨어 아키텍처</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">물리 플로어플랜</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="id1">
+<h1>물리 플로어플랜<a class="headerlink" href="#id1" title="Link to this heading">#</a></h1>
+<figure class="align-center" id="id7">
+<a class="reference internal image-reference" href="../../../_images/architecture_v002.png"><img alt="pccx v002 물리 플로어플랜" src="../../../_images/architecture_v002.png" style="width: 95%;" />
+</a>
+<figcaption>
+<p><span class="caption-text"><strong>Figure 2.</strong> pccx v002 의 물리 플로어플랜.
+L2 Cache 가 중앙에 배치되어 상하 대칭으로 배치된 GEMV·SFU 뱅크와
+양측에 위치한 시스톨릭 어레이에 액티베이션을 공급합니다.</span><a class="headerlink" href="#id7" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+<section id="id2">
+<h2>1. 대칭형 배치 전략<a class="headerlink" href="#id2" title="Link to this heading">#</a></h2>
+<p>pccx v002 의 핵심 물리적 특징은 <strong>중앙 공유 L2 캐시 + 대칭 컴퓨트 슬라이스</strong>
+구조입니다.</p>
+<ul class="simple">
+<li><p><strong>중앙 L2 캐시</strong>: 플로어플랜의 기하학적 중심에 배치되어, 상하 슬라이스가
+동일한 레이턴시로 액티베이션에 접근합니다.</p></li>
+<li><p><strong>상하 대칭 슬라이스</strong>: 각 슬라이스에는 GEMV 32×1 뱅크, SFU 뱅크,
+Constant Cache, L1 Cache 가 포함됩니다. 디코딩 단계에서 두 슬라이스가
+병렬로 서로 다른 배치/헤드 또는 multi-query 를 처리할 수 있습니다.</p></li>
+<li><p><strong>우측 시스톨릭 어레이</strong>: 32×16 시스톨릭 어레이 2 개가 나란히 배치되어
+프리필 단계의 대규모 GEMM 을 담당합니다.</p></li>
+</ul>
+</section>
+<section id="id3">
+<h2>2. 버스 구조<a class="headerlink" href="#id3" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<colgroup>
+<col style="width: 25.0%" />
+<col style="width: 75.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>버스</p></th>
+<th class="head"><p>용도</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>WEIGHT BUS</strong></p></td>
+<td><p>Weight Buffer → GEMM/GEMV 코어의 파이프라인 레지스터로 가중치 브로드캐스트.
+파이프라인 레지스터(<em>Pipeline REG - WEIGHT BUS</em>) 가 각 뱅크 직전에
+배치되어 타이밍을 완화.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>ACTIVATION BUS</strong></p></td>
+<td><p>L2 Cache ↔ GEMV / SFU / Systolic Array. 수직 축으로 중앙 L2 에서
+상하로 분배되며, 양방향 기록/판독이 가능.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>AXI DMA HP Port [2, 3]</strong></p></td>
+<td><p>상단·하단 슬라이스 각각이 독립적인 HP 포트를 통해 호스트 DDR4 로부터
+가중치를 스트리밍. <strong>256 bit/clk &#64; 250 MHz</strong> 의 유효 대역폭.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="id4">
+<h2>3. 캐시 뱅크 구성<a class="headerlink" href="#id4" title="Link to this heading">#</a></h2>
+<p>각 슬라이스 내부의 캐시는 <strong>기능별 분할</strong> 됩니다.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<colgroup>
+<col style="width: 22.0%" />
+<col style="width: 18.0%" />
+<col style="width: 60.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>캐시</p></th>
+<th class="head"><p>용도</p></th>
+<th class="head"><p>설명</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>L1 Cache</strong></p></td>
+<td><p>코어 로컬</p></td>
+<td><p>GEMV 연산의 직접 액세스용. 코어당 private.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Constant Cache</strong></p></td>
+<td><p>상수 저장</p></td>
+<td><p>ISA 의 shape/size 포인터, weight scale factor 등 저장. MEMSET 으로
+프리셋.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>L2 Cache</strong></p></td>
+<td><p>중앙 공유</p></td>
+<td><p>액티베이션, KV 캐시, 중간 결과. 양측 슬라이스가 동시 접근.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Weight Buffer</strong></p></td>
+<td><p>가중치 스트림</p></td>
+<td><p>순환 큐 형태로 HP 포트에서 스트리밍된 INT4 가중치 일시 저장.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="id5">
+<h2>4. 물리 설계상의 고려사항<a class="headerlink" href="#id5" title="Link to this heading">#</a></h2>
+<section id="id6">
+<h3>4.1 라우팅 대칭성<a class="headerlink" href="#id6" title="Link to this heading">#</a></h3>
+<p>L2 Cache 와 상·하 슬라이스 간 배선 길이를 대칭화하여, 두 슬라이스의
+액티베이션 접근 레이턴시를 동일하게 유지합니다. 이는 소프트웨어 측에서
+양 슬라이스를 <strong>대칭적 작업 분할(symmetric work partitioning)</strong> 에
+매핑하기 위한 전제입니다.</p>
+</section>
+<section id="dsp">
+<h3>4.2 DSP 슬라이스 집중 배치<a class="headerlink" href="#dsp" title="Link to this heading">#</a></h3>
+<p>KV260 의 1,248 개 DSP48E2 중 대부분이 우측 시스톨릭 어레이 영역에 배치되며,
+GEMV 및 SFU 뱅크는 LUT/BRAM 기반 연산으로 DSP 사용을 최소화합니다.
+자세한 배치는 리소스 활용 섹션 (추후 합성 결과 반영) 에서 다룹니다.</p>
+</section>
+<section id="bram-uram">
+<h3>4.3 BRAM/URAM 배분<a class="headerlink" href="#bram-uram" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>L2 Cache</strong>: URAM 기반 (~96 블록).</p></li>
+<li><p><strong>L1 / Constant Cache</strong>: BRAM 기반 (~140 블록).</p></li>
+<li><p>Weight Buffer 는 BRAM 의 FIFO 모드 활용.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">참고</p>
+<p>리소스 사용량은 generate 파라미터에 따라 변동됩니다.
+KV260 기준 권장 구성은 <a class="reference internal" href="../../Devices/kv260.html"><span class="doc">pccx: 병렬 컴퓨트 코어 익스큐터</span></a> 참조.</p>
+</div>
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="top_level.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">이전</p>
+        <p class="prev-next-title">탑레벨 아키텍처</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="memory_hierarchy.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">다음</p>
+        <p class="prev-next-title">메모리 계층</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">1. 대칭형 배치 전략</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">2. 버스 구조</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">3. 캐시 뱅크 구성</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">4. 물리 설계상의 고려사항</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">4.1 라우팅 대칭성</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dsp">4.2 DSP 슬라이스 집중 배치</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bram-uram">4.3 BRAM/URAM 배분</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=7f76b32a3354e82990f2"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=7f76b32a3354e82990f2"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2026, hwkim.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item"><p class="personal-link">
+  <a href="https://hwkim-dev.github.io/hwkim-dev/" target="_blank" rel="noopener">
+    hwkim-dev.github.io
+  </a>
+</p></div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0 버전으로 생성되었습니다.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

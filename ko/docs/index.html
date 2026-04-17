@@ -31,7 +31,10 @@
 <link href="../_static/styles/pydata-sphinx-theme.css?digest=7f76b32a3354e82990f2" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
     <link rel="stylesheet" type="text/css" href="../_static/language-switcher.css?v=5ec28b56" />
+    <link rel="stylesheet" type="text/css" href="../_static/mermaid-theme.css?v=87bd70f5" />
+    <link rel="stylesheet" type="text/css" href="../_static/image-lightbox.css?v=884c9d5a" />
   
   <!-- So that users can add custom icons -->
   <script defer src="../_static/scripts/fontawesome.js?digest=7f76b32a3354e82990f2"></script>
@@ -45,7 +48,8 @@
     <script src="../_static/translations.js?v=afa94a99"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'docs/index';</script>
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
-    <script src="../_static/language-switcher.js?v=0e12a82b"></script>
+    <script src="../_static/language-switcher.js?v=e91f783c"></script>
+    <script src="../_static/image-lightbox.js?v=dec353f8"></script>
     <link rel="index" title="색인" href="../genindex.html" />
     <link rel="search" title="검색" href="../search.html" />
     <link rel="next" title="지원 디바이스" href="Devices/index.html" />
@@ -200,6 +204,18 @@
           <a href="https://github.com/hwkim-dev/pccx" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
             <span class="sr-only">GitHub</span></a>
         </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://hwkim-dev.github.io/hwkim-dev/" title="개인 사이트" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-solid fa-user fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">개인 사이트</span></a>
+        </li>
 </ul></div>
       
     </div>
@@ -306,6 +322,18 @@
           
           <a href="https://github.com/hwkim-dev/pccx" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
             <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://hwkim-dev.github.io/hwkim-dev/" title="개인 사이트" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-solid fa-user fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">개인 사이트</span></a>
         </li>
 </ul></div>
         
@@ -453,12 +481,13 @@
 <hr class="docutils" />
 <section id="id5">
 <h2>3. 문서<a class="headerlink" href="#id5" title="Link to this heading">#</a></h2>
-<p>자세한 기술 사양은 <code class="docutils literal notranslate"><span class="pre">/docs</span></code> 디렉토리에 있습니다:</p>
+<p>자세한 기술 사양은 <a class="reference internal" href="v002/index.html"><span class="doc">pccx v002 아키텍처</span></a> 의 다음 섹션에서 확인할 수 있습니다:</p>
 <ol class="arabic simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">pccx_ISA_Spec.md</span></code> — 64비트 커스텀 명령어 세트 사양.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">Architecture_Scaling.md</span></code> — 물리적 리소스에 로직을 매핑하는 가이드라인.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">API_Reference.md</span></code> — pccx 드라이버 및 SDK 문서.</p></li>
+<li><p><a class="reference internal" href="v002/ISA/index.html"><span class="doc">명령어 세트 아키텍처 (ISA)</span></a> — 64비트 커스텀 명령어 세트 사양.</p></li>
+<li><p><a class="reference internal" href="v002/Architecture/index.html"><span class="doc">하드웨어 아키텍처</span></a> — 하드웨어 아키텍처 및 플로어플랜.</p></li>
+<li><p><a class="reference internal" href="v002/Drivers/index.html"><span class="doc">소프트웨어 스택</span></a> — pccx 드라이버 및 SDK 문서.</p></li>
 </ol>
+<p>v001 아키텍처는 <a class="reference internal" href="archive/experimental_v001/index.html"><span class="doc">아카이브: v001 실험적 아키텍처</span></a> 에 아카이브되어 있습니다.</p>
 </section>
 <hr class="docutils" />
 <section id="id6">
@@ -466,6 +495,14 @@
 <p>이 프로젝트는 <strong>Apache License 2.0</strong> 하에 라이선스가 부여됩니다.
 오픈소스 하드웨어 개발을 위한 안전한 생태계를 보장하면서
 아키텍처를 특허 관련 위험으로부터 보호하며 자유로운 사용과 수정을 제공합니다.</p>
+</section>
+<hr class="docutils" />
+<section id="id7">
+<h2>5. 관련 링크<a class="headerlink" href="#id7" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>소스 코드 · 이슈: <a class="reference external" href="https://github.com/hwkim-dev/pccx">github.com/hwkim-dev/pccx</a></p></li>
+<li><p>저자 사이트: <a class="reference external" href="https://hwkim-dev.github.io/hwkim-dev/">hwkim-dev.github.io/hwkim-dev</a></p></li>
+</ul>
 </section>
 </section>
 
@@ -528,6 +565,7 @@
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">3. 문서</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">4. 라이선스</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">5. 관련 링크</a></li>
 </ul>
   </nav></div>
 
@@ -561,6 +599,12 @@
     
   </p>
 </div>
+      
+        <div class="footer-item"><p class="personal-link">
+  <a href="https://hwkim-dev.github.io/hwkim-dev/" target="_blank" rel="noopener">
+    hwkim-dev.github.io
+  </a>
+</p></div>
       
     </div>
   

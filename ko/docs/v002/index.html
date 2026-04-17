@@ -31,7 +31,10 @@
 <link href="../../_static/styles/pydata-sphinx-theme.css?digest=7f76b32a3354e82990f2" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
     <link rel="stylesheet" type="text/css" href="../../_static/language-switcher.css?v=5ec28b56" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mermaid-theme.css?v=87bd70f5" />
+    <link rel="stylesheet" type="text/css" href="../../_static/image-lightbox.css?v=884c9d5a" />
   
   <!-- So that users can add custom icons -->
   <script defer src="../../_static/scripts/fontawesome.js?digest=7f76b32a3354e82990f2"></script>
@@ -45,10 +48,11 @@
     <script src="../../_static/translations.js?v=afa94a99"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'docs/v002/index';</script>
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
-    <script src="../../_static/language-switcher.js?v=0e12a82b"></script>
+    <script src="../../_static/language-switcher.js?v=e91f783c"></script>
+    <script src="../../_static/image-lightbox.js?v=dec353f8"></script>
     <link rel="index" title="색인" href="../../genindex.html" />
     <link rel="search" title="검색" href="../../search.html" />
-    <link rel="next" title="pccx: 병렬 컴퓨트 코어 익스큐터" href="v002_isa.html" />
+    <link rel="next" title="개요" href="overview.html" />
     <link rel="prev" title="아카이브: v001 실험적 아키텍처" href="../archive/experimental_v001/index.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="ko"/>
@@ -200,6 +204,18 @@
           <a href="https://github.com/hwkim-dev/pccx" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
             <span class="sr-only">GitHub</span></a>
         </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://hwkim-dev.github.io/hwkim-dev/" title="개인 사이트" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-solid fa-user fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">개인 사이트</span></a>
+        </li>
 </ul></div>
       
     </div>
@@ -303,6 +319,18 @@
           <a href="https://github.com/hwkim-dev/pccx" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
             <span class="sr-only">GitHub</span></a>
         </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://hwkim-dev.github.io/hwkim-dev/" title="개인 사이트" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-solid fa-user fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">개인 사이트</span></a>
+        </li>
 </ul></div>
         
       </div>
@@ -321,10 +349,40 @@
 <nav class="bd-docs-nav bd-links"
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
-  <div class="bd-toc-item navbar-nav"><ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="v002_isa.html">pccx: 병렬 컴퓨트 코어 익스큐터</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Architecture/v002_architecture.html">pccx: 병렬 컴퓨트 코어 익스큐터</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Drivers/v002_driver.html">pccx: 병렬 컴퓨트 코어 익스큐터</a></li>
+  <div class="bd-toc-item navbar-nav"><p aria-level="2" class="caption" role="heading"><span class="caption-text">개요</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="overview.html">개요</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">하드웨어 아키텍처</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="Architecture/index.html">하드웨어 아키텍처</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="Architecture/rationale.html">v001 → v002 설계 근거</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Architecture/top_level.html">탑레벨 아키텍처</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Architecture/floorplan.html">물리 플로어플랜</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Architecture/memory_hierarchy.html">메모리 계층</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Architecture/kv_cache.html">KV 캐시 최적화 전략</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Architecture/gemm_core.html">GEMM 코어 (시스톨릭 어레이)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Architecture/gemv_core.html">GEMV 코어</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Architecture/sfu_core.html">SFU 코어 (Complex Vector Operations)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Architecture/dsp48e2_w4a8.html">DSP48E2 W4A8 비트 패킹과 부호 복원</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">명령어 세트 아키텍처 (ISA)</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="ISA/index.html">명령어 세트 아키텍처 (ISA)</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="ISA/encoding.html">명령어 인코딩</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ISA/instructions.html">명령어 상세 인코딩</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ISA/dataflow.html">명령어별 데이터플로우</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">소프트웨어 스택</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="Drivers/index.html">소프트웨어 스택</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="Drivers/api.html">C API 개요</a></li>
+</ul>
+</details></li>
 </ul>
 </div>
 </nav></div>
@@ -384,18 +442,60 @@
                   
   <section id="pccx-v002">
 <h1>pccx v002 아키텍처<a class="headerlink" href="#pccx-v002" title="Link to this heading">#</a></h1>
+<p class="rubric">Parallel Compute Core eXecutor — 두 번째 세대</p>
+<p><strong>pccx v002</strong> 는 엣지 디바이스에서 Transformer 기반 대규모 언어 모델(LLM)의
+<strong>자기회귀 디코딩(Autoregressive Decoding)</strong> 을 가속하기 위해 설계된
+이기종(heterogeneous) NPU 아키텍처의 두 번째 세대입니다. v001의 GEMM 편중
+설계를 전면 재검토하여, GEMV·CVO·GEMM 이 <strong>동일한 액티베이션 버스를 공유</strong>
+하도록 L2 캐시를 아키텍처의 기하학적 중심에 배치하고, <strong>데이터 이동 경로를
+최소화</strong> 하도록 재설계되었습니다.</p>
+<hr class="docutils" />
 <div class="toctree-wrapper compound">
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">개요</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="v002_isa.html">pccx: 병렬 컴퓨트 코어 익스큐터</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="v002_isa.html#v002-isa">v002 명령어 세트 아키텍처 (ISA)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="overview.html">개요</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#id2">1. 프로젝트 목표</a></li>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#id4">2. 타겟 워크로드</a></li>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#v001">3. v001 과의 주요 차이점</a></li>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#id6">4. 에코시스템 계층</a></li>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#id7">5. 문서 구성</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="Architecture/v002_architecture.html">pccx: 병렬 컴퓨트 코어 익스큐터</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="Architecture/v002_architecture.html#v002">v002 아키텍처 개요</a></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">하드웨어 아키텍처</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Architecture/index.html">하드웨어 아키텍처</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Architecture/rationale.html">v001 → v002 설계 근거</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Architecture/top_level.html">탑레벨 아키텍처</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Architecture/floorplan.html">물리 플로어플랜</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Architecture/memory_hierarchy.html">메모리 계층</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Architecture/kv_cache.html">KV 캐시 최적화 전략</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Architecture/gemm_core.html">GEMM 코어 (시스톨릭 어레이)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Architecture/gemv_core.html">GEMV 코어</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Architecture/sfu_core.html">SFU 코어 (Complex Vector Operations)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Architecture/dsp48e2_w4a8.html">DSP48E2 W4A8 비트 패킹과 부호 복원</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="Drivers/v002_driver.html">pccx: 병렬 컴퓨트 코어 익스큐터</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="Drivers/v002_driver.html#v002-api">v002 드라이버 API</a></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">명령어 세트 아키텍처 (ISA)</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="ISA/index.html">명령어 세트 아키텍처 (ISA)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ISA/encoding.html">명령어 인코딩</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ISA/instructions.html">명령어 상세 인코딩</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ISA/dataflow.html">명령어별 데이터플로우</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">소프트웨어 스택</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Drivers/index.html">소프트웨어 스택</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Drivers/api.html">C API 개요</a></li>
 </ul>
 </li>
 </ul>
@@ -422,11 +522,11 @@
       </div>
     </a>
     <a class="right-next"
-       href="v002_isa.html"
+       href="overview.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">다음</p>
-        <p class="prev-next-title">pccx: 병렬 컴퓨트 코어 익스큐터</p>
+        <p class="prev-next-title">개요</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -465,6 +565,12 @@
     
   </p>
 </div>
+      
+        <div class="footer-item"><p class="personal-link">
+  <a href="https://hwkim-dev.github.io/hwkim-dev/" target="_blank" rel="noopener">
+    hwkim-dev.github.io
+  </a>
+</p></div>
       
     </div>
   
