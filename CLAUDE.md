@@ -716,18 +716,44 @@ transitively 로드). 둘 다 넣으면 `setup_sphinx` 가 두 번 실행돼 터
 
 ---
 
-## 12. Roadmap (post-migration)
+## 12. Roadmap (next actions)
 
-현재 브랜치(`feat/sphinx-furo-migration`) 완료 후 후속 개선 항목:
+_업데이트: 2026-04-18. 이번 브랜치 작업 + bot-author cleanup 완료 시점 기준._
 
-- [ ] **기존 RST → MyST MD 점진 마이그레이션** (섹션 단위, 의미 보존).
-- [ ] **`sphinx-external-toc`** 활성화 (`_toc.yml` 단일 소스). 현재는 설치만.
-- [ ] **pagefind** 도입 — 사이트 규모가 페이지 500+ 돌파 시.
-- [ ] **v003 RTL 분기 및 문서 템플릿**.
-- [ ] **sphinx-needs** 검토 — 요구사항 ↔ RTL 모듈 ↔ 테스트 traceability 매트릭스가 필요해질 때.
-- [ ] **Giscus/utterances** 댓글 (사용자 피드백 수집용).
-- [ ] **API 자동 문서화** — Python 드라이버가 실제 코드로 존재하면 `sphinx-autoapi`.
-- [ ] **Mermaid → SVG 일괄 교체** (중요 다이어그램 순차적으로).
+### 12.1 Done (reference only)
+
+- ✅ Phase 0–5 Furo migration (conf_common.py, Furo 테마, samples/, plots/, refs.bib, Makefile).
+- ✅ 전역 bot-author cleanup (Claude / jules[bot] / copilot-swe-agent[bot] 흔적 0. ~/gh-cleanup-backup/ 에 mirror 백업 보존).
+- ✅ 전역 재발 방지 (`~/.claude/settings.json` includeCoAuthoredBy=false, pre-push 훅, check-bot-authors.sh).
+- ✅ 3개 repo legacy branch / open PR 전부 정리 (pccx, hwkim-dev 모두 원격 "main" + gh-pages 만).
+
+### 12.2 Blocking (다음 세션에서 먼저)
+
+이 두 항목이 해결되기 전에는 **원격에 `feat/sphinx-furo-migration` 을 push 해도 배포가 실패** 합니다.
+
+- [ ] **`.github/workflows/deploy.yml` 재작성** — 현재는 pydata-sphinx-theme 기반 옛 스택을 인라인 `pip install` 중. Furo 스택은 `requirements.txt` 에 있으니, 해당 라인을 `pip install -r requirements.txt` 로 교체 + EN·KO 2회 빌드. (optional) sphinx-multiversion 훅.
+- [ ] **`.github/workflows/lint.yml` 신규** — PR 트리거로 `make strict` + `make lint`. 이게 있어야 zero-warning 불변성을 CI 가 지킴.
+
+### 12.3 Next (사용자 결정 대기)
+
+- [ ] **`feat/sphinx-furo-migration` push 및 main 으로 PR/merge 경로**: 로컬에 8 commits 대기 중. 위 12.2 가 먼저 반영된 뒤 push 해야 첫 배포가 성공함.
+- [ ] **`.venv/` untrack 결정** — 현재 tracked. `git rm --cached -r .venv/` 는 destructive 라 승인 필요.
+- [ ] **Jules / copilot-swe-agent GitHub Apps uninstall** — https://github.com/settings/installations. 사용자 수동 (브라우저). App 은 로컬 pre-push 훅을 우회함.
+- [ ] **백업 디렉토리 청소** — 1~2 주 후 문제 없으면 아래 삭제:
+  - `~/gh-cleanup-backup/*.git` (force push 이전 mirror)
+  - `~/Desktop/github/*.pre-rewrite-backup.*` (로컬 working clone 스냅샷)
+  - `~/gh-cleanup/` (filter-repo 작업 디렉토리)
+
+### 12.4 Enhancement backlog (우선순위 낮음)
+
+- [ ] **기존 `.rst` → MyST `.md` 점진 마이그레이션**. 섹션 단위. 동시에 `autosectionlabel` 중복 경고가 나던 `dataflow.rst` 의 "Path Summary" 중복 헤딩 정리.
+- [ ] **`sphinx-external-toc`** 활성화 (`_toc.yml` 단일 소스). 지금은 설치만 됨.
+- [ ] **pagefind** — 사이트가 페이지 500+ 이거나 한국어 형태소 검색이 필요해질 때 전환.
+- [ ] **v003 RTL 분기 + 문서 템플릿** — CLAUDE.md §8.4 playbook 따라 스켈레톤 복제.
+- [ ] **Mermaid → SVG 일괄 교체** — 중요 아키텍처 다이어그램부터 순차.
+- [ ] **`sphinx-needs`** 도입 검토 — 요구사항 ↔ RTL 모듈 ↔ 테스트 traceability 매트릭스.
+- [ ] **Giscus / utterances** 댓글 (독자 피드백).
+- [ ] **`sphinx-autoapi`** — Python 드라이버 코드가 생기면 자동 API 문서.
 
 ---
 
