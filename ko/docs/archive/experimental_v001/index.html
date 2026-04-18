@@ -7,19 +7,19 @@
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://hwkim-dev.github.io/pccx/docs/archive/experimental_v001/index.html" />
 <meta property="og:site_name" content="pccx — Parallel Compute Core eXecutor" />
-<meta property="og:description" content="Status Archived SystemVerilog RTL Target Hardware Quantization Precision 프로젝트 개요: pccx 는 베어메탈 Xilinx Kria KV260 FPGA(400 MHz)에서 양자화된 Gemma 3N E4B 대규모 언어 모델을 가속하기 위해 처음부터 맞춤 설계된 SystemVerilog 기반 신경망..." />
+<meta property="og:description" content="Status Archived SystemVerilog RTL Target Hardware Quantization Precision 프로젝트 개요: pccx(이전 명칭 uXC) 는 베어메탈 Xilinx Kria KV260 FPGA(400 MHz)에서 양자화된 Gemma 3N E4B 대규모 언어 모델을 가속하기 위해 처음부터 맞춤 설계된 SystemVer..." />
 <meta property="og:image:width" content="1146" />
 <meta property="og:image:height" content="600" />
-<meta property="og:image" content="https://hwkim-dev.github.io/pccx/_images/social_previews/summary_docs_archive_experimental_v001_index_ce5e6d14.png" />
-<meta property="og:image:alt" content="Status Archived SystemVerilog RTL Target Hardware Quantization Precision 프로젝트 개요: pccx 는 베어메탈 Xilinx Kria KV260 FPGA(400 MHz)에서 양자화된 Gemma 3N E4B 대규모 언어 모델을 가속하기 위해 처음부터 맞춤 설계된 SystemVerilog 기반 신경망..." />
-<meta name="description" content="Status Archived SystemVerilog RTL Target Hardware Quantization Precision 프로젝트 개요: pccx 는 베어메탈 Xilinx Kria KV260 FPGA(400 MHz)에서 양자화된 Gemma 3N E4B 대규모 언어 모델을 가속하기 위해 처음부터 맞춤 설계된 SystemVerilog 기반 신경망..." />
+<meta property="og:image" content="https://hwkim-dev.github.io/pccx/_images/social_previews/summary_docs_archive_experimental_v001_index_6591accf.png" />
+<meta property="og:image:alt" content="Status Archived SystemVerilog RTL Target Hardware Quantization Precision 프로젝트 개요: pccx(이전 명칭 uXC) 는 베어메탈 Xilinx Kria KV260 FPGA(400 MHz)에서 양자화된 Gemma 3N E4B 대규모 언어 모델을 가속하기 위해 처음부터 맞춤 설계된 SystemVer..." />
+<meta name="description" content="Status Archived SystemVerilog RTL Target Hardware Quantization Precision 프로젝트 개요: pccx(이전 명칭 uXC) 는 베어메탈 Xilinx Kria KV260 FPGA(400 MHz)에서 양자화된 Gemma 3N E4B 대규모 언어 모델을 가속하기 위해 처음부터 맞춤 설계된 SystemVer..." />
 <meta name="twitter:card" content="summary_large_image" />
-<link rel="index" title="색인" href="../../../genindex.html"><link rel="search" title="검색" href="../../../search.html"><link rel="next" title="툴체인 데모" href="../../samples/index.html"><link rel="prev" title="아카이브" href="../index.html">
+<link rel="index" title="색인" href="../../../genindex.html"><link rel="search" title="검색" href="../../../search.html"><link rel="next" title="pccx: Parallel Compute Core eXecutor" href="Architecture/v001_architecture.html"><link rel="prev" title="아카이브" href="../index.html">
         <link rel="canonical" href="https://hwkim-dev.github.io/pccx/docs/archive/experimental_v001/index.html">
 
     <!-- Generated with Sphinx 7.4.7 and Furo 2025.12.19 -->
         <title>아카이브: v001 실험적 아키텍처 - pccx 문서</title>
-      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=acfd86a5" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=fd3f3429" />
     <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
@@ -303,18 +303,37 @@
 <p class="caption" role="heading"><span class="caption-text">아카이브</span></p>
 <ul class="current">
 <li class="toctree-l1 current has-children"><a class="reference internal" href="../index.html">아카이브</a><input aria-label="Toggle navigation of 아카이브" checked="" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
-<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">아카이브: v001 실험적 아키텍처</a></li>
+<li class="toctree-l2 current has-children current-page"><a class="current reference internal" href="#">아카이브: v001 실험적 아키텍처</a><input aria-label="Toggle navigation of 아카이브: v001 실험적 아키텍처" checked="" class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="Architecture/v001_architecture.html">pccx: Parallel Compute Core eXecutor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Drivers/ISA.html">pccx ISA 사양</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Drivers/ISA_Spreadsheet.html">pccx ISA 스프레드시트 뷰</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Drivers/v001_API.html">pccx v001 호스트 API 개발자 레퍼런스</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="RTL/index.html">RTL 소스 레퍼런스 (v001)</a><input aria-label="Toggle navigation of RTL 소스 레퍼런스 (v001)" class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="RTL/top.html">최상위</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RTL/packages.html">패키지와 상수</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RTL/controller.html">NPU 컨트롤러</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RTL/mat_core.html">행렬 코어 (GEMM)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RTL/vec_core.html">벡터 코어 (GEMV)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RTL/cvo_core.html">CVO 코어 (SFU)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RTL/mem_control.html">메모리 제어</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RTL/preprocess.html">전처리</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RTL/library.html">라이브러리</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RTL/host_api.html">호스트 API (C 드라이버)</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">툴체인 데모</span></p>
 <ul>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../../samples/index.html">툴체인 데모</a><input aria-label="Toggle navigation of 툴체인 데모" class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../samples/index.html">툴체인 데모</a><input aria-label="Toggle navigation of 툴체인 데모" class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../samples/mermaid_blockdiagram.html">Mermaid — NPU 블록 다이어그램</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../samples/wavedrom_axi_read.html">WaveDrom — AXI4 read 트랜잭션</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../samples/svg_themed_demo.html">SVG — 테마 대응 4×4 PE 어레이</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../samples/plot_bandwidth.html">scienceplots — batch size 대비 대역폭</a></li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../../auto_plots/index.html">Plot gallery</a><input aria-label="Toggle navigation of Plot gallery" class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../auto_plots/index.html">Plot gallery</a><input aria-label="Toggle navigation of Plot gallery" class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../auto_plots/plot_bandwidth.html">Batch size vs achieved HP-AXI bandwidth</a></li>
 </ul>
 </li>
@@ -372,17 +391,49 @@ GEMV(벡터) 연산에 의해 제한되므로, 이 브랜치는 최적화된 구
 현재 아카이브되었습니다.</p>
 </div>
 <p><img alt="Status Archived" src="https://img.shields.io/badge/Status-Archived-red" /> <img alt="SystemVerilog RTL" src="https://img.shields.io/badge/RTL-SystemVerilog-green" /> <img alt="Target Hardware" src="https://img.shields.io/badge/Target-Kria_KV260-orange" /> <img alt="Quantization Precision" src="https://img.shields.io/badge/Precision-W4A16_BF16-green" /></p>
+<div class="toctree-wrapper compound">
+</div>
 <hr class="docutils" />
 <section id="id1">
 <h2>프로젝트 개요<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h2>
-<p><strong>pccx</strong> 는 베어메탈 Xilinx Kria KV260 FPGA(400 MHz)에서 양자화된
-<strong>Gemma 3N E4B</strong> 대규모 언어 모델을 가속하기 위해 처음부터 맞춤 설계된
-SystemVerilog 기반 신경망 처리 장치(NPU)입니다. 이 아키텍처는 KV260 플랫폼의
-1,248개 DSP48E2 슬라이스와 144개 BRAM을 기능적 한계까지 활용하도록 세밀하게 설계되었습니다.</p>
+<p><strong>pccx</strong> (이전 명칭 uXC) 는 베어메탈 Xilinx Kria KV260 FPGA(400 MHz)에서
+양자화된 <strong>Gemma 3N E4B</strong> 대규모 언어 모델을 가속하기 위해 처음부터
+맞춤 설계된 SystemVerilog 기반 신경망 처리 장치(NPU)입니다. 이 아키텍처는
+KV260 플랫폼의 1,248 개 DSP48E2 슬라이스와 144 개 BRAM 을 기능적 한계까지
+활용하도록 세밀하게 설계되었습니다.</p>
 <ul class="simple">
-<li><p><strong>소프트웨어 기준선</strong>: <a class="reference external" href="https://github.com/hwkim-dev/llm-lite">llm-lite</a> (x64 CPU 참조 구현)</p></li>
-<li><p><strong>풀스택 공동 설계</strong>: 하드웨어 가속기(SystemVerilog), 추적 기반 검증 모델(Python), AXI DMA 메모리 파이프라인.</p></li>
+<li><p><strong>소프트웨어 기준선</strong>:
+<a class="reference external" href="https://github.com/hwkim-dev/llm-lite">llm-lite</a> (x64 CPU 참조 구현)</p></li>
+<li><p><strong>풀스택 공동 설계</strong>: 하드웨어 가속기(SystemVerilog), 추적 기반 검증
+모델(Python), AXI DMA 메모리 파이프라인.</p></li>
 </ul>
+</section>
+<hr class="docutils" />
+<section id="id2">
+<h2>빠른 메뉴<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h2>
+<div class="grid cards docutils container">
+<ul>
+<li><p><a class="reference internal" href="Architecture/v001_architecture.html"><span class="doc">아키텍처 개요</span></a></p>
+<p>NPU 내부 아키텍처, 3 계층 코어 시스템의 분리형 모델, 메모리 전이
+계층 레이아웃을 설명합니다.</p>
+</li>
+<li><p><a class="reference internal" href="Drivers/ISA.html"><span class="doc">ISA 사양</span></a></p>
+<p>64-bit VLIW 코어, Opcode 라우팅 설계, 레지스터 매핑, 파이프라인
+스케줄링 방법론을 설명합니다.</p>
+</li>
+<li><p><a class="reference internal" href="Drivers/ISA_Spreadsheet.html"><span class="doc">ISA 스프레드시트</span></a></p>
+<p>전체 모듈형 ISA 구조의 스프레드시트 뷰 breakdown 을 제공합니다.</p>
+</li>
+<li><p><a class="reference internal" href="Drivers/v001_API.html"><span class="doc">C API 상세</span></a></p>
+<p>활성 NPU 호스트 컨트롤러를 타게팅하는 <code class="docutils literal notranslate"><span class="pre">pccx_v1_api.c</span></code> /
+<code class="docutils literal notranslate"><span class="pre">pccx_v1_api.h</span></code> 의 주요 래핑 인터페이스를 다룹니다.</p>
+</li>
+<li><p><a class="reference internal" href="RTL/index.html"><span class="doc">RTL 소스 레퍼런스</span></a></p>
+<p>코어별 SystemVerilog 심층 해부. <code class="docutils literal notranslate"><span class="pre">codes/v001/</span></code> 의 모든 모듈을
+syntax highlighting 과 접을 수 있는 dropdown 으로 인라인 표시.</p>
+</li>
+</ul>
+</div>
 </section>
 <hr class="docutils" />
 <section id="w4a16-bf16">
@@ -391,10 +442,10 @@ SystemVerilog 기반 신경망 처리 장치(NPU)입니다. 이 아키텍처는 
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
-<col style="width: 15.0%" />
-<col style="width: 10.0%" />
-<col style="width: 10.0%" />
-<col style="width: 65.0%" />
+<col style="width: 18.0%" />
+<col style="width: 12.0%" />
+<col style="width: 12.0%" />
+<col style="width: 58.0%" />
 </colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>데이터</p></th>
@@ -404,41 +455,54 @@ SystemVerilog 기반 신경망 처리 장치(NPU)입니다. 이 아키텍처는 
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>가중치</p></td>
+<tr class="row-even"><td><p><strong>가중치</strong></p></td>
 <td><p>INT4</p></td>
-<td><p>4비트</p></td>
-<td><p>HP 포트를 통해 스트리밍되며 순수 INT4 레이어로 소비됨</p></td>
+<td><p>4 비트</p></td>
+<td><p>HP 포트를 통해 스트리밍되며 순수 INT4 레이어로 소비</p></td>
 </tr>
-<tr class="row-odd"><td><p>피처맵</p></td>
+<tr class="row-odd"><td><p><strong>피처맵</strong></p></td>
 <td><p>BF16</p></td>
-<td><p>16비트</p></td>
-<td><p>BF16 → 27비트 고정소수점으로 변환 후 네이티브 MAC 연산 수행</p></td>
+<td><p>16 비트</p></td>
+<td><p>BF16 <span class="math notranslate nohighlight">\(\rightarrow\)</span> 27 비트 고정소수점으로 변환 후 네이티브 MAC 연산</p></td>
 </tr>
-<tr class="row-even"><td><p>누산기</p></td>
+<tr class="row-even"><td><p><strong>누산기</strong></p></td>
 <td><p>INT48</p></td>
-<td><p>48비트</p></td>
+<td><p>48 비트</p></td>
 <td><p>DSP48E2 블록의 P-레지스터를 통해 재귀적으로 누산</p></td>
 </tr>
-<tr class="row-odd"><td><p>SFU I/O</p></td>
+<tr class="row-odd"><td><p><strong>SFU I/O</strong></p></td>
 <td><p>BF16</p></td>
-<td><p>16비트</p></td>
-<td><p>정규화 후 비선형 연산을 위해 BF16으로 재구성</p></td>
+<td><p>16 비트</p></td>
+<td><p>정규화 후 비선형 연산을 위해 BF16 으로 재구성</p></td>
 </tr>
 </tbody>
 </table>
 </div>
+<section id="id3">
+<h3>정밀도 승격 흐름<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h3>
+<pre  class="mermaid">
+        graph TD
+    A[Weight: INT4] --&gt; MAC[DSP48E2 MAC]
+    B[FMap: BF16 → 27-bit fixed-pt] --&gt; MAC
+    MAC --&gt;|Accumulator| C[INT48]
+    C --&gt;|Barrel Shift + LOD| D[Normalization: BF16]
+    D --&gt;|SFU / CORDIC| E[Non-Linear Ops: exp, RMSNorm, Softmax...]
+    E --&gt; F[Output: BF16 to next layer]
+    </pre><p>비선형 연산(Complex Vector Operation) 루프로 진입하는 전이 구간에서
+연산은 정확히 <strong>BF16</strong> 으로 승격됩니다.</p>
+</section>
 </section>
 <hr class="docutils" />
-<section id="id2">
-<h2>컴퓨트 엔진<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h2>
+<section id="id4">
+<h2>컴퓨트 엔진<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h2>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
-<col style="width: 15.0%" />
-<col style="width: 20.0%" />
-<col style="width: 20.0%" />
-<col style="width: 20.0%" />
-<col style="width: 25.0%" />
+<col style="width: 12.0%" />
+<col style="width: 22.0%" />
+<col style="width: 22.0%" />
+<col style="width: 26.0%" />
+<col style="width: 18.0%" />
 </colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>엔진</p></th>
@@ -449,19 +513,19 @@ SystemVerilog 기반 신경망 처리 장치(NPU)입니다. 이 아키텍처는 
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>행렬 코어</p></td>
+<tr class="row-even"><td><p><strong>행렬 코어</strong></p></td>
 <td><p>GEMM (프리필, 프로젝션)</p></td>
-<td><p>HP0/1 (32 INT4/클럭)</p></td>
-<td><p>BF16 → 27비트 고정소수점</p></td>
+<td><p>HP0/1 (32 INT4/clk)</p></td>
+<td><p>BF16 <span class="math notranslate nohighlight">\(\rightarrow\)</span> 27 비트 고정소수점</p></td>
 <td><p>INT48 (DSP48E2)</p></td>
 </tr>
-<tr class="row-odd"><td><p>벡터 코어</p></td>
-<td><p>GEMV (자기회귀 디코딩)</p></td>
-<td><p>HP2/3 (32 INT4/클럭, 각 포트)</p></td>
-<td><p>BF16 → 27비트 고정소수점</p></td>
+<tr class="row-odd"><td><p><strong>벡터 코어</strong></p></td>
+<td><p>GEMV (자기회귀 디코드)</p></td>
+<td><p>HP2/3 (32 INT4/clk each)</p></td>
+<td><p>BF16 <span class="math notranslate nohighlight">\(\rightarrow\)</span> 27 비트 고정소수점</p></td>
 <td><p>INT48 (DSP48E2)</p></td>
 </tr>
-<tr class="row-even"><td><p>CVO 코어</p></td>
+<tr class="row-even"><td><p><strong>CVO 코어</strong></p></td>
 <td><p>비선형 연산 (Softmax, GELU, RoPE)</p></td>
 <td><p>N/A</p></td>
 <td><p>L2 경유 BF16 스트림</p></td>
@@ -470,9 +534,12 @@ SystemVerilog 기반 신경망 처리 장치(NPU)입니다. 이 아키텍처는 
 </tbody>
 </table>
 </div>
-<p><strong>분리형 데이터플로우</strong> 설계 원칙을 적용하면 연산 명령어가 비동기적으로 실행됩니다.
-글로벌 파이프라인에서 별개의 모듈로 분산되어 아키텍처 스톨을 완전히 방지하고
-수학적 하드웨어 처리량을 최대로 끌어올립니다.</p>
+<blockquote>
+<div><p>구조적 <strong>분리형 데이터플로우</strong> 설계 원칙을 적용하면 연산 명령어가
+비동기적으로 실행됩니다. 글로벌 파이프라인에서 별개의 모듈로 분산되어
+아키텍처 스톨을 완전히 방지하고 수학적 하드웨어 처리량을 최고점까지
+밀어붙입니다.</p>
+</div></blockquote>
 </section>
 </section>
 
@@ -487,12 +554,12 @@ SystemVerilog 기반 신경망 처리 장치(NPU)입니다. 이 아키텍처는 
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="../../samples/index.html">
+          <a class="next-page" href="Architecture/v001_architecture.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">툴체인 데모</div>
+                <div class="title">pccx: Parallel Compute Core eXecutor</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
@@ -542,8 +609,12 @@ SystemVerilog 기반 신경망 처리 장치(NPU)입니다. 이 아키텍처는 
             <ul>
 <li><a class="reference internal" href="#">아카이브: v001 실험적 아키텍처</a><ul>
 <li><a class="reference internal" href="#id1">프로젝트 개요</a></li>
-<li><a class="reference internal" href="#w4a16-bf16">양자화 전략: W4A16 + BF16 활성화</a></li>
-<li><a class="reference internal" href="#id2">컴퓨트 엔진</a></li>
+<li><a class="reference internal" href="#id2">빠른 메뉴</a></li>
+<li><a class="reference internal" href="#w4a16-bf16">양자화 전략: W4A16 + BF16 활성화</a><ul>
+<li><a class="reference internal" href="#id3">정밀도 승격 흐름</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id4">컴퓨트 엔진</a></li>
 </ul>
 </li>
 </ul>
@@ -571,6 +642,444 @@ SystemVerilog 기반 신경망 처리 장치(NPU)입니다. 이 아키텍처는 
     <script src="https://wavedrom.com/skins/default.js"></script>
     <script src="https://wavedrom.com/wavedrom.min.js"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+    <script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@10.9.0/dist/mermaid.esm.min.mjs";
+
+
+
+
+
+const initStyles = () => {
+    const defaultStyle = document.createElement('style');
+    defaultStyle.textContent = `pre.mermaid {
+    /* Same as .mermaid-container > pre */
+    display: block;
+    width: 100%;
+}
+
+pre.mermaid > svg {
+    /* Same as .mermaid-container > pre > svg */
+    height: 500px;
+    width: 100%;
+    max-width: 100% !important;
+}`;
+    document.head.appendChild(defaultStyle);
+
+    const fullscreenStyle = document.createElement('style');
+    fullscreenStyle.textContent = `.mermaid-container {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+.mermaid-container > pre {
+    display: block;
+    width: 100%;
+}
+
+.mermaid-container > pre > svg {
+    height: 500px;
+    width: 100%;
+    max-width: 100% !important;
+}
+
+.mermaid-fullscreen-btn {
+    width: 28px;
+    height: 28px;
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    font-size: 14px;
+    line-height: 1;
+    padding: 0;
+    color: #333;
+}
+
+.mermaid-fullscreen-btn:hover {
+    opacity: 100% !important;
+    background: rgba(255, 255, 255, 1);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+    transform: scale(1.1);
+}
+
+.mermaid-fullscreen-btn.dark-theme {
+    background: rgba(50, 50, 50, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: #e0e0e0;
+}
+
+.mermaid-fullscreen-btn.dark-theme:hover {
+    background: rgba(60, 60, 60, 1);
+    box-shadow: 0 3px 10px rgba(255, 255, 255, 0.2);
+}
+
+.mermaid-fullscreen-modal {
+    display: none;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 95vw;
+    height: 100vh;
+    background: rgba(255, 255, 255, 0.98);
+    z-index: 9999;
+    padding: 20px;
+    overflow: auto;
+}
+
+.mermaid-fullscreen-modal.dark-theme {
+    background: rgba(0, 0, 0, 0.98);
+}
+
+.mermaid-fullscreen-modal.active {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mermaid-container-fullscreen {
+    position: relative;
+    width: 95vw;
+    height: 90vh;
+    max-width: 95vw;
+    max-height: 90vh;
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    overflow: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mermaid-container-fullscreen.dark-theme {
+    background: #1a1a1a;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+}
+
+.mermaid-container-fullscreen pre.mermaid {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mermaid-container-fullscreen .mermaid svg {
+    height: 100% !important;
+    width: 100% !important;
+    cursor: grab;
+}
+
+.mermaid-fullscreen-close {
+    position: fixed !important;
+    top: 20px !important;
+    right: 20px !important;
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    transition: all 0.2s;
+    font-size: 24px;
+    line-height: 1;
+    color: #333;
+}
+
+.mermaid-fullscreen-close:hover {
+    background: white;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+    transform: scale(1.1);
+}
+
+.mermaid-fullscreen-close.dark-theme {
+    background: rgba(50, 50, 50, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #e0e0e0;
+}
+
+.mermaid-fullscreen-close.dark-theme:hover {
+    background: rgba(60, 60, 60, 1);
+    box-shadow: 0 6px 16px rgba(255, 255, 255, 0.2);
+}
+
+.mermaid-fullscreen-modal .mermaid-fullscreen-btn {
+    display: none !important;
+}`;
+    document.head.appendChild(fullscreenStyle);
+}
+
+// Detect if page has dark background
+const isDarkTheme = () => {
+    // We use a set of heuristics:
+    // 1. Check for common dark mode classes or attributes
+    // 2. Check computed background color brightness
+    if (document.documentElement.classList.contains('dark') ||
+        document.documentElement.getAttribute('data-theme') === 'dark' ||
+        document.body.classList.contains('dark') ||
+        document.body.getAttribute('data-theme') === 'dark') {
+        // console.log("Dark theme detected via class/attribute");
+        return true;
+    }
+    if (document.documentElement.classList.contains('light') ||
+        document.documentElement.getAttribute('data-theme') === 'light' ||
+        document.body.classList.contains('light') ||
+        document.body.getAttribute('data-theme') === 'light') {
+        // console.log("Light theme detected via class/attribute");
+        return false;
+    }
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        // console.log("Dark theme detected via prefers-color-scheme");
+        return true;
+    }
+    const bgColor = window.getComputedStyle(document.body).backgroundColor;
+    const match = bgColor.match(/rgb\((\d+),\s*(\d+),\s*(\d+)/);
+    if (match) {
+        const r = parseInt(match[1]);
+        const g = parseInt(match[2]);
+        const b = parseInt(match[3]);
+        const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+        // console.log("Background color brightness:", brightness);
+        return brightness < 128;
+    }
+    // console.log("No dark or light theme detected, defaulting to light theme");
+    return false;
+};
+
+let darkTheme = isDarkTheme();
+let modal = null;
+let modalContent = null;
+let previousScrollOffset = [window.scrollX, window.scrollY];
+
+const runMermaid = async (rerun) => {
+    console.log("Running mermaid diagrams, rerun =", rerun);
+    // clear all existing mermaid charts
+    let all_mermaids = document.querySelectorAll(".mermaid");
+
+    if (rerun) {
+        all_mermaids.forEach((el) => {
+            if(!el.hasAttribute("data-original-code")) {
+                // store original code
+                // console.log(`Storing original code for first run: `, el.innerHTML);
+                el.setAttribute('data-original-code', el.innerHTML);
+            }
+            if(el.getAttribute("data-processed") === "true") {
+                // remove and restore original
+                el.removeAttribute("data-processed");
+                // console.log(`Restoring original code for re-run: `, el.getAttribute('data-original-code'));
+                el.innerHTML = el.getAttribute('data-original-code');
+            } else {
+                // store original code
+                // console.log(`Storing original code for re-run: `, el.innerHTML);
+                el.setAttribute('data-original-code', el.innerHTML);
+            }
+        });
+        await mermaid.run();
+    }
+
+    all_mermaids = document.querySelectorAll(".mermaid");
+    const mermaids_processed = document.querySelectorAll(".mermaid[data-processed='true']");
+
+    if ("False" === "True") {
+        const mermaids_to_add_zoom = -1 === -1 ? all_mermaids.length : -1;
+        if(mermaids_to_add_zoom > 0) {
+            var svgs = d3.selectAll("");
+            if(all_mermaids.length !== mermaids_processed.length) {
+                setTimeout(() => runMermaid(false), 200);
+                return;
+            } else if(svgs.size() !== mermaids_to_add_zoom) {
+                setTimeout(() => runMermaid(false), 200);
+                return;
+            } else {
+                svgs.each(function() {
+                    var svg = d3.select(this);
+                    svg.html("<g class='wrapper'>" + svg.html() + "</g>");
+                    var inner = svg.select("g");
+                    var zoom = d3.zoom().on("zoom", function(event) {
+                        inner.attr("transform", event.transform);
+                    });
+                    svg.call(zoom);
+                });
+            }
+        }
+    } else if(all_mermaids.length !== mermaids_processed.length) {
+        // Wait for mermaid to process all diagrams
+        setTimeout(() => runMermaid(false), 200);
+        return;
+    }
+
+    // Stop here if not adding fullscreen capability
+    if ("True" !== "True") return;
+
+    if (modal !== null ) {
+        // Destroy existing modal
+        modal.remove();
+        modal = null;
+        modalContent = null;
+    }
+
+    modal = document.createElement('div');
+    modal.className = 'mermaid-fullscreen-modal' + (darkTheme ? ' dark-theme' : '');
+    modal.setAttribute('role', 'dialog');
+    modal.setAttribute('aria-modal', 'true');
+    modal.setAttribute('aria-label', 'Fullscreen diagram viewer');
+    modal.innerHTML = `
+        <button class="mermaid-fullscreen-close${darkTheme ? ' dark-theme' : ''}" aria-label="Close fullscreen">✕</button>
+        <div class="mermaid-container-fullscreen${darkTheme ? ' dark-theme' : ''}"></div>
+    `;
+    document.body.appendChild(modal);
+
+    modalContent = modal.querySelector('.mermaid-container-fullscreen');
+    const closeBtn = modal.querySelector('.mermaid-fullscreen-close');
+
+    const closeModal = () => {
+        modal.classList.remove('active');
+        modalContent.innerHTML = '';
+        document.body.style.overflow = ''
+        window.scrollTo({left: previousScrollOffset[0], top: previousScrollOffset[1], behavior: 'instant'});
+    };
+
+    closeBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+    });
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal.classList.contains('active')) {
+            closeModal();
+        }
+    });
+
+    document.querySelectorAll('.mermaid').forEach((mermaidDiv) => {
+        if (mermaidDiv.parentNode.classList.contains('mermaid-container') ||
+            mermaidDiv.closest('.mermaid-fullscreen-modal')) {
+            // Already processed, adjust button class if needed
+            const existingBtn = mermaidDiv.parentNode.querySelector('.mermaid-fullscreen-btn');
+            if (existingBtn) {
+                existingBtn.className = 'mermaid-fullscreen-btn' + (darkTheme ? ' dark-theme' : '');
+            }
+            return;
+        }
+
+        const container = document.createElement('div');
+        container.className = 'mermaid-container';
+        mermaidDiv.parentNode.insertBefore(container, mermaidDiv);
+        container.appendChild(mermaidDiv);
+
+        const fullscreenBtn = document.createElement('button');
+        fullscreenBtn.className = 'mermaid-fullscreen-btn' + (darkTheme ? ' dark-theme' : '');
+        fullscreenBtn.setAttribute('aria-label', 'View diagram in fullscreen');
+        fullscreenBtn.textContent = '⛶';
+        fullscreenBtn.style.opacity = '50%';
+
+        // Calculate dynamic position based on diagram's margin and padding
+        const diagramStyle = window.getComputedStyle(mermaidDiv);
+        const marginTop = parseFloat(diagramStyle.marginTop) || 0;
+        const marginRight = parseFloat(diagramStyle.marginRight) || 0;
+        const paddingTop = parseFloat(diagramStyle.paddingTop) || 0;
+        const paddingRight = parseFloat(diagramStyle.paddingRight) || 0;
+        fullscreenBtn.style.top = `${marginTop + paddingTop + 4}px`;
+        fullscreenBtn.style.right = `${marginRight + paddingRight + 4}px`;
+
+        fullscreenBtn.addEventListener('click', () => {
+            previousScrollOffset = [window.scroll, window.scrollY];
+            const clone = mermaidDiv.cloneNode(true);
+            modalContent.innerHTML = '';
+            modalContent.appendChild(clone);
+
+            const svg = clone.querySelector('svg');
+            if (svg) {
+                svg.removeAttribute('width');
+                svg.removeAttribute('height');
+                svg.style.width = '100%';
+                svg.style.height = 'auto';
+                svg.style.maxWidth = '100%';
+                svg.style.sdisplay = 'block';
+
+                if ("False" === "True") {
+                    setTimeout(() => {
+                        const g = svg.querySelector('g');
+                        if (g) {
+                            var svgD3 = d3.select(svg);
+                            svgD3.html("<g class='wrapper'>" + svgD3.html() + "</g>");
+                            var inner = svgD3.select("g");
+                            var zoom = d3.zoom().on("zoom", function(event) {
+                                inner.attr("transform", event.transform);
+                            });
+                            svgD3.call(zoom);
+                        }
+                    }, 100);
+                }
+            }
+
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+        container.appendChild(fullscreenBtn);
+    });
+};
+
+const load = async () => {
+    initStyles();
+
+    await runMermaid(true);
+
+    const reRunIfThemeChanges = async () => {
+        const newDarkTheme = isDarkTheme();
+        if (newDarkTheme !== darkTheme) {
+            darkTheme = newDarkTheme;
+            console.log("Theme change detected, re-running mermaid with", darkTheme ? "dark" : "default", "theme");
+            await mermaid.initialize(
+                {...JSON.parse(
+                    `{"startOnLoad": false}`
+                ),
+                ...{ darkMode: darkTheme, theme: darkTheme ? 'dark' : 'default' },
+                }
+            );
+            await runMermaid(true);
+        }
+    };
+
+    // Update theme classes when theme changes
+    const themeObserver = new MutationObserver(reRunIfThemeChanges);
+    themeObserver.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ['class', 'style', 'data-theme']
+    });
+    themeObserver.observe(document.body, {
+        attributes: true,
+        attributeFilter: ['class', 'style', 'data-theme']
+    });
+};
+
+
+
+
+
+console.log("Initializing mermaid with", darkTheme ? "dark" : "default", "theme");
+mermaid.initialize(
+    {...JSON.parse(
+        `{"startOnLoad": false}`
+    ),
+    ...{ darkMode: darkTheme, theme: darkTheme ? 'dark' : 'default' },
+    }
+);
+
+window.addEventListener("load", load);
+window.runMermaid = runMermaid;</script>
     <script src="../../../_static/image-lightbox.js?v=dec353f8"></script>
     <script src="../../../_static/language-switcher.js?v=118c9f35"></script>
     </body>

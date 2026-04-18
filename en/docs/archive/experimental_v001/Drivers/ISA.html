@@ -19,7 +19,7 @@
 
     <!-- Generated with Sphinx 7.4.7 and Furo 2025.12.19 -->
         <title>pccx ISA Specification - pccx</title>
-      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=acfd86a5" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css?v=fd3f3429" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
@@ -308,7 +308,19 @@
 <li class="toctree-l3 current current-page"><a class="current reference internal" href="#">pccx ISA Specification</a></li>
 <li class="toctree-l3"><a class="reference internal" href="ISA_Spreadsheet.html">pccx ISA Spreadsheet View</a></li>
 <li class="toctree-l3"><a class="reference internal" href="v001_API.html">Developer Reference for pccx v001 Host API</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../rtl_source.html">RTL Source Reference (v001)</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../RTL/index.html">RTL Source Reference (v001)</a><input aria-label="Toggle navigation of RTL Source Reference (v001)" class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../RTL/top.html">Top level</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RTL/packages.html">Packages and Constants</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RTL/controller.html">NPU Controller</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RTL/mat_core.html">Matrix Core (GEMM)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RTL/vec_core.html">Vector Core (GEMV)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RTL/cvo_core.html">CVO Core (SFU)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RTL/mem_control.html">Memory Control</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RTL/preprocess.html">Preprocess</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RTL/library.html">Library</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RTL/host_api.html">Host API (C driver)</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -316,12 +328,12 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Toolchain Demos</span></p>
 <ul>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../../../samples/index.html">Toolchain Demos</a><input aria-label="Toggle navigation of Toolchain Demos" class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../samples/index.html">Toolchain Demos</a><input aria-label="Toggle navigation of Toolchain Demos" class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../samples/mermaid_blockdiagram.html">Mermaid — NPU block diagram</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../samples/wavedrom_axi_read.html">WaveDrom — AXI4 read transaction</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../samples/svg_themed_demo.html">SVG — themed 4×4 PE array</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../samples/plot_bandwidth.html">scienceplots — bandwidth vs batch size</a></li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../auto_plots/index.html">Plot gallery</a><input aria-label="Toggle navigation of Plot gallery" class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../auto_plots/index.html">Plot gallery</a><input aria-label="Toggle navigation of Plot gallery" class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../../auto_plots/plot_bandwidth.html">Batch size vs achieved HP-AXI bandwidth</a></li>
 </ul>
 </li>
@@ -608,7 +620,7 @@ normalization factor 4. <code class="docutils literal notranslate"><span class="
 </section>
 <section id="cvo-flags-5-bit-5-1-of-body">
 <h4>3.4.2 CVO Flags (5-bit, [5:1] of body)<a class="headerlink" href="#cvo-flags-5-bit-5-1-of-body" title="Link to this heading">¶</a></h4>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="mi">5</span><span class="p">]</span>  <span class="n">sub_emax</span>      <span class="n">Subtract</span> <span class="n">e_max</span> <span class="kn">from</span> <span class="nn">input</span> <span class="n">before</span> <span class="n">operation</span> <span class="p">(</span><span class="n">requires</span> <span class="n">prior</span> <span class="n">FINDEMAX</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="mi">5</span><span class="p">]</span>  <span class="n">sub_emax</span>      <span class="n">Subtract</span> <span class="n">e_max</span> <span class="kn">from</span><span class="w"> </span><span class="nn">input</span> <span class="n">before</span> <span class="n">operation</span> <span class="p">(</span><span class="n">requires</span> <span class="n">prior</span> <span class="n">FINDEMAX</span><span class="p">)</span>
 <span class="p">[</span><span class="mi">4</span><span class="p">]</span>  <span class="n">recip_scale</span>   <span class="n">Use</span> <span class="n">reciprocal</span> <span class="n">of</span> <span class="n">scalar</span> <span class="k">for</span> <span class="n">SCALE</span> <span class="p">(</span><span class="n">divide</span> <span class="n">instead</span> <span class="n">of</span> <span class="n">multiply</span><span class="p">)</span>
 <span class="p">[</span><span class="mi">3</span><span class="p">]</span>  <span class="n">accm</span>          <span class="n">Accumulate</span> <span class="n">into</span> <span class="n">dst</span> <span class="p">(</span><span class="n">do</span> <span class="ow">not</span> <span class="n">overwrite</span><span class="p">)</span>
 <span class="p">[</span><span class="mi">2</span><span class="p">:</span><span class="mi">1</span><span class="p">]</span> <span class="n">reserved</span>

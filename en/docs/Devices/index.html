@@ -7,19 +7,19 @@
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://hwkim-dev.github.io/pccx/docs/Devices/index.html" />
 <meta property="og:site_name" content="pccx — Parallel Compute Core eXecutor" />
-<meta property="og:description" content="Target Hardware: Xilinx Kria KV260." />
+<meta property="og:description" content="Target Hardware: Xilinx Kria KV260- Key specifications, Memory architecture, Resource utilization.." />
 <meta property="og:image:width" content="1146" />
 <meta property="og:image:height" content="600" />
-<meta property="og:image" content="https://hwkim-dev.github.io/pccx/_images/social_previews/summary_docs_Devices_index_7a2a1e84.png" />
-<meta property="og:image:alt" content="Target Hardware: Xilinx Kria KV260." />
-<meta name="description" content="Target Hardware: Xilinx Kria KV260." />
+<meta property="og:image" content="https://hwkim-dev.github.io/pccx/_images/social_previews/summary_docs_Devices_index_27635d8e.png" />
+<meta property="og:image:alt" content="Target Hardware: Xilinx Kria KV260- Key specifications, Memory architecture, Resource utilization.." />
+<meta name="description" content="Target Hardware: Xilinx Kria KV260- Key specifications, Memory architecture, Resource utilization.." />
 <meta name="twitter:card" content="summary_large_image" />
 <link rel="index" title="Index" href="../../genindex.html"><link rel="search" title="Search" href="../../search.html"><link rel="next" title="Target Hardware: Xilinx Kria KV260" href="kv260.html"><link rel="prev" title="NPU Controller Modules" href="../v002/RTL/controller.html">
         <link rel="canonical" href="https://hwkim-dev.github.io/pccx/docs/Devices/index.html">
 
     <!-- Generated with Sphinx 7.4.7 and Furo 2025.12.19 -->
         <title>Devices - pccx</title>
-      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=acfd86a5" />
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=fd3f3429" />
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
@@ -308,7 +308,19 @@
 <li class="toctree-l3"><a class="reference internal" href="../archive/experimental_v001/Drivers/ISA.html">pccx ISA Specification</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../archive/experimental_v001/Drivers/ISA_Spreadsheet.html">pccx ISA Spreadsheet View</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../archive/experimental_v001/Drivers/v001_API.html">Developer Reference for pccx v001 Host API</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../archive/experimental_v001/rtl_source.html">RTL Source Reference (v001)</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../archive/experimental_v001/RTL/index.html">RTL Source Reference (v001)</a><input aria-label="Toggle navigation of RTL Source Reference (v001)" class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../archive/experimental_v001/RTL/top.html">Top level</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../archive/experimental_v001/RTL/packages.html">Packages and Constants</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../archive/experimental_v001/RTL/controller.html">NPU Controller</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../archive/experimental_v001/RTL/mat_core.html">Matrix Core (GEMM)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../archive/experimental_v001/RTL/vec_core.html">Vector Core (GEMV)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../archive/experimental_v001/RTL/cvo_core.html">CVO Core (SFU)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../archive/experimental_v001/RTL/mem_control.html">Memory Control</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../archive/experimental_v001/RTL/preprocess.html">Preprocess</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../archive/experimental_v001/RTL/library.html">Library</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../archive/experimental_v001/RTL/host_api.html">Host API (C driver)</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -316,12 +328,12 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Toolchain Demos</span></p>
 <ul>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../samples/index.html">Toolchain Demos</a><input aria-label="Toggle navigation of Toolchain Demos" class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../samples/index.html">Toolchain Demos</a><input aria-label="Toggle navigation of Toolchain Demos" class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../samples/mermaid_blockdiagram.html">Mermaid — NPU block diagram</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../samples/wavedrom_axi_read.html">WaveDrom — AXI4 read transaction</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../samples/svg_themed_demo.html">SVG — themed 4×4 PE array</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../samples/plot_bandwidth.html">scienceplots — bandwidth vs batch size</a></li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../auto_plots/index.html">Plot gallery</a><input aria-label="Toggle navigation of Plot gallery" class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../auto_plots/index.html">Plot gallery</a><input aria-label="Toggle navigation of Plot gallery" class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../auto_plots/plot_bandwidth.html">Batch size vs achieved HP-AXI bandwidth</a></li>
 </ul>
 </li>
@@ -373,7 +385,12 @@
 <h1>Devices<a class="headerlink" href="#devices" title="Link to this heading">¶</a></h1>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="kv260.html">Target Hardware: Xilinx Kria KV260</a></li>
+<li class="toctree-l1"><a class="reference internal" href="kv260.html">Target Hardware: Xilinx Kria KV260</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="kv260.html#key-specifications">Key specifications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kv260.html#memory-architecture">Memory architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kv260.html#resource-utilization">Resource utilization</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </section>

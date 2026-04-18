@@ -1,0 +1,1090 @@
+<!doctype html>
+<html class="no-js" lang="ko" data-content_root="../../../../">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="벡터 코어 (GEMV)" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://hwkim-dev.github.io/pccx/docs/archive/experimental_v001/RTL/vec_core.html" />
+<meta property="og:site_name" content="pccx — Parallel Compute Core eXecutor" />
+<meta property="og:description" content="4 개의 병렬 μV-core. 각 코어는 자기 L1 캐시 슬라이스에서 활성화를, HP2/HP3 (포트당 32 INT4/clk) 에서 가중치를 읽습니다. 부분곱은 3 단 reduction tree 로, 이후 Emax 정렬 BF16 누산기로 들어갑니다. 단일 토큰 디코드 경로가 가중치 대역폭에 제한되는 자기회귀 디코딩에서 이 엔진이 주역입니다. 모듈: G..." />
+<meta property="og:image:width" content="1146" />
+<meta property="og:image:height" content="600" />
+<meta property="og:image" content="https://hwkim-dev.github.io/pccx/_images/social_previews/summary_docs_archive_experimental_v001_RTL_vec_core_1afb28a5.png" />
+<meta property="og:image:alt" content="4 개의 병렬 μV-core. 각 코어는 자기 L1 캐시 슬라이스에서 활성화를, HP2/HP3 (포트당 32 INT4/clk) 에서 가중치를 읽습니다. 부분곱은 3 단 reduction tree 로, 이후 Emax 정렬 BF16 누산기로 들어갑니다. 단일 토큰 디코드 경로가 가중치 대역폭에 제한되는 자기회귀 디코딩에서 이 엔진이 주역입니다. 모듈: G..." />
+<meta name="description" content="4 개의 병렬 μV-core. 각 코어는 자기 L1 캐시 슬라이스에서 활성화를, HP2/HP3 (포트당 32 INT4/clk) 에서 가중치를 읽습니다. 부분곱은 3 단 reduction tree 로, 이후 Emax 정렬 BF16 누산기로 들어갑니다. 단일 토큰 디코드 경로가 가중치 대역폭에 제한되는 자기회귀 디코딩에서 이 엔진이 주역입니다. 모듈: G..." />
+<meta name="twitter:card" content="summary_large_image" />
+<link rel="index" title="색인" href="../../../../genindex.html"><link rel="search" title="검색" href="../../../../search.html"><link rel="next" title="CVO 코어 (SFU)" href="cvo_core.html"><link rel="prev" title="행렬 코어 (GEMM)" href="mat_core.html">
+        <link rel="canonical" href="https://hwkim-dev.github.io/pccx/docs/archive/experimental_v001/RTL/vec_core.html">
+
+    <!-- Generated with Sphinx 7.4.7 and Furo 2025.12.19 -->
+        <title>벡터 코어 (GEMV) - pccx 문서</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=d111a655" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/styles/furo.css?v=7bdb33bb" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css?v=fd3f3429" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/sg_gallery.css?v=d2d258e8" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/styles/furo-extensions.css?v=8dab3a3b" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/custom.css?v=505235e3" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/image-lightbox.css?v=884c9d5a" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/language-switcher.css?v=cc8629cf" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f2f2f2;
+  --color-code-foreground: #1e1e1e;
+  --color-brand-primary: #0b5fff;
+  --color-brand-content: #0b5fff;
+  --color-announcement-background: #fff5cf;
+  --color-announcement-text: #6b5900;
+  --pccx-accent: #ff7a00;
+  --pccx-muted-border: #dbe1ea;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  --color-brand-primary: #7aa8ff;
+  --color-brand-content: #7aa8ff;
+  --color-announcement-background: #332a00;
+  --color-announcement-text: #f9e58b;
+  --pccx-accent: #ffb470;
+  --pccx-muted-border: #3a4049;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  --color-brand-primary: #7aa8ff;
+  --color-brand-content: #7aa8ff;
+  --color-announcement-background: #332a00;
+  --color-announcement-text: #f9e58b;
+  --pccx-accent: #ffb470;
+  --pccx-muted-border: #3a4049;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+<div class="announcement">
+  <aside class="announcement-content">
+     한국어 버전 · <a href="/pccx/en/">View in English →</a> 
+  </aside>
+</div>
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../../../index.html"><div class="brand">pccx 문서</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky">
+
+<a class="sidebar-brand" href="../../../../index.html">
+      <span class="sidebar-brand-text">pccx 문서</span>
+</a>
+
+
+<div class="pccx-langswitch" role="group" aria-label="Language">
+  <a class="pccx-langswitch__btn" href="/pccx/en/"  data-pccx-lang="en">EN</a>
+  <span class="pccx-langswitch__sep" aria-hidden="true">·</span>
+  <a class="pccx-langswitch__btn" href="/pccx/ko/"  data-pccx-lang="ko">한국어</a>
+</div><form class="sidebar-search-container" method="get" action="../../../../search.html" role="search">
+  <input class="sidebar-search" placeholder="검색" name="q" aria-label="검색">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">소개</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../index.html">pccx: 병렬 컴퓨트 코어 익스큐터</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">v002 아키텍처</span></p>
+<ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../v002/index.html">pccx v002 아키텍처</a><input aria-label="Toggle navigation of pccx v002 아키텍처" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../v002/overview.html">개요</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../v002/Architecture/index.html">하드웨어 아키텍처</a><input aria-label="Toggle navigation of 하드웨어 아키텍처" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../v002/Architecture/rationale.html">v001 → v002 설계 근거</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../v002/Architecture/top_level.html">탑레벨 아키텍처</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../v002/Architecture/floorplan.html">물리 플로어플랜</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../v002/Architecture/memory_hierarchy.html">메모리 계층</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../v002/Architecture/kv_cache.html">KV 캐시 최적화 전략</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../v002/Architecture/gemm_core.html">GEMM 코어 (시스톨릭 어레이)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../v002/Architecture/gemv_core.html">GEMV 코어</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../v002/Architecture/sfu_core.html">SFU 코어 (Complex Vector Operations)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../v002/Architecture/dsp48e2_w4a8.html">DSP48E2 W4A8 비트 패킹과 부호 복원</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../v002/ISA/index.html">명령어 세트 아키텍처 (ISA)</a><input aria-label="Toggle navigation of 명령어 세트 아키텍처 (ISA)" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../v002/ISA/encoding.html">명령어 인코딩</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../v002/ISA/instructions.html">명령어 상세 인코딩</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../v002/ISA/dataflow.html">명령어별 데이터플로우</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../v002/Drivers/index.html">소프트웨어 스택</a><input aria-label="Toggle navigation of 소프트웨어 스택" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../v002/Drivers/api.html">C API 개요</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../v002/Models/index.html">타깃 모델</a><input aria-label="Toggle navigation of 타깃 모델" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../v002/Models/gemma3n_overview.html">Gemma 3N E4B — 개요</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../v002/Models/gemma3n_pipeline.html">Gemma 3N E4B — 연산자 수준 파이프라인</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../v002/Models/gemma3n_attention_rope.html">Gemma 3N — Attention 및 RoPE 제약</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../v002/Models/gemma3n_ple_laurel.html">Gemma 3N — LAuReL 과 PLE Calibration 모듈</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../v002/Models/gemma3n_ffn_sparsity.html">Gemma 3N — FFN Gaussian Top-K Sparsity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../v002/Models/gemma3n_execution.html">Gemma 3N E4B 를 pccx v002 에서 실행 — Execution / Scheduling</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../v002/RTL/index.html">RTL 소스 레퍼런스 (v002)</a><input aria-label="Toggle navigation of RTL 소스 레퍼런스 (v002)" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../v002/RTL/isa_pkg.html">ISA 타입 패키지</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../v002/RTL/npu_top.html">NPU 최상위 모듈</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../v002/RTL/compute_cores.html">컴퓨트 코어 모듈</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../v002/RTL/controller.html">NPU 컨트롤러 모듈</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">타겟 하드웨어</span></p>
+<ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../Devices/index.html">지원 디바이스</a><input aria-label="Toggle navigation of 지원 디바이스" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../Devices/kv260.html">pccx: 병렬 컴퓨트 코어 익스큐터</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">아카이브</span></p>
+<ul class="current">
+<li class="toctree-l1 current has-children"><a class="reference internal" href="../../index.html">아카이브</a><input aria-label="Toggle navigation of 아카이브" checked="" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l2 current has-children"><a class="reference internal" href="../index.html">아카이브: v001 실험적 아키텍처</a><input aria-label="Toggle navigation of 아카이브: v001 실험적 아키텍처" checked="" class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../Architecture/v001_architecture.html">pccx: Parallel Compute Core eXecutor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../Drivers/ISA.html">pccx ISA 사양</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../Drivers/ISA_Spreadsheet.html">pccx ISA 스프레드시트 뷰</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../Drivers/v001_API.html">pccx v001 호스트 API 개발자 레퍼런스</a></li>
+<li class="toctree-l3 current has-children"><a class="reference internal" href="index.html">RTL 소스 레퍼런스 (v001)</a><input aria-label="Toggle navigation of RTL 소스 레퍼런스 (v001)" checked="" class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="top.html">최상위</a></li>
+<li class="toctree-l4"><a class="reference internal" href="packages.html">패키지와 상수</a></li>
+<li class="toctree-l4"><a class="reference internal" href="controller.html">NPU 컨트롤러</a></li>
+<li class="toctree-l4"><a class="reference internal" href="mat_core.html">행렬 코어 (GEMM)</a></li>
+<li class="toctree-l4 current current-page"><a class="current reference internal" href="#">벡터 코어 (GEMV)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cvo_core.html">CVO 코어 (SFU)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="mem_control.html">메모리 제어</a></li>
+<li class="toctree-l4"><a class="reference internal" href="preprocess.html">전처리</a></li>
+<li class="toctree-l4"><a class="reference internal" href="library.html">라이브러리</a></li>
+<li class="toctree-l4"><a class="reference internal" href="host_api.html">호스트 API (C 드라이버)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">툴체인 데모</span></p>
+<ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../samples/index.html">툴체인 데모</a><input aria-label="Toggle navigation of 툴체인 데모" class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../samples/mermaid_blockdiagram.html">Mermaid — NPU 블록 다이어그램</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../samples/wavedrom_axi_read.html">WaveDrom — AXI4 read 트랜잭션</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../samples/svg_themed_demo.html">SVG — 테마 대응 4×4 PE 어레이</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../samples/plot_bandwidth.html">scienceplots — batch size 대비 대역폭</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../auto_plots/index.html">Plot gallery</a><input aria-label="Toggle navigation of Plot gallery" class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../auto_plots/plot_bandwidth.html">Batch size vs achieved HP-AXI bandwidth</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="https://github.com/hwkim-dev/pccx/blob/main/ko/docs/docs/archive/experimental_v001/RTL/vec_core.rst?plain=true" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div><div class="edit-this-page">
+  <a class="muted-link" href="https://github.com/hwkim-dev/pccx/edit/main/ko/docs/docs/archive/experimental_v001/RTL/vec_core.rst" rel="edit" title="Edit this page">
+    <svg><use href="#svg-pencil"></use></svg>
+    <span class="visually-hidden">Edit this page</span>
+  </a>
+</div><div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="gemv">
+<h1>벡터 코어 (GEMV)<a class="headerlink" href="#gemv" title="Link to this heading">¶</a></h1>
+<p>4 개의 병렬 μV-core. 각 코어는 자기 L1 캐시 슬라이스에서 활성화를,
+HP2/HP3 (포트당 32 INT4/clk) 에서 가중치를 읽습니다. 부분곱은 3 단
+reduction tree 로, 이후 Emax 정렬 BF16 누산기로 들어갑니다. 단일
+토큰 디코드 경로가 가중치 대역폭에 제한되는 자기회귀 디코딩에서
+이 엔진이 주역입니다.</p>
+<div class="admonition seealso">
+<p class="admonition-title">더 보기</p>
+<dl class="simple">
+<dt><a class="reference internal" href="../Architecture/v001_architecture.html"><span class="doc">pccx: Parallel Compute Core eXecutor</span></a></dt><dd><p>μV-core 위치를 보여주는 v001 블록도.</p>
+</dd>
+</dl>
+</div>
+<section id="id1">
+<h2>모듈<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">GEMV_top.sv</span></code> — μV-core 래퍼. 4 레인을 인스턴스화하고 가중치
+FIFO + L1 캐시 슬라이스에 연결.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">GEMV_generate_lut.sv</span></code> — 레인별 LUT 로 INT4 가중치 디코드 / 부호
+확장.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">GEMV_Vec_Matrix_MUL.svh</span></code> — multiply-reduce 단계용 매개변수 헤더.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">GEMV_reduction_branch.sv</span></code> — reduction tree 의 한 가지 (부분곱 쌍
+합산).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">GEMV_reduction.sv</span></code> — 4 가지를 스칼라로 합치는 최상위 reduction
+tree.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">GEMV_accumulate.sv</span></code> — 최종 스칼라를 받는 Emax 정렬 BF16 누산기.</p></li>
+</ul>
+</section>
+<section id="id2">
+<h2>소스<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h2>
+<details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
+<summary class="sd-summary-title sd-card-header sd-bg-muted sd-bg-text-muted">
+<span class="sd-summary-icon"><svg version="1.1" width="1.0em" height="1.0em" class="sd-octicon sd-octicon-code" viewBox="0 0 16 16" aria-hidden="true"><path d="m11.28 3.22 4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.749.749 0 0 1-1.275-.326.749.749 0 0 1 .215-.734L13.94 8l-3.72-3.72a.749.749 0 0 1 .326-1.275.749.749 0 0 1 .734.215Zm-6.56 0a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042L2.06 8l3.72 3.72a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215L.47 8.53a.75.75 0 0 1 0-1.06Z"></path></svg></span><span class="sd-summary-text"><code class="docutils literal notranslate"><span class="pre">GEMV_top.sv</span></code></span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<div class="highlight-systemverilog notranslate"><div class="highlight"><pre><span></span><span class="no">`timescale</span><span class="w"> </span><span class="mi">1</span><span class="n">ns</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">1</span><span class="n">ps</span>
+
+<span class="no">`include</span><span class="w"> </span><span class="s">&quot;GEMV_Vec_Matrix_MUL.svh&quot;</span>
+<span class="no">`include</span><span class="w"> </span><span class="s">&quot;GLOBAL_CONST.svh&quot;</span>
+
+<span class="c1">// weight size = 4bit</span>
+<span class="c1">// feature_map size =  bf16</span>
+<span class="k">module</span><span class="w"> </span><span class="n">GEMV_top</span>
+<span class="w">  </span><span class="k">import</span><span class="w"> </span><span class="n">vec_core_pkg</span><span class="o">::*</span><span class="p">;</span>
+<span class="p">#(</span>
+<span class="w">    </span><span class="k">parameter</span><span class="w"> </span><span class="n">gemv_cfg_t</span><span class="w"> </span><span class="n">param</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">VecCoreDefaultCfg</span><span class="p">,</span>
+<span class="w">    </span><span class="k">parameter</span><span class="w"> </span><span class="n">A</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">    </span><span class="k">parameter</span><span class="w"> </span><span class="n">B</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">    </span><span class="k">parameter</span><span class="w"> </span><span class="n">C</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span>
+<span class="w">    </span><span class="k">parameter</span><span class="w"> </span><span class="n">D</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span>
+<span class="p">)</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="k">input</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="n">clk</span><span class="p">,</span>
+<span class="w">    </span><span class="k">input</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="n">rst_n</span><span class="p">,</span>
+
+<span class="w">    </span><span class="k">input</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="n">IN_weight_valid_A</span><span class="p">,</span>
+<span class="w">    </span><span class="k">input</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="n">IN_weight_valid_B</span><span class="p">,</span>
+<span class="w">    </span><span class="k">input</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="n">IN_weight_valid_C</span><span class="p">,</span>
+<span class="w">    </span><span class="k">input</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="n">IN_weight_valid_D</span><span class="p">,</span>
+
+<span class="w">    </span><span class="k">input</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="p">[</span><span class="n">param</span><span class="p">.</span><span class="n">weight_width</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="o">:</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="n">IN_weight_A</span><span class="p">[</span><span class="mi">0</span><span class="o">:</span><span class="n">param</span><span class="p">.</span><span class="n">weight_cnt</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+<span class="w">    </span><span class="k">input</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="p">[</span><span class="n">param</span><span class="p">.</span><span class="n">weight_width</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="o">:</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="n">IN_weight_B</span><span class="p">[</span><span class="mi">0</span><span class="o">:</span><span class="n">param</span><span class="p">.</span><span class="n">weight_cnt</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+<span class="w">    </span><span class="k">input</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="p">[</span><span class="n">param</span><span class="p">.</span><span class="n">weight_width</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="o">:</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="n">IN_weight_C</span><span class="p">[</span><span class="mi">0</span><span class="o">:</span><span class="n">param</span><span class="p">.</span><span class="n">weight_cnt</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+<span class="w">    </span><span class="k">input</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="p">[</span><span class="n">param</span><span class="p">.</span><span class="n">weight_width</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="o">:</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="n">IN_weight_D</span><span class="p">[</span><span class="mi">0</span><span class="o">:</span><span class="n">param</span><span class="p">.</span><span class="n">weight_cnt</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+
+<span class="w">    </span><span class="k">output</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="n">OUT_weight_ready_A</span><span class="p">,</span>
+<span class="w">    </span><span class="k">output</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="n">OUT_weight_ready_B</span><span class="p">,</span>
+<span class="w">    </span><span class="k">output</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="n">OUT_weight_ready_C</span><span class="p">,</span>
+<span class="w">    </span><span class="k">output</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="n">OUT_weight_ready_D</span><span class="p">,</span>
+
+<span class="w">    </span><span class="k">input</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="p">[</span><span class="n">param</span><span class="p">.</span><span class="n">fixed_mant_width</span><span class="o">-</span><span class="mi">1</span><span class="o">:</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="n">IN_fmap_broadcast</span><span class="w">      </span><span class="p">[</span><span class="mi">0</span><span class="o">:</span><span class="n">param</span><span class="p">.</span><span class="n">fmap_cache_out_cnt</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+<span class="w">    </span><span class="k">input</span><span class="w"> </span><span class="kt">logic</span><span class="w">                              </span><span class="n">IN_fmap_broadcast_valid</span><span class="p">,</span>
+
+<span class="w">    </span><span class="k">input</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="p">[</span><span class="mi">16</span><span class="o">:</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="n">IN_num_recur</span><span class="p">,</span>
+<span class="w">    </span><span class="c1">// e_max (from Cache for Normalization alignment)</span>
+<span class="w">    </span><span class="k">input</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="p">[</span><span class="n">dtype_pkg</span><span class="o">::</span><span class="n">Bf16ExpWidth</span><span class="o">-</span><span class="mi">1</span><span class="o">:</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="n">IN_cached_emax_out</span><span class="p">[</span><span class="mi">0</span><span class="o">:</span><span class="n">param</span><span class="p">.</span><span class="n">fmap_cache_out_cnt</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+
+<span class="w">    </span><span class="k">input</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="n">IN_activated_lane</span><span class="p">[</span><span class="mi">0</span><span class="o">:</span><span class="n">param</span><span class="p">.</span><span class="n">num_gemv_pipeline</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+
+<span class="w">    </span><span class="k">output</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="p">[</span><span class="n">param</span><span class="p">.</span><span class="n">fmap_type_mixed_precision</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="o">:</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="n">OUT_final_fmap_A</span><span class="p">,</span>
+<span class="w">    </span><span class="k">output</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="p">[</span><span class="n">param</span><span class="p">.</span><span class="n">fmap_type_mixed_precision</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="o">:</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="n">OUT_final_fmap_B</span><span class="p">,</span>
+<span class="w">    </span><span class="k">output</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="p">[</span><span class="n">param</span><span class="p">.</span><span class="n">fmap_type_mixed_precision</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="o">:</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="n">OUT_final_fmap_C</span><span class="p">,</span>
+<span class="w">    </span><span class="k">output</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="p">[</span><span class="n">param</span><span class="p">.</span><span class="n">fmap_type_mixed_precision</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="o">:</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="n">OUT_final_fmap_D</span><span class="p">,</span>
+
+<span class="w">    </span><span class="k">output</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="n">OUT_result_valid_A</span><span class="p">,</span>
+<span class="w">    </span><span class="k">output</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="n">OUT_result_valid_B</span><span class="p">,</span>
+<span class="w">    </span><span class="k">output</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="n">OUT_result_valid_C</span><span class="p">,</span>
+<span class="w">    </span><span class="k">output</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="n">OUT_result_valid_D</span>
+<span class="p">);</span>
+
+<span class="w">  </span><span class="kt">logic</span><span class="w"> </span><span class="p">[</span><span class="n">param</span><span class="p">.</span><span class="n">fixed_mant_width</span><span class="o">+</span><span class="mi">2</span><span class="o">:</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="n">fmap_LUT_wire</span><span class="p">[</span><span class="mi">0</span><span class="o">:</span><span class="n">param</span><span class="p">.</span><span class="n">fmap_cache_out_cnt</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="o">:</span><span class="n">param</span><span class="p">.</span><span class="n">weight_width</span><span class="o">-</span><span class="mi">1</span><span class="p">];</span>
+
+<span class="w">  </span><span class="kt">logic</span><span class="w"> </span><span class="n">fmap_ready_wire</span><span class="p">;</span>
+
+<span class="w">  </span><span class="n">GEMV_generate_lut</span><span class="w"> </span><span class="p">#(</span>
+<span class="w">      </span><span class="p">.</span><span class="n">param</span><span class="p">(</span><span class="n">VecCoreDefaultCfg</span><span class="p">)</span>
+<span class="w">  </span><span class="p">)</span><span class="w"> </span><span class="n">u_GEMV_generate_lut</span><span class="w"> </span><span class="p">(</span>
+<span class="w">      </span><span class="p">.</span><span class="n">IN_fmap_broadcast</span><span class="p">(</span><span class="n">IN_fmap_broadcast</span><span class="p">),</span>
+<span class="w">      </span><span class="p">.</span><span class="n">IN_fmap_broadcast_valid</span><span class="p">(</span><span class="n">IN_fmap_broadcast_valid</span><span class="p">),</span>
+<span class="w">      </span><span class="p">.</span><span class="n">IN_cached_emax_out</span><span class="p">(</span><span class="n">IN_cached_emax_out</span><span class="p">),</span>
+
+<span class="w">      </span><span class="p">.</span><span class="n">OUT_fmap_LUT</span><span class="w">  </span><span class="p">(</span><span class="n">fmap_LUT_wire</span><span class="p">),</span>
+<span class="w">      </span><span class="p">.</span><span class="n">OUT_fmap_ready</span><span class="p">(</span><span class="n">fmap_ready_wire</span><span class="p">)</span>
+<span class="w">  </span><span class="p">);</span>
+
+
+<span class="w">  </span><span class="n">GEMV_reduction_branch</span><span class="w"> </span><span class="p">#(</span>
+<span class="w">      </span><span class="p">.</span><span class="n">param</span><span class="p">(</span><span class="n">VecCoreDefaultCfg</span><span class="p">)</span>
+<span class="w">  </span><span class="p">)</span><span class="w"> </span><span class="n">u_GEMV_reduction_branch_A</span><span class="w"> </span><span class="p">(</span>
+<span class="w">      </span><span class="p">.</span><span class="n">clk</span><span class="w">  </span><span class="p">(</span><span class="n">clk</span><span class="p">),</span>
+<span class="w">      </span><span class="p">.</span><span class="n">rst_n</span><span class="p">(</span><span class="n">rst_n</span><span class="p">),</span>
+
+<span class="w">      </span><span class="p">.</span><span class="n">IN_weight_valid</span><span class="p">(</span><span class="n">IN_weight_valid_A</span><span class="p">),</span>
+<span class="w">      </span><span class="p">.</span><span class="n">IN_weight</span><span class="p">(</span><span class="n">IN_weight_A</span><span class="p">),</span>
+
+<span class="w">      </span><span class="p">.</span><span class="n">fmap_ready</span><span class="p">(</span><span class="n">fmap_ready_wire</span><span class="p">),</span>
+<span class="w">      </span><span class="p">.</span><span class="n">IN_num_recur</span><span class="p">(</span><span class="n">IN_num_recur</span><span class="p">),</span><span class="w">  </span><span class="c1">// shape x * y * z</span>
+
+<span class="w">      </span><span class="p">.</span><span class="n">IN_activated_lane</span><span class="p">(</span><span class="n">IN_activated_lane</span><span class="p">[</span><span class="n">A</span><span class="p">]),</span>
+<span class="w">      </span><span class="p">.</span><span class="n">IN_fmap_LUT</span><span class="p">(</span><span class="n">fmap_LUT_wire</span><span class="p">),</span>
+
+<span class="w">      </span><span class="p">.</span><span class="n">OUT_GEMV_result_vector</span><span class="p">(</span><span class="n">OUT_final_fmap_A</span><span class="p">),</span>
+<span class="w">      </span><span class="p">.</span><span class="n">OUT_valid</span><span class="p">(</span><span class="n">OUT_result_valid_A</span><span class="p">)</span>
+<span class="w">  </span><span class="p">);</span>
+
+
+<span class="w">  </span><span class="n">GEMV_reduction_branch</span><span class="w"> </span><span class="p">#(</span>
+<span class="w">      </span><span class="p">.</span><span class="n">param</span><span class="p">(</span><span class="n">VecCoreDefaultCfg</span><span class="p">)</span>
+<span class="w">  </span><span class="p">)</span><span class="w"> </span><span class="n">u_GEMV_reduction_branch_B</span><span class="w"> </span><span class="p">(</span>
+<span class="w">      </span><span class="p">.</span><span class="n">clk</span><span class="w">  </span><span class="p">(</span><span class="n">clk</span><span class="p">),</span>
+<span class="w">      </span><span class="p">.</span><span class="n">rst_n</span><span class="p">(</span><span class="n">rst_n</span><span class="p">),</span>
+
+<span class="w">      </span><span class="p">.</span><span class="n">IN_weight_valid</span><span class="p">(</span><span class="n">IN_weight_valid_B</span><span class="p">),</span>
+<span class="w">      </span><span class="p">.</span><span class="n">IN_weight</span><span class="p">(</span><span class="n">IN_weight_B</span><span class="p">),</span>
+
+<span class="w">      </span><span class="p">.</span><span class="n">fmap_ready</span><span class="p">(</span><span class="n">fmap_ready_wire</span><span class="p">),</span>
+<span class="w">      </span><span class="p">.</span><span class="n">IN_num_recur</span><span class="p">(</span><span class="n">IN_num_recur</span><span class="p">),</span><span class="w">  </span><span class="c1">// shape x * y * z</span>
+
+<span class="w">      </span><span class="p">.</span><span class="n">IN_activated_lane</span><span class="p">(</span><span class="n">IN_activated_lane</span><span class="p">[</span><span class="n">B</span><span class="p">]),</span>
+<span class="w">      </span><span class="p">.</span><span class="n">IN_fmap_LUT</span><span class="p">(</span><span class="n">fmap_LUT_wire</span><span class="p">),</span>
+
+<span class="w">      </span><span class="p">.</span><span class="n">OUT_GEMV_result_vector</span><span class="p">(</span><span class="n">OUT_final_fmap_B</span><span class="p">),</span>
+<span class="w">      </span><span class="p">.</span><span class="n">OUT_valid</span><span class="p">(</span><span class="n">OUT_result_valid_B</span><span class="p">)</span>
+<span class="w">  </span><span class="p">);</span>
+
+<span class="w">  </span><span class="n">GEMV_reduction_branch</span><span class="w"> </span><span class="p">#(</span>
+<span class="w">      </span><span class="p">.</span><span class="n">param</span><span class="p">(</span><span class="n">VecCoreDefaultCfg</span><span class="p">)</span>
+<span class="w">  </span><span class="p">)</span><span class="w"> </span><span class="n">u_GEMV_reduction_branch_C</span><span class="w"> </span><span class="p">(</span>
+<span class="w">      </span><span class="p">.</span><span class="n">clk</span><span class="w">  </span><span class="p">(</span><span class="n">clk</span><span class="p">),</span>
+<span class="w">      </span><span class="p">.</span><span class="n">rst_n</span><span class="p">(</span><span class="n">rst_n</span><span class="p">),</span>
+
+<span class="w">      </span><span class="p">.</span><span class="n">IN_weight_valid</span><span class="p">(</span><span class="n">IN_weight_valid_C</span><span class="p">),</span>
+<span class="w">      </span><span class="p">.</span><span class="n">IN_weight</span><span class="p">(</span><span class="n">IN_weight_C</span><span class="p">),</span>
+
+<span class="w">      </span><span class="p">.</span><span class="n">fmap_ready</span><span class="p">(</span><span class="n">fmap_ready_wire</span><span class="p">),</span>
+<span class="w">      </span><span class="p">.</span><span class="n">IN_num_recur</span><span class="p">(</span><span class="n">IN_num_recur</span><span class="p">),</span><span class="w">  </span><span class="c1">// shape x * y * z</span>
+
+<span class="w">      </span><span class="p">.</span><span class="n">IN_activated_lane</span><span class="p">(</span><span class="n">IN_activated_lane</span><span class="p">[</span><span class="n">C</span><span class="p">]),</span>
+<span class="w">      </span><span class="p">.</span><span class="n">IN_fmap_LUT</span><span class="p">(</span><span class="n">fmap_LUT_wire</span><span class="p">),</span>
+
+<span class="w">      </span><span class="p">.</span><span class="n">OUT_GEMV_result_vector</span><span class="p">(</span><span class="n">OUT_final_fmap_C</span><span class="p">),</span>
+<span class="w">      </span><span class="p">.</span><span class="n">OUT_valid</span><span class="p">(</span><span class="n">OUT_result_valid_C</span><span class="p">)</span>
+<span class="w">  </span><span class="p">);</span>
+
+<span class="w">  </span><span class="n">GEMV_reduction_branch</span><span class="w"> </span><span class="p">#(</span>
+<span class="w">      </span><span class="p">.</span><span class="n">param</span><span class="p">(</span><span class="n">VecCoreDefaultCfg</span><span class="p">)</span>
+<span class="w">  </span><span class="p">)</span><span class="w"> </span><span class="n">u_GEMV_reduction_branch_D</span><span class="w"> </span><span class="p">(</span>
+<span class="w">      </span><span class="p">.</span><span class="n">clk</span><span class="w">  </span><span class="p">(</span><span class="n">clk</span><span class="p">),</span>
+<span class="w">      </span><span class="p">.</span><span class="n">rst_n</span><span class="p">(</span><span class="n">rst_n</span><span class="p">),</span>
+
+<span class="w">      </span><span class="p">.</span><span class="n">IN_weight_valid</span><span class="p">(</span><span class="n">IN_weight_valid_D</span><span class="p">),</span>
+<span class="w">      </span><span class="p">.</span><span class="n">IN_weight</span><span class="p">(</span><span class="n">IN_weight_D</span><span class="p">),</span>
+
+<span class="w">      </span><span class="p">.</span><span class="n">fmap_ready</span><span class="p">(</span><span class="n">fmap_ready_wire</span><span class="p">),</span>
+<span class="w">      </span><span class="p">.</span><span class="n">IN_num_recur</span><span class="p">(</span><span class="n">IN_num_recur</span><span class="p">),</span><span class="w">  </span><span class="c1">// shape x * y * z</span>
+
+<span class="w">      </span><span class="p">.</span><span class="n">IN_activated_lane</span><span class="p">(</span><span class="n">IN_activated_lane</span><span class="p">[</span><span class="n">D</span><span class="p">]),</span>
+<span class="w">      </span><span class="p">.</span><span class="n">IN_fmap_LUT</span><span class="p">(</span><span class="n">fmap_LUT_wire</span><span class="p">),</span>
+
+<span class="w">      </span><span class="p">.</span><span class="n">OUT_GEMV_result_vector</span><span class="p">(</span><span class="n">OUT_final_fmap_D</span><span class="p">),</span>
+<span class="w">      </span><span class="p">.</span><span class="n">OUT_valid</span><span class="p">(</span><span class="n">OUT_result_valid_D</span><span class="p">)</span>
+<span class="w">  </span><span class="p">);</span>
+
+<span class="k">endmodule</span>
+</pre></div>
+</div>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
+<summary class="sd-summary-title sd-card-header sd-bg-muted sd-bg-text-muted">
+<span class="sd-summary-icon"><svg version="1.1" width="1.0em" height="1.0em" class="sd-octicon sd-octicon-code" viewBox="0 0 16 16" aria-hidden="true"><path d="m11.28 3.22 4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.749.749 0 0 1-1.275-.326.749.749 0 0 1 .215-.734L13.94 8l-3.72-3.72a.749.749 0 0 1 .326-1.275.749.749 0 0 1 .734.215Zm-6.56 0a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042L2.06 8l3.72 3.72a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215L.47 8.53a.75.75 0 0 1 0-1.06Z"></path></svg></span><span class="sd-summary-text"><code class="docutils literal notranslate"><span class="pre">GEMV_generate_lut.sv</span></code></span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<div class="highlight-systemverilog notranslate"><div class="highlight"><pre><span></span><span class="no">`timescale</span><span class="w"> </span><span class="mi">1</span><span class="n">ns</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">1</span><span class="n">ps</span>
+
+<span class="no">`include</span><span class="w"> </span><span class="s">&quot;GEMV_Vec_Matrix_MUL.svh&quot;</span>
+<span class="no">`include</span><span class="w"> </span><span class="s">&quot;GLOBAL_CONST.svh&quot;</span>
+
+<span class="c1">// Descending order</span>
+
+<span class="k">module</span><span class="w"> </span><span class="n">GEMV_generate_lut</span>
+<span class="w">  </span><span class="k">import</span><span class="w"> </span><span class="n">vec_core_pkg</span><span class="o">::*</span><span class="p">;</span>
+<span class="p">#(</span>
+<span class="w">    </span><span class="k">parameter</span><span class="w"> </span><span class="n">gemv_cfg_t</span><span class="w"> </span><span class="n">param</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">VecCoreDefaultCfg</span>
+<span class="p">)</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="k">input</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="p">[</span><span class="n">param</span><span class="p">.</span><span class="n">fixed_mant_width</span><span class="o">-</span><span class="mi">1</span><span class="o">:</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="n">IN_fmap_broadcast</span><span class="w">      </span><span class="p">[</span><span class="mi">0</span><span class="o">:</span><span class="n">param</span><span class="p">.</span><span class="n">fmap_cache_out_cnt</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+<span class="w">    </span><span class="k">input</span><span class="w"> </span><span class="kt">logic</span><span class="w">                              </span><span class="n">IN_fmap_broadcast_valid</span><span class="p">,</span>
+
+<span class="w">    </span><span class="c1">// e_max (from Cache for Normalization alignment)</span>
+<span class="w">    </span><span class="k">input</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="p">[</span><span class="n">device_pkg</span><span class="o">::</span><span class="n">FmapType</span><span class="o">-</span><span class="mi">1</span><span class="o">:</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="n">IN_cached_emax_out</span><span class="p">[</span><span class="mi">0</span><span class="o">:</span><span class="n">param</span><span class="p">.</span><span class="n">fmap_cache_out_cnt</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+<span class="w">    </span><span class="k">output</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="p">[</span><span class="n">param</span><span class="p">.</span><span class="n">param</span><span class="p">.</span><span class="n">fixed_mant_width</span><span class="o">+</span><span class="mi">2</span><span class="o">:</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="n">OUT_fmap_LUT</span><span class="p">[</span><span class="mi">0</span><span class="o">:</span><span class="n">param</span><span class="p">.</span><span class="n">fmap_cache_out_cnt</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="o">:</span><span class="n">param</span><span class="p">.</span><span class="n">weight_width</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+<span class="w">    </span><span class="k">output</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="n">OUT_fmap_ready</span>
+<span class="p">);</span>
+<span class="w">  </span><span class="k">genvar</span><span class="w"> </span><span class="n">idx</span><span class="p">,</span><span class="w"> </span><span class="n">w</span><span class="p">;</span>
+<span class="w">  </span><span class="k">generate</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">idx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">idx</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">param</span><span class="p">.</span><span class="n">fmap_cache_out_cnt</span><span class="p">;</span><span class="w"> </span><span class="n">idx</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">fmap_lut_pre_cal</span>
+<span class="w">      </span><span class="kt">wire</span><span class="w"> </span><span class="kt">signed</span><span class="w"> </span><span class="p">[</span><span class="mi">29</span><span class="o">:</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="n">F</span><span class="p">;</span>
+<span class="w">      </span><span class="k">assign</span><span class="w"> </span><span class="n">F</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{{</span><span class="mi">3</span><span class="p">{</span><span class="n">IN_fmap_broadcast</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="mi">26</span><span class="p">]}},</span><span class="w"> </span><span class="n">IN_fmap_broadcast</span><span class="p">[</span><span class="n">idx</span><span class="p">]};</span>
+
+<span class="w">      </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">w</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">w</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">16</span><span class="p">;</span><span class="w"> </span><span class="n">w</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">lut_entry</span>
+<span class="w">        </span><span class="c1">// w - 8 = INT4 range (-8 ~ 7)</span>
+<span class="w">        </span><span class="k">assign</span><span class="w"> </span><span class="n">OUT_fmap_low_LUT</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="n">w</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">F</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">$</span><span class="kt">signed</span><span class="p">(</span><span class="mi">5</span><span class="p">&#39;(</span><span class="n">w</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">5&#39;d8</span><span class="p">);</span>
+<span class="w">      </span><span class="k">end</span>
+<span class="w">    </span><span class="k">end</span>
+<span class="w">  </span><span class="k">endgenerate</span>
+<span class="k">endmodule</span>
+</pre></div>
+</div>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
+<summary class="sd-summary-title sd-card-header sd-bg-muted sd-bg-text-muted">
+<span class="sd-summary-icon"><svg version="1.1" width="1.0em" height="1.0em" class="sd-octicon sd-octicon-code" viewBox="0 0 16 16" aria-hidden="true"><path d="m11.28 3.22 4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.749.749 0 0 1-1.275-.326.749.749 0 0 1 .215-.734L13.94 8l-3.72-3.72a.749.749 0 0 1 .326-1.275.749.749 0 0 1 .734.215Zm-6.56 0a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042L2.06 8l3.72 3.72a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215L.47 8.53a.75.75 0 0 1 0-1.06Z"></path></svg></span><span class="sd-summary-text"><code class="docutils literal notranslate"><span class="pre">GEMV_Vec_Matrix_MUL.svh</span></code></span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<div class="highlight-systemverilog notranslate"><div class="highlight"><pre><span></span><span class="c1">//`define //</span>
+<span class="cp">`define WEIGHT_HP_PORT_SIZE 512</span>
+<span class="cp">`define FEATURE_MAP_HPC_PORT_SIZE 256</span>
+
+<span class="c1">//`define INPUT_weight</span>
+<span class="cp">`define IS_NEGATIVE_NUMBER 1</span>
+<span class="cp">`define WEIGHT_SIZE 4</span>
+<span class="cp">`define FEAUTRE_MAP_SIZE 16</span>
+<span class="cp">`define AXI_WEIGHT_PORT_CNT 4</span>
+
+
+<span class="cp">`define GEMV_LOW 0</span>
+<span class="cp">`define GEMV_HIGH 1</span>
+
+
+<span class="cp">`define GEMV_MAX_RES_VEC 2048</span>
+
+<span class="cp">`define GEMV_QUARTER_ONE 0</span>
+<span class="cp">`define GEMV_QUARTER_TWO 1</span>
+<span class="cp">`define GEMV_QUARTER_THREE 2</span>
+<span class="cp">`define GEMV_QUARTER_FOUR 3</span>
+</pre></div>
+</div>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
+<summary class="sd-summary-title sd-card-header sd-bg-muted sd-bg-text-muted">
+<span class="sd-summary-icon"><svg version="1.1" width="1.0em" height="1.0em" class="sd-octicon sd-octicon-code" viewBox="0 0 16 16" aria-hidden="true"><path d="m11.28 3.22 4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.749.749 0 0 1-1.275-.326.749.749 0 0 1 .215-.734L13.94 8l-3.72-3.72a.749.749 0 0 1 .326-1.275.749.749 0 0 1 .734.215Zm-6.56 0a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042L2.06 8l3.72 3.72a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215L.47 8.53a.75.75 0 0 1 0-1.06Z"></path></svg></span><span class="sd-summary-text"><code class="docutils literal notranslate"><span class="pre">GEMV_reduction_branch.sv</span></code></span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<div class="highlight-systemverilog notranslate"><div class="highlight"><pre><span></span><span class="no">`timescale</span><span class="w"> </span><span class="mi">1</span><span class="n">ns</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">1</span><span class="n">ps</span>
+
+<span class="no">`include</span><span class="w"> </span><span class="s">&quot;GEMV_Vec_Matrix_MUL.svh&quot;</span>
+<span class="no">`include</span><span class="w"> </span><span class="s">&quot;GLOBAL_CONST.svh&quot;</span>
+
+<span class="k">module</span><span class="w"> </span><span class="n">GEMV_reduction_branch</span>
+<span class="w">  </span><span class="k">import</span><span class="w"> </span><span class="n">vec_core_pkg</span><span class="o">::*</span><span class="p">;</span>
+<span class="p">#(</span>
+<span class="w">    </span><span class="k">parameter</span><span class="w"> </span><span class="n">gemv_cfg_t</span><span class="w"> </span><span class="n">param</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">VecCoreDefaultCfg</span>
+<span class="p">)</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="k">input</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="n">clk</span><span class="p">,</span>
+<span class="w">    </span><span class="k">input</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="n">rst_n</span><span class="p">,</span>
+
+<span class="w">    </span><span class="k">input</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="n">IN_weight_valid</span><span class="p">,</span>
+<span class="w">    </span><span class="k">input</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="p">[</span><span class="n">param</span><span class="p">.</span><span class="n">weight_width</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="o">:</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="n">IN_weight</span><span class="p">[</span><span class="mi">0</span><span class="o">:</span><span class="n">param</span><span class="p">.</span><span class="n">weight_cnt</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+
+<span class="w">    </span><span class="k">input</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="n">fmap_ready</span><span class="p">,</span>
+<span class="w">    </span><span class="k">input</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="p">[</span><span class="mi">16</span><span class="o">:</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="n">IN_num_recur</span><span class="p">,</span>
+
+<span class="w">    </span><span class="k">input</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="n">IN_activated_lane</span><span class="p">,</span>
+<span class="w">    </span><span class="k">input</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="p">[</span><span class="n">param</span><span class="p">.</span><span class="n">fixed_mant_width</span><span class="o">+</span><span class="mi">2</span><span class="o">:</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="n">IN_fmap_LUT</span><span class="w"> </span><span class="p">[</span><span class="mi">0</span><span class="o">:</span><span class="n">param</span><span class="p">.</span><span class="n">fmap_cache_out_cnt</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="o">:</span><span class="n">param</span><span class="p">.</span><span class="n">weight_width</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+
+<span class="w">    </span><span class="k">output</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="p">[</span><span class="n">param</span><span class="p">.</span><span class="n">fixed_mant_width</span><span class="o">+</span><span class="mi">2</span><span class="o">:</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="n">OUT_GEMV_result_vector</span><span class="p">[</span><span class="mi">0</span><span class="o">:</span><span class="n">param</span><span class="p">.</span><span class="n">gemv_batch</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+<span class="w">    </span><span class="k">output</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="n">OUT_valid</span>
+<span class="p">);</span>
+
+<span class="w">  </span><span class="kt">logic</span><span class="w"> </span><span class="p">[</span><span class="n">param</span><span class="p">.</span><span class="n">fixed_mant_width</span><span class="o">+</span><span class="mi">2</span><span class="o">:</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="n">reduction_result_wire</span><span class="p">;</span>
+
+<span class="w">  </span><span class="kt">logic</span><span class="w"> </span><span class="n">reduction_res_valid_wire</span><span class="p">;</span>
+
+<span class="w">  </span><span class="n">GEMV_reduction</span><span class="w"> </span><span class="p">#(</span>
+<span class="w">      </span><span class="p">.</span><span class="n">fmap_cache_out_cnt</span><span class="p">(</span><span class="n">param</span><span class="p">.</span><span class="n">fmap_cache_out_cnt</span><span class="p">),</span>
+<span class="w">      </span><span class="p">.</span><span class="n">weight_type</span><span class="p">(</span><span class="n">param</span><span class="p">.</span><span class="n">weight_width</span><span class="p">),</span>
+<span class="w">      </span><span class="p">.</span><span class="n">line_cnt</span><span class="p">(</span><span class="n">line_cnt</span><span class="p">)</span>
+<span class="w">  </span><span class="p">)</span><span class="w"> </span><span class="n">u_GEMV_reduction</span><span class="w"> </span><span class="p">(</span>
+<span class="w">      </span><span class="p">.</span><span class="n">clk</span><span class="w">  </span><span class="p">(</span><span class="n">clk</span><span class="p">),</span>
+<span class="w">      </span><span class="p">.</span><span class="n">rst_n</span><span class="p">(</span><span class="n">rst_n</span><span class="p">),</span>
+
+<span class="w">      </span><span class="p">.</span><span class="n">IN_fmap_LUT</span><span class="p">(</span><span class="n">IN_fmap_LUT</span><span class="p">),</span>
+<span class="w">      </span><span class="p">.</span><span class="n">IN_valid</span><span class="p">(</span><span class="n">IN_weight_valid</span><span class="p">),</span>
+
+<span class="w">      </span><span class="p">.</span><span class="n">IN_is_lane_active</span><span class="p">(</span><span class="n">IN_activated_lane</span><span class="p">),</span>
+<span class="w">      </span><span class="p">.</span><span class="n">IN_weight</span><span class="p">(</span><span class="n">IN_weight</span><span class="p">),</span>
+
+<span class="w">      </span><span class="p">.</span><span class="n">OUT_reduction_result</span><span class="p">(</span><span class="n">reduction_result_wire</span><span class="p">),</span>
+<span class="w">      </span><span class="p">.</span><span class="n">OUT_reduction_res_valid</span><span class="p">(</span><span class="n">reduction_res_valid_wire</span><span class="p">)</span>
+<span class="w">  </span><span class="p">);</span>
+
+<span class="w">  </span><span class="n">GEMV_accumulate</span><span class="w"> </span><span class="p">#(</span>
+<span class="w">      </span><span class="p">.</span><span class="n">param</span><span class="p">(</span><span class="n">VecCoreDefaultCfg</span><span class="p">)</span>
+<span class="w">  </span><span class="p">)</span><span class="w"> </span><span class="n">u_GEMV_accumulate</span><span class="w"> </span><span class="p">(</span>
+<span class="w">      </span><span class="p">.</span><span class="n">clk</span><span class="w">  </span><span class="p">(</span><span class="n">clk</span><span class="p">),</span>
+<span class="w">      </span><span class="p">.</span><span class="n">rst_n</span><span class="p">(</span><span class="n">rst_n</span><span class="p">),</span>
+
+<span class="w">      </span><span class="p">.</span><span class="n">IN_reduction_result</span><span class="p">(</span><span class="n">reduction_result_wire</span><span class="p">),</span>
+<span class="w">      </span><span class="p">.</span><span class="n">init</span><span class="p">(</span><span class="n">fmap_ready</span><span class="p">),</span>
+
+<span class="w">      </span><span class="p">.</span><span class="n">IN_valid</span><span class="p">(</span><span class="n">reduction_res_valid_wire</span><span class="p">),</span>
+<span class="w">      </span><span class="p">.</span><span class="n">IN_num_recur</span><span class="p">(</span><span class="n">IN_num_recur</span><span class="p">),</span>
+<span class="w">      </span><span class="p">.</span><span class="n">OUT_GEMV_result_vector</span><span class="p">(</span><span class="n">OUT_GEMV_result_vector</span><span class="p">),</span>
+<span class="w">      </span><span class="p">.</span><span class="n">OUT_acc_valid</span><span class="p">(</span><span class="n">OUT_valid</span><span class="p">)</span>
+<span class="w">  </span><span class="p">);</span>
+
+<span class="k">endmodule</span>
+</pre></div>
+</div>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
+<summary class="sd-summary-title sd-card-header sd-bg-muted sd-bg-text-muted">
+<span class="sd-summary-icon"><svg version="1.1" width="1.0em" height="1.0em" class="sd-octicon sd-octicon-code" viewBox="0 0 16 16" aria-hidden="true"><path d="m11.28 3.22 4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.749.749 0 0 1-1.275-.326.749.749 0 0 1 .215-.734L13.94 8l-3.72-3.72a.749.749 0 0 1 .326-1.275.749.749 0 0 1 .734.215Zm-6.56 0a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042L2.06 8l3.72 3.72a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215L.47 8.53a.75.75 0 0 1 0-1.06Z"></path></svg></span><span class="sd-summary-text"><code class="docutils literal notranslate"><span class="pre">GEMV_reduction.sv</span></code></span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<div class="highlight-systemverilog notranslate"><div class="highlight"><pre><span></span><span class="no">`timescale</span><span class="w"> </span><span class="mi">1</span><span class="n">ns</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">1</span><span class="n">ps</span>
+
+<span class="no">`include</span><span class="w"> </span><span class="s">&quot;GEMV_Vec_Matrix_MUL.svh&quot;</span>
+<span class="no">`include</span><span class="w"> </span><span class="s">&quot;GLOBAL_CONST.svh&quot;</span>
+
+<span class="k">module</span><span class="w"> </span><span class="n">GEMV_reduction</span>
+<span class="w">  </span><span class="k">import</span><span class="w"> </span><span class="n">vec_core_pkg</span><span class="o">::*</span><span class="p">;</span>
+<span class="p">#(</span>
+<span class="w">    </span><span class="k">parameter</span><span class="w"> </span><span class="n">gemv_cfg_t</span><span class="w"> </span><span class="n">param</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">VecCoreDefaultCfg</span><span class="p">,</span>
+<span class="w">    </span><span class="k">parameter</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">REDUCTION_LATENCY</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span>
+<span class="p">)</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="k">input</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="n">clk</span><span class="p">,</span>
+<span class="w">    </span><span class="k">input</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="n">rst_n</span><span class="p">,</span>
+<span class="w">    </span><span class="k">input</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="n">IN_is_lane_active</span><span class="p">,</span>
+<span class="w">    </span><span class="k">input</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="n">IN_valid</span><span class="p">,</span>
+<span class="w">    </span><span class="k">input</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="p">[</span><span class="n">param</span><span class="p">.</span><span class="n">fixed_mant_width</span><span class="o">+</span><span class="mi">2</span><span class="o">:</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="n">IN_fmap_LUT</span><span class="p">[</span><span class="mi">0</span><span class="o">:</span><span class="n">param</span><span class="p">.</span><span class="n">param</span><span class="p">.</span><span class="n">fmap_cache_out_cnt</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="o">:</span><span class="n">param</span><span class="p">.</span><span class="n">weight_width</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+<span class="w">    </span><span class="k">input</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="p">[</span><span class="n">param</span><span class="p">.</span><span class="n">weight_width</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="o">:</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="n">IN_weight</span><span class="p">[</span><span class="mi">0</span><span class="o">:</span><span class="n">param</span><span class="p">.</span><span class="n">weight_cnt</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+
+<span class="w">    </span><span class="k">output</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="p">[</span><span class="n">param</span><span class="p">.</span><span class="n">fixed_mant_width</span><span class="o">+</span><span class="mi">2</span><span class="o">:</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="n">OUT_reduction_result</span><span class="p">,</span>
+<span class="w">    </span><span class="k">output</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="n">OUT_reduction_res_valid</span>
+<span class="p">);</span>
+<span class="w">  </span><span class="c1">// ===| pipeline Valid sync REG |===</span>
+<span class="w">  </span><span class="c1">// REDUCTION_LATENCY(5) Shift Register</span>
+<span class="w">  </span><span class="kt">logic</span><span class="w"> </span><span class="p">[</span><span class="n">REDUCTION_LATENCY</span><span class="o">-</span><span class="mi">1</span><span class="o">:</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="n">valid_pipe</span><span class="p">;</span>
+
+<span class="w">  </span><span class="k">always_ff</span><span class="w"> </span><span class="p">@(</span><span class="k">posedge</span><span class="w"> </span><span class="n">clk</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">rst_n</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">      </span><span class="n">valid_pipe</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="m">&#39;0</span><span class="p">;</span>
+<span class="w">    </span><span class="k">end</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">      </span><span class="c1">// Push the valid status into the LSB and shift every cycle</span>
+<span class="w">      </span><span class="c1">//(Active only when IN_valid and IN_is_lane_active are both 1).</span>
+<span class="w">      </span><span class="n">valid_pipe</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="p">{</span><span class="n">valid_pipe</span><span class="p">[</span><span class="n">REDUCTION_LATENCY</span><span class="o">-</span><span class="mi">2</span><span class="o">:</span><span class="mi">0</span><span class="p">],</span><span class="w"> </span><span class="p">(</span><span class="n">IN_valid</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">IN_is_lane_active</span><span class="p">)};</span>
+<span class="w">    </span><span class="k">end</span>
+<span class="w">  </span><span class="k">end</span>
+
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">OUT_reduction_res_valid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">valid_pipe</span><span class="p">[</span><span class="n">REDUCTION_LATENCY</span><span class="o">-</span><span class="mi">1</span><span class="p">];</span>
+
+<span class="w">  </span><span class="c1">//2^5</span>
+<span class="w">  </span><span class="kt">logic</span><span class="w"> </span><span class="p">[</span><span class="n">param</span><span class="p">.</span><span class="n">fixed_mant_width</span><span class="o">+</span><span class="mi">2</span><span class="o">:</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="n">reduction_32_fmap_wire</span><span class="p">[</span><span class="mi">0</span><span class="o">:</span><span class="mi">31</span><span class="p">];</span>
+<span class="w">  </span><span class="c1">//2^4</span>
+<span class="w">  </span><span class="kt">logic</span><span class="w"> </span><span class="p">[</span><span class="n">param</span><span class="p">.</span><span class="n">fixed_mant_width</span><span class="o">+</span><span class="mi">2</span><span class="o">:</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="n">reduction_16_fmap_wire</span><span class="p">[</span><span class="mi">0</span><span class="o">:</span><span class="mi">15</span><span class="p">];</span>
+<span class="w">  </span><span class="c1">//2^3</span>
+<span class="w">  </span><span class="kt">logic</span><span class="w"> </span><span class="p">[</span><span class="n">param</span><span class="p">.</span><span class="n">fixed_mant_width</span><span class="o">+</span><span class="mi">2</span><span class="o">:</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="n">reduction_8_fmap_wire</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="mi">0</span><span class="o">:</span><span class="mi">7</span><span class="p">];</span>
+<span class="w">  </span><span class="c1">//2^2</span>
+<span class="w">  </span><span class="kt">logic</span><span class="w"> </span><span class="p">[</span><span class="n">param</span><span class="p">.</span><span class="n">fixed_mant_width</span><span class="o">+</span><span class="mi">2</span><span class="o">:</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="n">reduction_4_fmap_wire</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="mi">0</span><span class="o">:</span><span class="mi">3</span><span class="p">];</span>
+<span class="w">  </span><span class="c1">//2^1</span>
+<span class="w">  </span><span class="kt">logic</span><span class="w"> </span><span class="p">[</span><span class="n">param</span><span class="p">.</span><span class="n">fixed_mant_width</span><span class="o">+</span><span class="mi">2</span><span class="o">:</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="n">reduction_2_fmap_wire</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="mi">0</span><span class="o">:</span><span class="mi">1</span><span class="p">];</span>
+
+<span class="w">  </span><span class="k">always_ff</span><span class="w"> </span><span class="p">@(</span><span class="k">posedge</span><span class="w"> </span><span class="n">clk</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">rst_n</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">      </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">lane</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">lane</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">param</span><span class="p">.</span><span class="n">fmap_cache_out_cnt</span><span class="p">;</span><span class="w"> </span><span class="n">lane</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">        </span><span class="c1">//stage1_emax_q1[i] &lt;= 0</span>
+<span class="w">      </span><span class="k">end</span>
+<span class="w">    </span><span class="k">end</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">IN_valid</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">IN_is_lane_active</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">lane</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">lane</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">param</span><span class="p">.</span><span class="n">fmap_cache_out_cnt</span><span class="p">;</span><span class="w"> </span><span class="n">lane</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">          </span><span class="n">reduction_32_fmap_wire</span><span class="p">[</span><span class="n">lane</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">IN_fmap_LUT</span><span class="p">[</span><span class="n">lane</span><span class="p">][</span><span class="n">IN_weight</span><span class="p">[</span><span class="n">lane</span><span class="p">]];</span>
+<span class="w">        </span><span class="k">end</span>
+<span class="w">      </span><span class="k">end</span>
+<span class="w">    </span><span class="k">end</span>
+<span class="w">  </span><span class="k">end</span>
+
+<span class="w">  </span><span class="c1">// ===| Stage 1: Reduction 32 -&gt; 16 |==========================================</span>
+<span class="w">  </span><span class="c1">// Instantiates 16 DSP48E2 slices to add adjacent pairs of the 32 input wires</span>
+<span class="w">  </span><span class="c1">// ============================================================================</span>
+<span class="w">  </span><span class="k">generate</span>
+<span class="w">    </span><span class="k">genvar</span><span class="w"> </span><span class="n">i</span><span class="p">;</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">16</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">gen_dsp_reduce_32_to_16</span>
+
+<span class="w">      </span><span class="c1">// --- Internal 48-bit wires for DSP port matching ---</span>
+<span class="w">      </span><span class="kt">logic</span><span class="w"> </span><span class="p">[</span><span class="mi">47</span><span class="o">:</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="n">dsp_in_ab</span><span class="p">;</span>
+<span class="w">      </span><span class="kt">logic</span><span class="w"> </span><span class="p">[</span><span class="mi">47</span><span class="o">:</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="n">dsp_in_c</span><span class="p">;</span>
+<span class="w">      </span><span class="kt">logic</span><span class="w"> </span><span class="p">[</span><span class="mi">47</span><span class="o">:</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="n">dsp_out_p</span><span class="p">;</span>
+
+<span class="w">      </span><span class="c1">// Map inputs to 48-bit width (Zero or Sign extension depending on your data)</span>
+<span class="w">      </span><span class="c1">// Operand 1: Even index (2*i) -&gt; Routed to A:B ports</span>
+<span class="w">      </span><span class="c1">// Operand 2: Odd index (2*i+1) -&gt; Routed to C port</span>
+<span class="w">      </span><span class="k">assign</span><span class="w"> </span><span class="n">dsp_in_ab</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">48</span><span class="p">&#39;(</span><span class="n">reduction_32_fmap_wire</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="p">]);</span>
+<span class="w">      </span><span class="k">assign</span><span class="w"> </span><span class="n">dsp_in_c</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="mi">48</span><span class="p">&#39;(</span><span class="n">reduction_32_fmap_wire</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]);</span>
+
+<span class="w">      </span><span class="n">DSP48E2</span><span class="w"> </span><span class="p">#(</span>
+<span class="w">          </span><span class="c1">// [IMPORTANT] Changed from &quot;TWO24&quot; to &quot;ONE48&quot; for standard addition.</span>
+<span class="w">          </span><span class="c1">// &quot;TWO24&quot; breaks the carry chain at bit 24. Use &quot;ONE48&quot; for full precision.</span>
+<span class="w">          </span><span class="p">.</span><span class="n">USE_SIMD</span><span class="p">(</span><span class="s">&quot;ONE48&quot;</span><span class="p">),</span>
+
+<span class="w">          </span><span class="c1">// --- Register Control (0 = Comb, 1 = Registered) ---</span>
+<span class="w">          </span><span class="p">.</span><span class="n">AREG</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span>
+<span class="w">          </span><span class="p">.</span><span class="n">BREG</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span>
+<span class="w">          </span><span class="p">.</span><span class="n">CREG</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span>
+<span class="w">          </span><span class="p">.</span><span class="n">PREG</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w">   </span><span class="c1">// Enable P register (1 clock delay for sum)</span>
+<span class="w">      </span><span class="p">)</span><span class="w"> </span><span class="n">u_dsp</span><span class="w"> </span><span class="p">(</span>
+<span class="w">          </span><span class="c1">// --- Clock and Reset ---</span>
+<span class="w">          </span><span class="p">.</span><span class="n">CLK</span><span class="w"> </span><span class="p">(</span><span class="n">clk</span><span class="p">),</span>
+<span class="w">          </span><span class="p">.</span><span class="n">RSTP</span><span class="p">(</span><span class="o">~</span><span class="n">rst_n</span><span class="p">),</span><span class="w"> </span><span class="c1">// Reset for P register (Active High inside DSP)</span>
+
+<span class="w">          </span><span class="c1">// --- Operation Mode (Fixed for A:B + C) ---</span>
+<span class="w">          </span><span class="p">.</span><span class="n">ALUMODE</span><span class="p">(</span><span class="mb">4&#39;b0000</span><span class="p">),</span><span class="w">         </span><span class="c1">// 0000 = ADD</span>
+<span class="w">          </span><span class="p">.</span><span class="n">INMODE</span><span class="w"> </span><span class="p">(</span><span class="mb">5&#39;b00000</span><span class="p">),</span><span class="w">        </span><span class="c1">// Default A and B routing</span>
+<span class="w">          </span><span class="p">.</span><span class="n">OPMODE</span><span class="w"> </span><span class="p">(</span><span class="mb">9&#39;b000_00_11_11</span><span class="p">),</span><span class="w"> </span><span class="c1">// Z=0, W=0, Y=C, X=A:B  =&gt;  P = A:B + C</span>
+
+<span class="w">          </span><span class="c1">// --- Clock Enables (Tie to high for continuous pipeline) ---</span>
+<span class="w">          </span><span class="p">.</span><span class="n">CEP</span><span class="p">(</span><span class="mb">1&#39;b1</span><span class="p">),</span><span class="w">  </span><span class="c1">// Enable P register updates</span>
+
+<span class="w">          </span><span class="c1">// --- Data Inputs ---</span>
+<span class="w">          </span><span class="p">.</span><span class="n">A</span><span class="p">(</span><span class="n">dsp_in_ab</span><span class="p">[</span><span class="mi">47</span><span class="o">:</span><span class="mi">18</span><span class="p">]),</span><span class="w">  </span><span class="c1">// Upper 30 bits go to A port</span>
+<span class="w">          </span><span class="p">.</span><span class="n">B</span><span class="p">(</span><span class="n">dsp_in_ab</span><span class="p">[</span><span class="mi">17</span><span class="o">:</span><span class="mi">0</span><span class="p">]),</span><span class="w">   </span><span class="c1">// Lower 18 bits go to B port</span>
+<span class="w">          </span><span class="p">.</span><span class="n">C</span><span class="p">(</span><span class="n">dsp_in_c</span><span class="p">),</span><span class="w">          </span><span class="c1">// 48 bits go to C port</span>
+
+<span class="w">          </span><span class="c1">// --- Data Output ---</span>
+<span class="w">          </span><span class="p">.</span><span class="n">P</span><span class="p">(</span><span class="n">dsp_out_p</span><span class="p">)</span><span class="w">  </span><span class="c1">// 48-bit Result</span>
+<span class="w">      </span><span class="p">);</span>
+
+<span class="w">      </span><span class="c1">// --- Truncate 48-bit result back to parameterized wire width ---</span>
+<span class="w">      </span><span class="k">assign</span><span class="w"> </span><span class="n">reduction_16_fmap_wire</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dsp_out_p</span><span class="p">[</span><span class="n">param</span><span class="p">.</span><span class="n">fmap_cache_out_cnt</span><span class="o">+</span><span class="mi">2</span><span class="o">:</span><span class="mi">0</span><span class="p">];</span>
+<span class="w">    </span><span class="k">end</span>
+<span class="w">  </span><span class="k">endgenerate</span>
+<span class="w">  </span><span class="c1">// ============================================================================</span>
+<span class="w">  </span><span class="c1">// ===| REDUCTION TREE: LUT-based Pipelined Adders (Optimized for 400MHz) |====</span>
+<span class="w">  </span><span class="c1">// UltraScale+ CARRY8 primitives combined with immediate FDRE (Registers)</span>
+<span class="w">  </span><span class="c1">// provide better routing and timing than forcing DSPs for simple additions.</span>
+<span class="w">  </span><span class="c1">// ============================================================================</span>
+
+<span class="w">  </span><span class="c1">// ===| Stage 2: Reduction 16 -&gt; 8 |===========================================</span>
+<span class="w">  </span><span class="c1">// Latency: 1 Clock Cycle</span>
+<span class="w">  </span><span class="k">always_ff</span><span class="w"> </span><span class="p">@(</span><span class="k">posedge</span><span class="w"> </span><span class="n">clk</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">rst_n</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">      </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">8</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">        </span><span class="n">reduction_8_fmap_wire</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="m">&#39;0</span><span class="p">;</span>
+<span class="w">      </span><span class="k">end</span>
+<span class="w">    </span><span class="k">end</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">      </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">8</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">        </span><span class="c1">// Simple addition. Vivado will infer CARRY8 + FF in the same slice.</span>
+<span class="w">        </span><span class="n">reduction_8_fmap_wire</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">reduction_16_fmap_wire</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">reduction_16_fmap_wire</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">];</span>
+<span class="w">      </span><span class="k">end</span>
+<span class="w">    </span><span class="k">end</span>
+<span class="w">  </span><span class="k">end</span>
+
+<span class="w">  </span><span class="c1">// ===| Stage 3: Reduction 8 -&gt; 4 |============================================</span>
+<span class="w">  </span><span class="c1">// Latency: 1 Clock Cycle</span>
+<span class="w">  </span><span class="k">always_ff</span><span class="w"> </span><span class="p">@(</span><span class="k">posedge</span><span class="w"> </span><span class="n">clk</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">rst_n</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">      </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">        </span><span class="n">reduction_4_fmap_wire</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="m">&#39;0</span><span class="p">;</span>
+<span class="w">      </span><span class="k">end</span>
+<span class="w">    </span><span class="k">end</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">      </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">        </span><span class="n">reduction_4_fmap_wire</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">reduction_8_fmap_wire</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">reduction_8_fmap_wire</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">];</span>
+<span class="w">      </span><span class="k">end</span>
+<span class="w">    </span><span class="k">end</span>
+<span class="w">  </span><span class="k">end</span>
+
+<span class="w">  </span><span class="c1">// ===| Stage 4: Reduction 4 -&gt; 2 |============================================</span>
+<span class="w">  </span><span class="c1">// Latency: 1 Clock Cycle</span>
+<span class="w">  </span><span class="k">always_ff</span><span class="w"> </span><span class="p">@(</span><span class="k">posedge</span><span class="w"> </span><span class="n">clk</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">rst_n</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">      </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">        </span><span class="n">reduction_2_fmap_wire</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="m">&#39;0</span><span class="p">;</span>
+<span class="w">      </span><span class="k">end</span>
+<span class="w">    </span><span class="k">end</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">      </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">        </span><span class="n">reduction_2_fmap_wire</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">reduction_4_fmap_wire</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">reduction_4_fmap_wire</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">];</span>
+<span class="w">      </span><span class="k">end</span>
+<span class="w">    </span><span class="k">end</span>
+<span class="w">  </span><span class="k">end</span>
+
+<span class="w">  </span><span class="c1">// ===| Stage 5: Reduction 2 -&gt; 1 (Final Sum) |================================</span>
+<span class="w">  </span><span class="c1">// Latency: 1 Clock Cycle</span>
+<span class="w">  </span><span class="k">always_ff</span><span class="w"> </span><span class="p">@(</span><span class="k">posedge</span><span class="w"> </span><span class="n">clk</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">rst_n</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">      </span><span class="n">OUT_reduction_result</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="m">&#39;0</span><span class="p">;</span>
+<span class="w">    </span><span class="k">end</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">      </span><span class="n">OUT_reduction_result</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">reduction_2_fmap_wire</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">reduction_2_fmap_wire</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+<span class="w">    </span><span class="k">end</span>
+<span class="w">  </span><span class="k">end</span>
+
+<span class="w">  </span><span class="c1">// ============================================================================</span>
+<span class="w">  </span><span class="c1">// Total Pipeline Latency for Reduction Tree:</span>
+<span class="w">  </span><span class="c1">// Stage 1 (DSP: 32-&gt;16) : 1 Cycle (or more depending on DSP PREG/MREG configs)</span>
+<span class="w">  </span><span class="c1">// Stage 2 (LUT: 16-&gt;8)  : 1 Cycle</span>
+<span class="w">  </span><span class="c1">// Stage 3 (LUT: 8-&gt;4)   : 1 Cycle</span>
+<span class="w">  </span><span class="c1">// Stage 4 (LUT: 4-&gt;2)   : 1 Cycle</span>
+<span class="w">  </span><span class="c1">// Stage 5 (LUT: 2-&gt;1)   : 1 Cycle</span>
+<span class="w">  </span><span class="c1">// ----------------------------------------</span>
+<span class="w">  </span><span class="c1">// Total latency after FMap/Weight input: 5 Cycles</span>
+<span class="w">  </span><span class="c1">// ============================================================================</span>
+
+<span class="k">endmodule</span>
+</pre></div>
+</div>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
+<summary class="sd-summary-title sd-card-header sd-bg-muted sd-bg-text-muted">
+<span class="sd-summary-icon"><svg version="1.1" width="1.0em" height="1.0em" class="sd-octicon sd-octicon-code" viewBox="0 0 16 16" aria-hidden="true"><path d="m11.28 3.22 4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.749.749 0 0 1-1.275-.326.749.749 0 0 1 .215-.734L13.94 8l-3.72-3.72a.749.749 0 0 1 .326-1.275.749.749 0 0 1 .734.215Zm-6.56 0a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042L2.06 8l3.72 3.72a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215L.47 8.53a.75.75 0 0 1 0-1.06Z"></path></svg></span><span class="sd-summary-text"><code class="docutils literal notranslate"><span class="pre">GEMV_accumulate.sv</span></code></span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<div class="highlight-systemverilog notranslate"><div class="highlight"><pre><span></span><span class="no">`timescale</span><span class="w"> </span><span class="mi">1</span><span class="n">ns</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">1</span><span class="n">ps</span>
+
+<span class="no">`include</span><span class="w"> </span><span class="s">&quot;GEMV_Vec_Matrix_MUL.svh&quot;</span>
+<span class="no">`include</span><span class="w"> </span><span class="s">&quot;GLOBAL_CONST.svh&quot;</span>
+
+<span class="c1">// GEMV Operation</span>
+<span class="c1">//</span>
+<span class="c1">// [Shape]</span>
+<span class="c1">// vector (1, N)</span>
+<span class="c1">// dot Matrix (N, M)</span>
+<span class="c1">// result (1, M)</span>
+<span class="c1">//</span>
+<span class="c1">// calc/per clk: Vec(1,32) dot Mat(32,32) = 32</span>
+<span class="c1">// gemv_cycle: 512 clk</span>
+<span class="c1">// Throughput/per clk: 1</span>
+<span class="c1">// Throughput/per-GEMV: 512 (1p/clk * 512clk)</span>
+<span class="c1">// GEMV-PIPE-CNT: 4</span>
+<span class="c1">// 512 * 4 = 2048</span>
+<span class="c1">// GEMV Throughput per [cycle]: (1, 2048)</span>
+<span class="c1">//</span>
+<span class="c1">// ===| Warning |===</span>
+<span class="c1">// Before we send result to ACP</span>
+<span class="c1">// results must type-casted FP32 to BF16(2Byte)</span>
+<span class="c1">// and find e-Max and align by 32Groups</span>
+
+
+
+<span class="k">module</span><span class="w"> </span><span class="n">GEMV_accumulate</span>
+<span class="w">  </span><span class="k">import</span><span class="w"> </span><span class="n">vec_core_pkg</span><span class="o">::*</span><span class="p">;</span>
+<span class="p">#(</span>
+<span class="w">    </span><span class="k">parameter</span><span class="w"> </span><span class="n">gemv_cfg_t</span><span class="w"> </span><span class="n">param</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">VecCoreDefaultCfg</span>
+<span class="p">)</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="k">input</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="n">clk</span><span class="p">,</span>
+<span class="w">    </span><span class="k">input</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="n">rst_n</span><span class="p">,</span>
+<span class="w">    </span><span class="k">input</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="p">[</span><span class="n">dtype_pkg</span><span class="o">::</span><span class="n">FixedMantWidth</span><span class="o">+</span><span class="mi">2</span><span class="o">:</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="n">IN_reduction_result</span><span class="p">,</span>
+
+<span class="w">    </span><span class="k">input</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="n">init</span><span class="p">,</span>
+<span class="w">    </span><span class="k">input</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="n">IN_valid</span><span class="p">,</span>
+
+<span class="w">    </span><span class="k">input</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="p">[</span><span class="mi">16</span><span class="o">:</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="n">IN_num_recur</span><span class="p">,</span>
+
+<span class="w">    </span><span class="k">output</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="p">[</span><span class="n">dtype_pkg</span><span class="o">::</span><span class="n">FixedMantWidth</span><span class="o">+</span><span class="mi">2</span><span class="o">:</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="n">OUT_GEMV_result_vector</span><span class="p">[</span><span class="mi">0</span><span class="o">:</span><span class="n">param</span><span class="p">.</span><span class="n">gemv_batch</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">],</span>
+<span class="w">    </span><span class="k">output</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="n">OUT_acc_valid</span>
+<span class="p">);</span>
+
+<span class="w">  </span><span class="kt">logic</span><span class="w"> </span><span class="p">[</span><span class="n">dtype_pkg</span><span class="o">::</span><span class="n">FixedMantWidth</span><span class="o">+</span><span class="mi">2</span><span class="o">:</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="n">GEMV_result_vector</span><span class="p">[</span><span class="mi">0</span><span class="o">:</span><span class="n">param</span><span class="p">.</span><span class="n">gemv_batch</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">];</span>
+
+<span class="w">  </span><span class="c1">// 2^9 == 512</span>
+<span class="w">  </span><span class="kt">logic</span><span class="w"> </span><span class="p">[</span><span class="mi">8</span><span class="o">:</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="n">res_vec_idx</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">logic</span><span class="w"> </span><span class="p">[</span><span class="mi">16</span><span class="o">:</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="n">num_recur</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">logic</span><span class="w"> </span><span class="p">[</span><span class="mi">11</span><span class="o">:</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="n">index_of_result</span><span class="p">;</span>
+
+<span class="w">  </span><span class="c1">// Preventing flip-flop replication: Direct-wire the internal accumulation register to the output port</span>
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">OUT_GEMV_result_vector</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GEMV_result_vector</span><span class="p">;</span>
+
+<span class="w">  </span><span class="k">always_ff</span><span class="w"> </span><span class="p">@(</span><span class="k">posedge</span><span class="w"> </span><span class="n">clk</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">rst_n</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">      </span><span class="n">OUT_acc_valid</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">      </span><span class="n">res_vec_idx</span><span class="w">   </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">      </span><span class="n">num_recur</span><span class="w">     </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">      </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">vec_idx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">vec_idx</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">param</span><span class="p">.</span><span class="n">gemv_batch</span><span class="p">;</span><span class="w"> </span><span class="n">vec_idx</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">        </span><span class="n">GEMV_result_vector</span><span class="p">[</span><span class="n">vec_idx</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="m">&#39;0</span><span class="p">;</span>
+<span class="w">      </span><span class="k">end</span>
+<span class="w">    </span><span class="k">end</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">init</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">      </span><span class="c1">// new GEMV Acc start init pipeline</span>
+<span class="w">      </span><span class="n">res_vec_idx</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">      </span><span class="n">num_recur</span><span class="w">   </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">IN_num_recur</span><span class="p">;</span>
+<span class="w">    </span><span class="k">end</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">begin</span>
+
+<span class="w">      </span><span class="n">OUT_acc_valid</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+
+<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">IN_valid</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="o">~</span><span class="n">OUT_acc_valid</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">        </span><span class="n">GEMV_result_vector</span><span class="p">[</span><span class="n">res_vec_idx</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">GEMV_result_vector</span><span class="p">[</span><span class="n">res_vec_idx</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">IN_reduction_result</span><span class="p">;</span>
+
+<span class="w">        </span><span class="c1">// Modulo-2^N counter&quot;: Intended Overflow 509-&gt; 510-&gt; 511-&gt; 0-&gt; 1</span>
+<span class="w">        </span><span class="n">res_vec_idx</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">res_vec_idx</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">        </span><span class="n">num_recur</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">num_recur</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">      </span><span class="k">end</span>
+
+<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">num_recur</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="o">~</span><span class="n">OUT_acc_valid</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">        </span><span class="n">OUT_acc_valid</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">      </span><span class="k">end</span>
+<span class="w">    </span><span class="k">end</span>
+<span class="w">  </span><span class="k">end</span>
+
+<span class="k">endmodule</span>
+</pre></div>
+</div>
+</div>
+</details></section>
+</section>
+
+    <script type="text/javascript">
+        function init() {
+            WaveDrom.ProcessAll();
+        }
+        window.onload = init;
+    </script>
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="cvo_core.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">CVO 코어 (SFU)</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="mat_core.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">행렬 코어 (GEMM)</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2026, hwkim
+            </div>
+            Made with 
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            <div class="last-updated">
+              Last updated on 2026-04-18</div>
+          </div>
+          <div class="right-details">
+            <div class="icons">
+              <a class="muted-link " href="https://github.com/hwkim-dev/pccx" aria-label="GitHub"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 16 16" width="1em" height="1em"><path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg></a>
+              
+            </div>
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">벡터 코어 (GEMV)</a><ul>
+<li><a class="reference internal" href="#id1">모듈</a></li>
+<li><a class="reference internal" href="#id2">소스</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="../../../../_static/documentation_options.js?v=cee9339f"></script>
+    <script src="../../../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../../_static/copybutton.js?v=f281be69"></script>
+    <script>let toggleHintShow = '표시하려면 클릭';</script>
+    <script>let toggleHintHide = '숨기려면 클릭';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../../../_static/togglebutton.js?v=b8b12719"></script>
+    <script src="../../../../_static/translations.js?v=e33e7ba0"></script>
+    <script src="../../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="https://wavedrom.com/skins/default.js"></script>
+    <script src="https://wavedrom.com/wavedrom.min.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../../../_static/image-lightbox.js?v=dec353f8"></script>
+    <script src="../../../../_static/language-switcher.js?v=118c9f35"></script>
+    </body>
+</html>

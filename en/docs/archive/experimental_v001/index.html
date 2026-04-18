@@ -7,19 +7,19 @@
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://hwkim-dev.github.io/pccx/docs/archive/experimental_v001/index.html" />
 <meta property="og:site_name" content="pccx — Parallel Compute Core eXecutor" />
-<meta property="og:description" content="[!WARNING] This architecture is a preliminary (v001) experimental design. Although structurally superior, it was engineered with a heavy inclination toward GEMM (Matrix) computations. Because local..." />
+<meta property="og:description" content="Status Archived SystemVerilog RTL Target Hardware Quantization Precision Project Overview: pccx(formerly uXC) is a customized SystemVerilog-based Neural Processing Unit (NPU) engineered fundamental..." />
 <meta property="og:image:width" content="1146" />
 <meta property="og:image:height" content="600" />
-<meta property="og:image" content="https://hwkim-dev.github.io/pccx/_images/social_previews/summary_docs_archive_experimental_v001_index_c6d7ba5f.png" />
-<meta property="og:image:alt" content="[!WARNING] This architecture is a preliminary (v001) experimental design. Although structurally superior, it was engineered with a heavy inclination toward GEMM (Matrix) computations. Because local..." />
-<meta name="description" content="[!WARNING] This architecture is a preliminary (v001) experimental design. Although structurally superior, it was engineered with a heavy inclination toward GEMM (Matrix) computations. Because local..." />
+<meta property="og:image" content="https://hwkim-dev.github.io/pccx/_images/social_previews/summary_docs_archive_experimental_v001_index_9e77e3ce.png" />
+<meta property="og:image:alt" content="Status Archived SystemVerilog RTL Target Hardware Quantization Precision Project Overview: pccx(formerly uXC) is a customized SystemVerilog-based Neural Processing Unit (NPU) engineered fundamental..." />
+<meta name="description" content="Status Archived SystemVerilog RTL Target Hardware Quantization Precision Project Overview: pccx(formerly uXC) is a customized SystemVerilog-based Neural Processing Unit (NPU) engineered fundamental..." />
 <meta name="twitter:card" content="summary_large_image" />
 <link rel="index" title="Index" href="../../../genindex.html"><link rel="search" title="Search" href="../../../search.html"><link rel="next" title="pccx: Parallel Compute Core eXecutor" href="Architecture/v001_architecture.html"><link rel="prev" title="Archive" href="../index.html">
         <link rel="canonical" href="https://hwkim-dev.github.io/pccx/docs/archive/experimental_v001/index.html">
 
     <!-- Generated with Sphinx 7.4.7 and Furo 2025.12.19 -->
         <title>Archive: v001 Experimental Architecture - pccx</title>
-      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=acfd86a5" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=fd3f3429" />
     <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
@@ -308,7 +308,19 @@
 <li class="toctree-l3"><a class="reference internal" href="Drivers/ISA.html">pccx ISA Specification</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Drivers/ISA_Spreadsheet.html">pccx ISA Spreadsheet View</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Drivers/v001_API.html">Developer Reference for pccx v001 Host API</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rtl_source.html">RTL Source Reference (v001)</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="RTL/index.html">RTL Source Reference (v001)</a><input aria-label="Toggle navigation of RTL Source Reference (v001)" class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="RTL/top.html">Top level</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RTL/packages.html">Packages and Constants</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RTL/controller.html">NPU Controller</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RTL/mat_core.html">Matrix Core (GEMM)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RTL/vec_core.html">Vector Core (GEMV)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RTL/cvo_core.html">CVO Core (SFU)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RTL/mem_control.html">Memory Control</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RTL/preprocess.html">Preprocess</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RTL/library.html">Library</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RTL/host_api.html">Host API (C driver)</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -316,12 +328,12 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Toolchain Demos</span></p>
 <ul>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../../samples/index.html">Toolchain Demos</a><input aria-label="Toggle navigation of Toolchain Demos" class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../samples/index.html">Toolchain Demos</a><input aria-label="Toggle navigation of Toolchain Demos" class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../samples/mermaid_blockdiagram.html">Mermaid — NPU block diagram</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../samples/wavedrom_axi_read.html">WaveDrom — AXI4 read transaction</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../samples/svg_themed_demo.html">SVG — themed 4×4 PE array</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../samples/plot_bandwidth.html">scienceplots — bandwidth vs batch size</a></li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../../auto_plots/index.html">Plot gallery</a><input aria-label="Toggle navigation of Plot gallery" class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../auto_plots/index.html">Plot gallery</a><input aria-label="Toggle navigation of Plot gallery" class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../auto_plots/plot_bandwidth.html">Batch size vs achieved HP-AXI bandwidth</a></li>
 </ul>
 </li>
@@ -371,14 +383,15 @@
         <article role="main" id="furo-main-content">
           <section id="archive-v001-experimental-architecture">
 <h1>Archive: v001 Experimental Architecture<a class="headerlink" href="#archive-v001-experimental-architecture" title="Link to this heading">¶</a></h1>
-<blockquote>
-<div><p>[!WARNING] This architecture is a preliminary (v001) experimental
-design. Although structurally superior, it was engineered with a
-heavy inclination toward GEMM (Matrix) computations. Because local
-LLM environments are predominantly bound by GEMV (Vector) operations,
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This architecture is a preliminary (v001) experimental design.
+Although structurally superior, it was engineered with a heavy
+inclination toward GEMM (Matrix) computations. Because local LLM
+environments are predominantly bound by GEMV (Vector) operations,
 this branch has been currently archived in favor of an optimized
 structure.</p>
-</div></blockquote>
+</div>
 <p><img alt="Status Archived" src="https://img.shields.io/badge/Status-Archived-red" /> <img alt="SystemVerilog RTL" src="https://img.shields.io/badge/RTL-SystemVerilog-green" /> <img alt="Target Hardware" src="https://img.shields.io/badge/Target-Kria_KV260-orange" /> <img alt="Quantization Precision" src="https://img.shields.io/badge/Precision-W4A16_BF16-green" /></p>
 <div class="toctree-wrapper compound">
 </div>
@@ -405,25 +418,25 @@ pipeline.</p></li>
 <h2>Quick Menu<a class="headerlink" href="#quick-menu" title="Link to this heading">¶</a></h2>
 <div class="grid cards docutils container">
 <ul>
-<li><p><a class="reference external" href="Architecture/v001_architecture.md">Architecture Overview</a></p>
+<li><p><a class="reference internal" href="Architecture/v001_architecture.html"><span class="doc">Architecture Overview</span></a></p>
 <p>Illustrates the internal NPU architecture, the 3-tier core system
 decoupled model, and the memory transition layer layout.</p>
 </li>
-<li><p><a class="reference external" href="Drivers/ISA.md">ISA Specification</a></p>
+<li><p><a class="reference internal" href="Drivers/ISA.html"><span class="doc">ISA Specification</span></a></p>
 <p>Explains the 64-bit VLIW core, Opcode routing design, register
 mappings, and pipeline scheduling methodologies.</p>
 </li>
-<li><p><a class="reference external" href="Drivers/ISA_Spreadsheet.md">ISA Spreadsheet</a></p>
+<li><p><a class="reference internal" href="Drivers/ISA_Spreadsheet.html"><span class="doc">ISA Spreadsheet</span></a></p>
 <p>Provides an internal spreadsheet-view breakdown of the overall
 modular ISA structure.</p>
 </li>
-<li><p><a class="reference external" href="Drivers/v001_API.md">C API Detail</a></p>
+<li><p><a class="reference internal" href="Drivers/v001_API.html"><span class="doc">C API Detail</span></a></p>
 <p>Focuses on the primary wrapping interfaces of <code class="docutils literal notranslate"><span class="pre">pccx_v1_api.c</span></code> and
 <code class="docutils literal notranslate"><span class="pre">pccx_v1_api.h</span></code> targeting the active NPU host controller.</p>
 </li>
-<li><p><a class="reference external" href="agents.md">Agents Architecture</a></p>
-<p>Concept logic on the autonomous agent micro-scheduling model
-operating inside the decoupled dataflow pipeline.</p>
+<li><p><a class="reference internal" href="RTL/index.html"><span class="doc">RTL Source Reference</span></a></p>
+<p>Per-core SystemVerilog deep-dive: every module under <code class="docutils literal notranslate"><span class="pre">codes/v001/</span></code>
+rendered inline with syntax highlighting and collapsible dropdowns.</p>
 </li>
 </ul>
 </div>

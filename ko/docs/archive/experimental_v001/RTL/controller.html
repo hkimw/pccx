@@ -1,0 +1,1516 @@
+<!doctype html>
+<html class="no-js" lang="ko" data-content_root="../../../../">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="NPU 컨트롤러" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://hwkim-dev.github.io/pccx/docs/archive/experimental_v001/RTL/controller.html" />
+<meta property="og:site_name" content="pccx — Parallel Compute Core eXecutor" />
+<meta property="og:description" content="컨트롤러는 NPU 의 프론트엔드 + 스케줄러 반쪽입니다. AXI-Lite 로 64 비트 VLIW 명령어를 받아 디코딩하고, 결과 마이크로 옵을 엔진별 FIFO 로 푸시하며, 상태 레지스터를 호스트에 노출합니다. 모든 컴퓨트 코어는 컨트롤러의 FIFO 뒤에서만 동작합니다. 토폴로지: 프론트엔드 (AXI-Lite 서피스): ctrl_npu_frontend..." />
+<meta property="og:image:width" content="1146" />
+<meta property="og:image:height" content="600" />
+<meta property="og:image" content="https://hwkim-dev.github.io/pccx/_images/social_previews/summary_docs_archive_experimental_v001_RTL_controller_19b67948.png" />
+<meta property="og:image:alt" content="컨트롤러는 NPU 의 프론트엔드 + 스케줄러 반쪽입니다. AXI-Lite 로 64 비트 VLIW 명령어를 받아 디코딩하고, 결과 마이크로 옵을 엔진별 FIFO 로 푸시하며, 상태 레지스터를 호스트에 노출합니다. 모든 컴퓨트 코어는 컨트롤러의 FIFO 뒤에서만 동작합니다. 토폴로지: 프론트엔드 (AXI-Lite 서피스): ctrl_npu_frontend..." />
+<meta name="description" content="컨트롤러는 NPU 의 프론트엔드 + 스케줄러 반쪽입니다. AXI-Lite 로 64 비트 VLIW 명령어를 받아 디코딩하고, 결과 마이크로 옵을 엔진별 FIFO 로 푸시하며, 상태 레지스터를 호스트에 노출합니다. 모든 컴퓨트 코어는 컨트롤러의 FIFO 뒤에서만 동작합니다. 토폴로지: 프론트엔드 (AXI-Lite 서피스): ctrl_npu_frontend..." />
+<meta name="twitter:card" content="summary_large_image" />
+<link rel="index" title="색인" href="../../../../genindex.html"><link rel="search" title="검색" href="../../../../search.html"><link rel="next" title="행렬 코어 (GEMM)" href="mat_core.html"><link rel="prev" title="패키지와 상수" href="packages.html">
+        <link rel="canonical" href="https://hwkim-dev.github.io/pccx/docs/archive/experimental_v001/RTL/controller.html">
+
+    <!-- Generated with Sphinx 7.4.7 and Furo 2025.12.19 -->
+        <title>NPU 컨트롤러 - pccx 문서</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=d111a655" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/styles/furo.css?v=7bdb33bb" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css?v=fd3f3429" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/sg_gallery.css?v=d2d258e8" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/styles/furo-extensions.css?v=8dab3a3b" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/custom.css?v=505235e3" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/image-lightbox.css?v=884c9d5a" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/language-switcher.css?v=cc8629cf" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f2f2f2;
+  --color-code-foreground: #1e1e1e;
+  --color-brand-primary: #0b5fff;
+  --color-brand-content: #0b5fff;
+  --color-announcement-background: #fff5cf;
+  --color-announcement-text: #6b5900;
+  --pccx-accent: #ff7a00;
+  --pccx-muted-border: #dbe1ea;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  --color-brand-primary: #7aa8ff;
+  --color-brand-content: #7aa8ff;
+  --color-announcement-background: #332a00;
+  --color-announcement-text: #f9e58b;
+  --pccx-accent: #ffb470;
+  --pccx-muted-border: #3a4049;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  --color-brand-primary: #7aa8ff;
+  --color-brand-content: #7aa8ff;
+  --color-announcement-background: #332a00;
+  --color-announcement-text: #f9e58b;
+  --pccx-accent: #ffb470;
+  --pccx-muted-border: #3a4049;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+<div class="announcement">
+  <aside class="announcement-content">
+     한국어 버전 · <a href="/pccx/en/">View in English →</a> 
+  </aside>
+</div>
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../../../index.html"><div class="brand">pccx 문서</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky">
+
+<a class="sidebar-brand" href="../../../../index.html">
+      <span class="sidebar-brand-text">pccx 문서</span>
+</a>
+
+
+<div class="pccx-langswitch" role="group" aria-label="Language">
+  <a class="pccx-langswitch__btn" href="/pccx/en/"  data-pccx-lang="en">EN</a>
+  <span class="pccx-langswitch__sep" aria-hidden="true">·</span>
+  <a class="pccx-langswitch__btn" href="/pccx/ko/"  data-pccx-lang="ko">한국어</a>
+</div><form class="sidebar-search-container" method="get" action="../../../../search.html" role="search">
+  <input class="sidebar-search" placeholder="검색" name="q" aria-label="검색">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">소개</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../index.html">pccx: 병렬 컴퓨트 코어 익스큐터</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">v002 아키텍처</span></p>
+<ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../v002/index.html">pccx v002 아키텍처</a><input aria-label="Toggle navigation of pccx v002 아키텍처" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../v002/overview.html">개요</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../v002/Architecture/index.html">하드웨어 아키텍처</a><input aria-label="Toggle navigation of 하드웨어 아키텍처" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../v002/Architecture/rationale.html">v001 → v002 설계 근거</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../v002/Architecture/top_level.html">탑레벨 아키텍처</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../v002/Architecture/floorplan.html">물리 플로어플랜</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../v002/Architecture/memory_hierarchy.html">메모리 계층</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../v002/Architecture/kv_cache.html">KV 캐시 최적화 전략</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../v002/Architecture/gemm_core.html">GEMM 코어 (시스톨릭 어레이)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../v002/Architecture/gemv_core.html">GEMV 코어</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../v002/Architecture/sfu_core.html">SFU 코어 (Complex Vector Operations)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../v002/Architecture/dsp48e2_w4a8.html">DSP48E2 W4A8 비트 패킹과 부호 복원</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../v002/ISA/index.html">명령어 세트 아키텍처 (ISA)</a><input aria-label="Toggle navigation of 명령어 세트 아키텍처 (ISA)" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../v002/ISA/encoding.html">명령어 인코딩</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../v002/ISA/instructions.html">명령어 상세 인코딩</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../v002/ISA/dataflow.html">명령어별 데이터플로우</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../v002/Drivers/index.html">소프트웨어 스택</a><input aria-label="Toggle navigation of 소프트웨어 스택" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../v002/Drivers/api.html">C API 개요</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../v002/Models/index.html">타깃 모델</a><input aria-label="Toggle navigation of 타깃 모델" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../v002/Models/gemma3n_overview.html">Gemma 3N E4B — 개요</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../v002/Models/gemma3n_pipeline.html">Gemma 3N E4B — 연산자 수준 파이프라인</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../v002/Models/gemma3n_attention_rope.html">Gemma 3N — Attention 및 RoPE 제약</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../v002/Models/gemma3n_ple_laurel.html">Gemma 3N — LAuReL 과 PLE Calibration 모듈</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../v002/Models/gemma3n_ffn_sparsity.html">Gemma 3N — FFN Gaussian Top-K Sparsity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../v002/Models/gemma3n_execution.html">Gemma 3N E4B 를 pccx v002 에서 실행 — Execution / Scheduling</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../v002/RTL/index.html">RTL 소스 레퍼런스 (v002)</a><input aria-label="Toggle navigation of RTL 소스 레퍼런스 (v002)" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../v002/RTL/isa_pkg.html">ISA 타입 패키지</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../v002/RTL/npu_top.html">NPU 최상위 모듈</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../v002/RTL/compute_cores.html">컴퓨트 코어 모듈</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../v002/RTL/controller.html">NPU 컨트롤러 모듈</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">타겟 하드웨어</span></p>
+<ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../Devices/index.html">지원 디바이스</a><input aria-label="Toggle navigation of 지원 디바이스" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../Devices/kv260.html">pccx: 병렬 컴퓨트 코어 익스큐터</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">아카이브</span></p>
+<ul class="current">
+<li class="toctree-l1 current has-children"><a class="reference internal" href="../../index.html">아카이브</a><input aria-label="Toggle navigation of 아카이브" checked="" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l2 current has-children"><a class="reference internal" href="../index.html">아카이브: v001 실험적 아키텍처</a><input aria-label="Toggle navigation of 아카이브: v001 실험적 아키텍처" checked="" class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../Architecture/v001_architecture.html">pccx: Parallel Compute Core eXecutor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../Drivers/ISA.html">pccx ISA 사양</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../Drivers/ISA_Spreadsheet.html">pccx ISA 스프레드시트 뷰</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../Drivers/v001_API.html">pccx v001 호스트 API 개발자 레퍼런스</a></li>
+<li class="toctree-l3 current has-children"><a class="reference internal" href="index.html">RTL 소스 레퍼런스 (v001)</a><input aria-label="Toggle navigation of RTL 소스 레퍼런스 (v001)" checked="" class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="top.html">최상위</a></li>
+<li class="toctree-l4"><a class="reference internal" href="packages.html">패키지와 상수</a></li>
+<li class="toctree-l4 current current-page"><a class="current reference internal" href="#">NPU 컨트롤러</a></li>
+<li class="toctree-l4"><a class="reference internal" href="mat_core.html">행렬 코어 (GEMM)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="vec_core.html">벡터 코어 (GEMV)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cvo_core.html">CVO 코어 (SFU)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="mem_control.html">메모리 제어</a></li>
+<li class="toctree-l4"><a class="reference internal" href="preprocess.html">전처리</a></li>
+<li class="toctree-l4"><a class="reference internal" href="library.html">라이브러리</a></li>
+<li class="toctree-l4"><a class="reference internal" href="host_api.html">호스트 API (C 드라이버)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">툴체인 데모</span></p>
+<ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../samples/index.html">툴체인 데모</a><input aria-label="Toggle navigation of 툴체인 데모" class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../samples/mermaid_blockdiagram.html">Mermaid — NPU 블록 다이어그램</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../samples/wavedrom_axi_read.html">WaveDrom — AXI4 read 트랜잭션</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../samples/svg_themed_demo.html">SVG — 테마 대응 4×4 PE 어레이</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../samples/plot_bandwidth.html">scienceplots — batch size 대비 대역폭</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../auto_plots/index.html">Plot gallery</a><input aria-label="Toggle navigation of Plot gallery" class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../auto_plots/plot_bandwidth.html">Batch size vs achieved HP-AXI bandwidth</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="https://github.com/hwkim-dev/pccx/blob/main/ko/docs/docs/archive/experimental_v001/RTL/controller.rst?plain=true" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div><div class="edit-this-page">
+  <a class="muted-link" href="https://github.com/hwkim-dev/pccx/edit/main/ko/docs/docs/archive/experimental_v001/RTL/controller.rst" rel="edit" title="Edit this page">
+    <svg><use href="#svg-pencil"></use></svg>
+    <span class="visually-hidden">Edit this page</span>
+  </a>
+</div><div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="npu">
+<h1>NPU 컨트롤러<a class="headerlink" href="#npu" title="Link to this heading">¶</a></h1>
+<p>컨트롤러는 NPU 의 <strong>프론트엔드 + 스케줄러</strong> 반쪽입니다. AXI-Lite 로
+64 비트 VLIW 명령어를 받아 디코딩하고, 결과 마이크로 옵을 엔진별
+FIFO 로 푸시하며, 상태 레지스터를 호스트에 노출합니다. 모든 컴퓨트
+코어는 컨트롤러의 FIFO 뒤에서만 동작합니다.</p>
+<div class="admonition seealso">
+<p class="admonition-title">더 보기</p>
+<dl class="simple">
+<dt><a class="reference internal" href="../Drivers/ISA.html"><span class="doc">pccx ISA 사양</span></a></dt><dd><p>아래 디코더가 처리하는 명령어 레이아웃과 오피코드 표.</p>
+</dd>
+</dl>
+</div>
+<section id="id1">
+<h2>토폴로지<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Host (AXI-Lite) ──► AXIL_CMD_IN ──► ctrl_npu_decoder ─┐
+                                                     ▼
+┌── GEMV FIFO ── GEMM FIFO ── CVO FIFO ── MEM FIFO ── MEMSET FIFO ──┐
+│                                                                    │
+│            ctrl_npu_dispatcher (엔진별 pop)                         │
+│                                                                    │
+└────────────► Global_Scheduler ◄────────────────────────────────────┘
+                                                                     │
+                                     NPU_fsm_out_Logic ──► AXIL_STAT_OUT
+</pre></div>
+</div>
+</section>
+<section id="axi-lite">
+<h2>프론트엔드 (AXI-Lite 서피스)<a class="headerlink" href="#axi-lite" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">ctrl_npu_frontend.sv</span></code> — AXIL 서피스 컨테이너. 인터페이스 슬레이브
+호스팅.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">AXIL_CMD_IN.sv</span></code> — AXI-Lite 쓰기 슬레이브. <code class="docutils literal notranslate"><span class="pre">0x00</span></code> / <code class="docutils literal notranslate"><span class="pre">0x04</span></code> 에
+32 비트씩 쓰면 64 비트 명령어를 래치.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">AXIL_STAT_OUT.sv</span></code> — <code class="docutils literal notranslate"><span class="pre">0x08</span></code> 에 BUSY/DONE 상태 레지스터를 노출하는
+AXI-Lite 읽기 슬레이브.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ctrl_npu_interface.sv</span></code> — 프론트엔드와 Control Unit 간 핸드셰이크
+내부 접착제.</p></li>
+</ul>
+<details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
+<summary class="sd-summary-title sd-card-header sd-bg-muted sd-bg-text-muted">
+<span class="sd-summary-icon"><svg version="1.1" width="1.0em" height="1.0em" class="sd-octicon sd-octicon-code" viewBox="0 0 16 16" aria-hidden="true"><path d="m11.28 3.22 4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.749.749 0 0 1-1.275-.326.749.749 0 0 1 .215-.734L13.94 8l-3.72-3.72a.749.749 0 0 1 .326-1.275.749.749 0 0 1 .734.215Zm-6.56 0a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042L2.06 8l3.72 3.72a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215L.47 8.53a.75.75 0 0 1 0-1.06Z"></path></svg></span><span class="sd-summary-text"><code class="docutils literal notranslate"><span class="pre">ctrl_npu_frontend.sv</span></code></span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<div class="highlight-systemverilog notranslate"><div class="highlight"><pre><span></span><span class="no">`timescale</span><span class="w"> </span><span class="mi">1</span><span class="n">ns</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">1</span><span class="n">ps</span>
+<span class="no">`include</span><span class="w"> </span><span class="s">&quot;GEMM_Array.svh&quot;</span>
+<span class="no">`include</span><span class="w"> </span><span class="s">&quot;npu_interfaces.svh&quot;</span>
+<span class="no">`include</span><span class="w"> </span><span class="s">&quot;GLOBAL_CONST.svh&quot;</span>
+
+<span class="k">module</span><span class="w"> </span><span class="n">ctrl_npu_frontend</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="k">input</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="n">clk</span><span class="p">,</span>
+<span class="w">    </span><span class="k">input</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="n">rst_n</span><span class="p">,</span>
+<span class="w">    </span><span class="k">input</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="n">IN_clear</span><span class="p">,</span>
+
+<span class="w">    </span><span class="c1">// AXI4-Lite Slave : PS &lt;-&gt; NPU control plane</span>
+<span class="w">    </span><span class="n">axil_if</span><span class="p">.</span><span class="n">slave</span><span class="w"> </span><span class="n">S_AXIL_CTRL</span><span class="p">,</span>
+
+<span class="w">    </span><span class="c1">// Control from Brain</span>
+<span class="w">    </span><span class="c1">//input logic IN_rd_start,</span>
+
+<span class="w">    </span><span class="c1">// Decoded command -&gt; Dispatcher / FSM</span>
+<span class="w">    </span><span class="k">output</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="p">[</span><span class="no">`ISA_WIDTH</span><span class="o">-</span><span class="mi">1</span><span class="o">:</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="n">OUT_RAW_instruction</span><span class="p">,</span>
+<span class="w">    </span><span class="k">output</span><span class="w"> </span><span class="kt">logic</span><span class="w">                  </span><span class="n">OUT_kick</span><span class="p">,</span>
+
+<span class="w">    </span><span class="c1">// Status &lt;- Encoder / FSM</span>
+<span class="w">    </span><span class="k">input</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="p">[</span><span class="no">`ISA_WIDTH</span><span class="o">:</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="n">IN_enc_stat</span><span class="p">,</span>
+<span class="w">    </span><span class="k">input</span><span class="w"> </span><span class="kt">logic</span><span class="w">                </span><span class="n">IN_enc_valid</span><span class="p">,</span><span class="w"> </span><span class="c1">// FIXED: Added missing comma</span>
+
+<span class="w">    </span><span class="k">input</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="n">IN_fetch_ready</span><span class="w">  </span><span class="c1">// FIXED: Removed illegal semicolon</span>
+<span class="p">);</span>
+
+<span class="w">  </span><span class="cm">/*─────────────────────────────────────────────</span>
+<span class="cm">  Internal wires : AXIL_CMD_IN &lt;-&gt; upper logic</span>
+<span class="cm">  ───────────────────────────────────────────────*/</span>
+<span class="w">  </span><span class="kt">logic</span><span class="w"> </span><span class="p">[</span><span class="no">`ISA_WIDTH</span><span class="o">-</span><span class="mi">1</span><span class="o">:</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="n">cmd_data</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">logic</span><span class="w">                  </span><span class="n">cmd_valid</span><span class="p">;</span>
+<span class="w">  </span><span class="c1">// logic               decoder_ready; // (Unused wire commented out)</span>
+
+<span class="w">  </span><span class="c1">// FIXED: Removed &#39;assign IN_fetch_ready = IN_fetch_ready;&#39;</span>
+<span class="w">  </span><span class="c1">// (You cannot continuously assign an input to itself in SystemVerilog)</span>
+
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">OUT_RAW_instruction</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cmd_data</span><span class="p">;</span>
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">OUT_kick</span><span class="w">            </span><span class="o">=</span><span class="w"> </span><span class="n">cmd_valid</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">IN_fetch_ready</span><span class="p">;</span>
+
+<span class="w">  </span><span class="cm">/*─────────────────────────────────────────────</span>
+<span class="cm">  [1-2] Communication IN : CPU -&gt; NPU (Using Write Channels)</span>
+<span class="cm">  ───────────────────────────────────────────────*/</span>
+<span class="w">  </span><span class="n">AXIL_CMD_IN</span><span class="w"> </span><span class="p">#(</span>
+<span class="w">      </span><span class="p">.</span><span class="n">FIFO_DEPTH</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span>
+<span class="w">  </span><span class="p">)</span><span class="w"> </span><span class="n">u_cmd_in</span><span class="w"> </span><span class="p">(</span>
+<span class="w">      </span><span class="p">.</span><span class="n">clk</span><span class="w">     </span><span class="p">(</span><span class="n">clk</span><span class="p">),</span>
+<span class="w">      </span><span class="p">.</span><span class="n">rst_n</span><span class="w">   </span><span class="p">(</span><span class="n">rst_n</span><span class="p">),</span>
+<span class="w">      </span><span class="p">.</span><span class="n">IN_clear</span><span class="p">(</span><span class="n">IN_clear</span><span class="p">),</span><span class="w"> </span><span class="c1">// FIXED: Typo i_clear -&gt; IN_clear</span>
+
+<span class="w">      </span><span class="c1">// AXI4-Lite Write channels directly routed from the interface</span>
+<span class="w">      </span><span class="p">.</span><span class="n">s_awaddr</span><span class="w"> </span><span class="p">(</span><span class="n">S_AXIL_CTRL</span><span class="p">.</span><span class="n">awaddr</span><span class="p">),</span>
+<span class="w">      </span><span class="p">.</span><span class="n">s_awvalid</span><span class="p">(</span><span class="n">S_AXIL_CTRL</span><span class="p">.</span><span class="n">awvalid</span><span class="p">),</span>
+<span class="w">      </span><span class="p">.</span><span class="n">s_awready</span><span class="p">(</span><span class="n">S_AXIL_CTRL</span><span class="p">.</span><span class="n">awready</span><span class="p">),</span>
+<span class="w">      </span><span class="p">.</span><span class="n">s_wdata</span><span class="w">  </span><span class="p">(</span><span class="n">S_AXIL_CTRL</span><span class="p">.</span><span class="n">wdata</span><span class="p">),</span>
+<span class="w">      </span><span class="p">.</span><span class="n">s_wvalid</span><span class="w"> </span><span class="p">(</span><span class="n">S_AXIL_CTRL</span><span class="p">.</span><span class="n">wvalid</span><span class="p">),</span>
+<span class="w">      </span><span class="p">.</span><span class="n">s_wready</span><span class="w"> </span><span class="p">(</span><span class="n">S_AXIL_CTRL</span><span class="p">.</span><span class="n">wready</span><span class="p">),</span>
+<span class="w">      </span><span class="p">.</span><span class="n">s_bresp</span><span class="w">  </span><span class="p">(</span><span class="n">S_AXIL_CTRL</span><span class="p">.</span><span class="n">bresp</span><span class="p">),</span>
+<span class="w">      </span><span class="p">.</span><span class="n">s_bvalid</span><span class="w"> </span><span class="p">(</span><span class="n">S_AXIL_CTRL</span><span class="p">.</span><span class="n">bvalid</span><span class="p">),</span>
+<span class="w">      </span><span class="p">.</span><span class="n">s_bready</span><span class="w"> </span><span class="p">(</span><span class="n">S_AXIL_CTRL</span><span class="p">.</span><span class="n">bready</span><span class="p">),</span>
+
+<span class="w">      </span><span class="p">.</span><span class="n">OUT_data</span><span class="p">(</span><span class="n">cmd_data</span><span class="p">),</span>
+<span class="w">      </span><span class="p">.</span><span class="n">OUT_valid</span><span class="p">(</span><span class="n">cmd_valid</span><span class="p">),</span>
+<span class="w">      </span><span class="p">.</span><span class="n">IN_decoder_ready</span><span class="p">(</span><span class="n">IN_fetch_ready</span><span class="p">)</span>
+<span class="w">  </span><span class="p">);</span>
+
+<span class="w">  </span><span class="cm">/*─────────────────────────────────────────────</span>
+<span class="cm">  [1-2] Communication OUT : NPU -&gt; CPU (Using Read Channels)</span>
+<span class="cm">  ───────────────────────────────────────────────*/</span>
+<span class="w">  </span><span class="n">AXIL_STAT_OUT</span><span class="w"> </span><span class="p">#(</span>
+<span class="w">      </span><span class="p">.</span><span class="n">FIFO_DEPTH</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span>
+<span class="w">  </span><span class="p">)</span><span class="w"> </span><span class="n">u_stat_out</span><span class="w"> </span><span class="p">(</span>
+<span class="w">      </span><span class="p">.</span><span class="n">clk</span><span class="w">     </span><span class="p">(</span><span class="n">clk</span><span class="p">),</span>
+<span class="w">      </span><span class="p">.</span><span class="n">rst_n</span><span class="w">   </span><span class="p">(</span><span class="n">rst_n</span><span class="p">),</span>
+<span class="w">      </span><span class="p">.</span><span class="n">IN_clear</span><span class="p">(</span><span class="n">IN_clear</span><span class="p">),</span><span class="w"> </span><span class="c1">// FIXED: Typo i_clear -&gt; IN_clear</span>
+
+<span class="w">      </span><span class="p">.</span><span class="n">IN_data</span><span class="w"> </span><span class="p">(</span><span class="n">IN_enc_stat</span><span class="p">),</span><span class="w">  </span><span class="c1">// FIXED: Typo i_enc_stat -&gt; IN_enc_stat</span>
+<span class="w">      </span><span class="p">.</span><span class="n">IN_valid</span><span class="p">(</span><span class="n">IN_enc_valid</span><span class="p">),</span><span class="w"> </span><span class="c1">// FIXED: Typo i_enc_valid -&gt; IN_enc_valid</span>
+
+<span class="w">      </span><span class="c1">// AXI4-Lite Read channels directly routed from the interface</span>
+<span class="w">      </span><span class="p">.</span><span class="n">s_araddr</span><span class="w"> </span><span class="p">(</span><span class="n">S_AXIL_CTRL</span><span class="p">.</span><span class="n">araddr</span><span class="p">),</span>
+<span class="w">      </span><span class="p">.</span><span class="n">s_arvalid</span><span class="p">(</span><span class="n">S_AXIL_CTRL</span><span class="p">.</span><span class="n">arvalid</span><span class="p">),</span>
+<span class="w">      </span><span class="p">.</span><span class="n">s_arready</span><span class="p">(</span><span class="n">S_AXIL_CTRL</span><span class="p">.</span><span class="n">arready</span><span class="p">),</span>
+<span class="w">      </span><span class="p">.</span><span class="n">s_rdata</span><span class="w">  </span><span class="p">(</span><span class="n">S_AXIL_CTRL</span><span class="p">.</span><span class="n">rdata</span><span class="p">),</span>
+<span class="w">      </span><span class="p">.</span><span class="n">s_rresp</span><span class="w">  </span><span class="p">(</span><span class="n">S_AXIL_CTRL</span><span class="p">.</span><span class="n">rresp</span><span class="p">),</span>
+<span class="w">      </span><span class="p">.</span><span class="n">s_rvalid</span><span class="w"> </span><span class="p">(</span><span class="n">S_AXIL_CTRL</span><span class="p">.</span><span class="n">rvalid</span><span class="p">),</span>
+<span class="w">      </span><span class="p">.</span><span class="n">s_rready</span><span class="w"> </span><span class="p">(</span><span class="n">S_AXIL_CTRL</span><span class="p">.</span><span class="n">rready</span><span class="p">)</span>
+<span class="w">  </span><span class="p">);</span>
+
+<span class="k">endmodule</span>
+</pre></div>
+</div>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
+<summary class="sd-summary-title sd-card-header sd-bg-muted sd-bg-text-muted">
+<span class="sd-summary-icon"><svg version="1.1" width="1.0em" height="1.0em" class="sd-octicon sd-octicon-code" viewBox="0 0 16 16" aria-hidden="true"><path d="m11.28 3.22 4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.749.749 0 0 1-1.275-.326.749.749 0 0 1 .215-.734L13.94 8l-3.72-3.72a.749.749 0 0 1 .326-1.275.749.749 0 0 1 .734.215Zm-6.56 0a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042L2.06 8l3.72 3.72a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215L.47 8.53a.75.75 0 0 1 0-1.06Z"></path></svg></span><span class="sd-summary-text"><code class="docutils literal notranslate"><span class="pre">AXIL_CMD_IN.sv</span></code></span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<div class="highlight-systemverilog notranslate"><div class="highlight"><pre><span></span><span class="no">`timescale</span><span class="w"> </span><span class="mi">1</span><span class="n">ns</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">1</span><span class="n">ps</span>
+
+<span class="no">`include</span><span class="w"> </span><span class="s">&quot;Algorithms.svh&quot;</span>
+<span class="no">`include</span><span class="w"> </span><span class="s">&quot;GLOBAL_CONST.svh&quot;</span>
+
+<span class="c1">// AXIL_CMD_IN</span>
+<span class="c1">// AXI4-Lite Write path : CPU → NPU</span>
+<span class="c1">// Stores incoming commands into a FIFO.</span>
+<span class="c1">// Drains FIFO to upper module when IN_decoder_ready is asserted.</span>
+
+<span class="k">module</span><span class="w"> </span><span class="n">AXIL_CMD_IN</span><span class="w"> </span><span class="p">#(</span>
+<span class="w">    </span><span class="k">parameter</span><span class="w"> </span><span class="n">FIFO_DEPTH</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">8</span><span class="w">  </span><span class="c1">// number of commands to buffer</span>
+<span class="p">)</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="k">input</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="n">clk</span><span class="p">,</span>
+<span class="w">    </span><span class="k">input</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="n">rst_n</span><span class="p">,</span>
+<span class="w">    </span><span class="k">input</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="n">IN_clear</span><span class="p">,</span>
+
+<span class="w">    </span><span class="c1">// AXI4-Lite Write channels (slave)</span>
+<span class="w">    </span><span class="c1">// AW</span>
+<span class="w">    </span><span class="k">input</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="p">[</span><span class="mi">11</span><span class="o">:</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="n">s_awaddr</span><span class="p">,</span>
+<span class="w">    </span><span class="k">input</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="p">[</span><span class="mi">2</span><span class="o">:</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="n">s_awprot</span><span class="p">,</span>
+<span class="w">    </span><span class="k">input</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="n">s_awvalid</span><span class="p">,</span>
+<span class="w">    </span><span class="k">output</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="n">s_awready</span><span class="p">,</span>
+<span class="w">    </span><span class="c1">// W</span>
+<span class="w">    </span><span class="k">input</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="p">[</span><span class="no">`ISA_WIDTH</span><span class="o">-</span><span class="mi">1</span><span class="o">:</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="n">s_wdata</span><span class="p">,</span>
+<span class="w">    </span><span class="k">input</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="p">[(</span><span class="no">`ISA_WIDTH</span><span class="o">/</span><span class="mi">8</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="o">:</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="n">s_wstrb</span><span class="p">,</span>
+<span class="w">    </span><span class="k">input</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="n">s_wvalid</span><span class="p">,</span>
+<span class="w">    </span><span class="k">output</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="n">s_wready</span><span class="p">,</span>
+<span class="w">    </span><span class="c1">// B</span>
+<span class="w">    </span><span class="k">output</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="p">[</span><span class="mi">1</span><span class="o">:</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="n">s_bresp</span><span class="p">,</span>
+<span class="w">    </span><span class="k">output</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="n">s_bvalid</span><span class="p">,</span>
+<span class="w">    </span><span class="k">input</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="n">s_bready</span><span class="p">,</span>
+
+<span class="w">    </span><span class="c1">// To upper module (NPU_interface)</span>
+<span class="w">    </span><span class="k">output</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="p">[</span><span class="no">`ISA_WIDTH</span><span class="o">-</span><span class="mi">1</span><span class="o">:</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="n">OUT_data</span><span class="p">,</span><span class="w">         </span><span class="c1">// command word</span>
+<span class="w">    </span><span class="k">output</span><span class="w"> </span><span class="kt">logic</span><span class="w">                  </span><span class="n">OUT_valid</span><span class="p">,</span><span class="w">        </span><span class="c1">// FIFO has data</span>
+<span class="w">    </span><span class="k">input</span><span class="w">  </span><span class="kt">logic</span><span class="w">                  </span><span class="n">IN_decoder_ready</span><span class="w">  </span><span class="c1">// upper module is ready to consume</span>
+<span class="p">);</span>
+
+<span class="w">  </span><span class="cm">/*─────────────────────────────────────────────</span>
+<span class="cm">  Register Address Map</span>
+<span class="cm">  ───────────────────────────────────────────────*/</span>
+<span class="w">  </span><span class="k">localparam</span><span class="w"> </span><span class="n">ADDR_INST</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">12&#39;h000</span><span class="p">;</span>
+<span class="w">  </span><span class="k">localparam</span><span class="w"> </span><span class="n">ADDR_KICK</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">12&#39;h008</span><span class="p">;</span>
+
+<span class="w">  </span><span class="cm">/*─────────────────────────────────────────────</span>
+<span class="cm">  AXI4-Lite Write Path</span>
+<span class="cm">  Latch AW first, write register when W arrives.</span>
+<span class="cm">  ───────────────────────────────────────────────*/</span>
+<span class="w">  </span><span class="kt">logic</span><span class="w"> </span><span class="p">[</span><span class="w">          </span><span class="mi">11</span><span class="o">:</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="n">aw_addr_latch</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">logic</span><span class="w">                  </span><span class="n">aw_pending</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">logic</span><span class="w">                  </span><span class="n">bvalid_r</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">logic</span><span class="w">                  </span><span class="n">fifo_wen</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">logic</span><span class="w"> </span><span class="p">[</span><span class="no">`ISA_WIDTH</span><span class="o">-</span><span class="mi">1</span><span class="o">:</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="n">fifo_wdata</span><span class="p">;</span>
+
+<span class="w">  </span><span class="c1">// if queue is full block receive</span>
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">s_awready</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="n">aw_pending</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="o">~</span><span class="n">cmd_q</span><span class="p">.</span><span class="n">full</span><span class="p">;</span>
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">s_wready</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">aw_pending</span><span class="p">;</span>
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">s_bresp</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="mb">2&#39;b00</span><span class="p">;</span>
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">s_bvalid</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">bvalid_r</span><span class="p">;</span>
+
+<span class="w">  </span><span class="c1">// AW latch</span>
+<span class="w">  </span><span class="k">always_ff</span><span class="w"> </span><span class="p">@(</span><span class="k">posedge</span><span class="w"> </span><span class="n">clk</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">rst_n</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">IN_clear</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">      </span><span class="n">aw_addr_latch</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="m">&#39;0</span><span class="p">;</span>
+<span class="w">      </span><span class="n">aw_pending</span><span class="w">    </span><span class="o">&lt;=</span><span class="w"> </span><span class="mb">1&#39;b0</span><span class="p">;</span>
+<span class="w">    </span><span class="k">end</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">s_awvalid</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">s_awready</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">        </span><span class="n">aw_addr_latch</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">s_awaddr</span><span class="p">;</span>
+<span class="w">        </span><span class="n">aw_pending</span><span class="w">    </span><span class="o">&lt;=</span><span class="w"> </span><span class="mb">1&#39;b1</span><span class="p">;</span>
+<span class="w">      </span><span class="k">end</span>
+<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">s_wvalid</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">s_wready</span><span class="p">)</span><span class="w"> </span><span class="n">aw_pending</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mb">1&#39;b0</span><span class="p">;</span>
+<span class="w">    </span><span class="k">end</span>
+<span class="w">  </span><span class="k">end</span>
+
+<span class="w">  </span><span class="c1">// W : push into FIFO + B response</span>
+<span class="w">  </span><span class="k">always_ff</span><span class="w"> </span><span class="p">@(</span><span class="k">posedge</span><span class="w"> </span><span class="n">clk</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">    </span><span class="n">fifo_wen</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mb">1&#39;b0</span><span class="p">;</span>
+<span class="w">    </span><span class="n">bvalid_r</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mb">1&#39;b0</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">rst_n</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">IN_clear</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">      </span><span class="n">fifo_wdata</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="m">&#39;0</span><span class="p">;</span>
+<span class="w">    </span><span class="k">end</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">s_wvalid</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">s_wready</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">        </span><span class="k">case</span><span class="w"> </span><span class="p">(</span><span class="n">aw_addr_latch</span><span class="p">)</span>
+<span class="w">          </span><span class="c1">// push instruction word into FIFO</span>
+<span class="w">          </span><span class="nl">ADDR_INST:</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">            </span><span class="n">fifo_wdata</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">s_wdata</span><span class="p">;</span>
+<span class="w">            </span><span class="n">fifo_wen</span><span class="w">   </span><span class="o">&lt;=</span><span class="w"> </span><span class="mb">1&#39;b1</span><span class="p">;</span>
+<span class="w">          </span><span class="k">end</span>
+<span class="w">          </span><span class="c1">// KICK : push a special marker (bit63 = 1 as kick flag)</span>
+<span class="w">          </span><span class="nl">ADDR_KICK:</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">            </span><span class="n">fifo_wdata</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mh">64&#39;h8000_0000_0000_0000</span><span class="p">;</span>
+<span class="w">            </span><span class="n">fifo_wen</span><span class="w">   </span><span class="o">&lt;=</span><span class="w"> </span><span class="mb">1&#39;b1</span><span class="p">;</span>
+<span class="w">          </span><span class="k">end</span>
+<span class="w">          </span><span class="k">default</span><span class="o">:</span><span class="w"> </span><span class="p">;</span>
+<span class="w">        </span><span class="k">endcase</span>
+<span class="w">        </span><span class="n">bvalid_r</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mb">1&#39;b1</span><span class="p">;</span>
+<span class="w">      </span><span class="k">end</span>
+<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">bvalid_r</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">s_bready</span><span class="p">)</span><span class="w"> </span><span class="n">bvalid_r</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mb">1&#39;b0</span><span class="p">;</span>
+<span class="w">    </span><span class="k">end</span>
+<span class="w">  </span><span class="k">end</span>
+
+<span class="w">  </span><span class="cm">/*─────────────────────────────────────────────</span>
+<span class="cm">  Command Queue  (simple synchronous, FIFO_DEPTH entries)</span>
+<span class="cm">  Push : fifo_wen</span>
+<span class="cm">  Pop  : OUT_valid &amp;&amp; IN_decoder_ready</span>
+<span class="cm">  ───────────────────────────────────────────────*/</span>
+<span class="w">  </span><span class="k">import</span><span class="w"> </span><span class="n">algorithms_pkg</span><span class="o">::*</span><span class="p">;</span>
+
+<span class="w">  </span><span class="n">IF_queue</span><span class="w"> </span><span class="p">#(</span>
+<span class="w">      </span><span class="p">.</span><span class="n">DATA_WIDTH</span><span class="p">(</span><span class="no">`ISA_WIDTH</span><span class="p">),</span>
+<span class="w">      </span><span class="p">.</span><span class="n">DEPTH</span><span class="p">(</span><span class="n">FIFO_DEPTH</span><span class="p">)</span>
+<span class="w">  </span><span class="p">)</span><span class="w"> </span><span class="n">cmd_q</span><span class="w"> </span><span class="p">(</span>
+<span class="w">      </span><span class="p">.</span><span class="n">clk</span><span class="w">  </span><span class="p">(</span><span class="n">clk</span><span class="p">),</span>
+<span class="w">      </span><span class="p">.</span><span class="n">rst_n</span><span class="p">(</span><span class="n">rst_n</span><span class="p">)</span>
+<span class="w">  </span><span class="p">);</span>
+<span class="w">  </span><span class="n">QUEUE</span><span class="w"> </span><span class="n">u_cmd_q</span><span class="w"> </span><span class="p">(.</span><span class="n">q</span><span class="p">(</span><span class="n">cmd_q</span><span class="p">.</span><span class="n">owner</span><span class="p">));</span>
+
+<span class="w">  </span><span class="k">always_ff</span><span class="w"> </span><span class="p">@(</span><span class="k">posedge</span><span class="w"> </span><span class="n">clk</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">rst_n</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">IN_clear</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">      </span><span class="n">cmd_q</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+<span class="w">    </span><span class="k">end</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">fifo_wen</span><span class="p">)</span><span class="w"> </span><span class="n">cmd_q</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">fifo_wdata</span><span class="p">);</span><span class="w">  </span><span class="c1">// push when AXI write done</span>
+<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">OUT_valid</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">IN_decoder_ready</span><span class="p">)</span><span class="w"> </span><span class="n">cmd_q</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span><span class="w">  </span><span class="c1">// IXED: o_valid -&gt; OUT_valid</span>
+<span class="w">    </span><span class="k">end</span>
+<span class="w">  </span><span class="k">end</span>
+
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">OUT_valid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="n">cmd_q</span><span class="p">.</span><span class="n">empty</span><span class="p">;</span>
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">OUT_data</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">cmd_q</span><span class="p">.</span><span class="n">pop_data</span><span class="p">;</span>
+
+<span class="k">endmodule</span>
+</pre></div>
+</div>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
+<summary class="sd-summary-title sd-card-header sd-bg-muted sd-bg-text-muted">
+<span class="sd-summary-icon"><svg version="1.1" width="1.0em" height="1.0em" class="sd-octicon sd-octicon-code" viewBox="0 0 16 16" aria-hidden="true"><path d="m11.28 3.22 4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.749.749 0 0 1-1.275-.326.749.749 0 0 1 .215-.734L13.94 8l-3.72-3.72a.749.749 0 0 1 .326-1.275.749.749 0 0 1 .734.215Zm-6.56 0a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042L2.06 8l3.72 3.72a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215L.47 8.53a.75.75 0 0 1 0-1.06Z"></path></svg></span><span class="sd-summary-text"><code class="docutils literal notranslate"><span class="pre">AXIL_STAT_OUT.sv</span></code></span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<div class="highlight-systemverilog notranslate"><div class="highlight"><pre><span></span><span class="no">`timescale</span><span class="w"> </span><span class="mi">1</span><span class="n">ns</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">1</span><span class="n">ps</span>
+
+<span class="c1">// AXIL_STAT_OUT</span>
+<span class="c1">// AXI4-Lite Read path : NPU → CPU</span>
+<span class="c1">// Upper module pushes status into FIFO continuously.</span>
+<span class="c1">// Drains FIFO to CPU when AXI4-Lite read handshake happens.</span>
+
+<span class="k">module</span><span class="w"> </span><span class="n">AXIL_STAT_OUT</span><span class="w"> </span><span class="p">#(</span>
+<span class="w">    </span><span class="k">parameter</span><span class="w"> </span><span class="n">FIFO_DEPTH</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">8</span>
+<span class="p">)</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="k">input</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="n">clk</span><span class="p">,</span>
+<span class="w">    </span><span class="k">input</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="n">rst_n</span><span class="p">,</span>
+<span class="w">    </span><span class="k">input</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="n">IN_clear</span><span class="p">,</span>
+
+<span class="w">    </span><span class="c1">// From upper module (NPU_interface → here)</span>
+<span class="w">    </span><span class="k">input</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="p">[</span><span class="no">`ISA_WIDTH</span><span class="o">-</span><span class="mi">1</span><span class="o">:</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="n">IN_data</span><span class="p">,</span><span class="w">  </span><span class="c1">// status word to send to CPU</span>
+<span class="w">    </span><span class="k">input</span><span class="w"> </span><span class="kt">logic</span><span class="w">                  </span><span class="n">IN_valid</span><span class="p">,</span><span class="w"> </span><span class="c1">// upper module has data to push</span>
+
+<span class="w">    </span><span class="c1">// AXI4-Lite Read channels (slave)</span>
+<span class="w">    </span><span class="c1">// AR</span>
+<span class="w">    </span><span class="k">input</span><span class="w">  </span><span class="kt">logic</span><span class="w"> </span><span class="p">[</span><span class="w">          </span><span class="mi">11</span><span class="o">:</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="n">s_araddr</span><span class="p">,</span>
+<span class="w">    </span><span class="k">input</span><span class="w">  </span><span class="kt">logic</span><span class="w">                  </span><span class="n">s_arvalid</span><span class="p">,</span>
+<span class="w">    </span><span class="k">output</span><span class="w"> </span><span class="kt">logic</span><span class="w">                  </span><span class="n">s_arready</span><span class="p">,</span>
+<span class="w">    </span><span class="c1">// R</span>
+<span class="w">    </span><span class="k">output</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="p">[</span><span class="no">`ISA_WIDTH</span><span class="o">-</span><span class="mi">1</span><span class="o">:</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="n">s_rdata</span><span class="p">,</span>
+<span class="w">    </span><span class="k">output</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="p">[</span><span class="w">           </span><span class="mi">1</span><span class="o">:</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="n">s_rresp</span><span class="p">,</span>
+<span class="w">    </span><span class="k">output</span><span class="w"> </span><span class="kt">logic</span><span class="w">                  </span><span class="n">s_rvalid</span><span class="p">,</span>
+<span class="w">    </span><span class="k">input</span><span class="w">  </span><span class="kt">logic</span><span class="w">                  </span><span class="n">s_rready</span>
+<span class="p">);</span>
+
+<span class="w">  </span><span class="cm">/*─────────────────────────────────────────────</span>
+<span class="cm">  FIFO  (simple synchronous, FIFO_DEPTH entries)</span>
+<span class="cm">  Push : IN_valid from upper module</span>
+<span class="cm">  Pop  : AXI4-Lite read handshake with CPU</span>
+<span class="cm">  ───────────────────────────────────────────────*/</span>
+<span class="w">  </span><span class="k">localparam</span><span class="w"> </span><span class="n">PTR_W</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">$</span><span class="n">clog2</span><span class="p">(</span><span class="n">FIFO_DEPTH</span><span class="p">);</span>
+
+<span class="w">  </span><span class="kt">logic</span><span class="w"> </span><span class="p">[</span><span class="no">`ISA_WIDTH</span><span class="o">-</span><span class="mi">1</span><span class="o">:</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="n">mem</span><span class="p">[</span><span class="mi">0</span><span class="o">:</span><span class="n">FIFO_DEPTH</span><span class="o">-</span><span class="mi">1</span><span class="p">];</span>
+<span class="w">  </span><span class="kt">logic</span><span class="w"> </span><span class="p">[</span><span class="nl">PTR_W:</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="n">wr_ptr</span><span class="p">,</span><span class="w"> </span><span class="n">rd_ptr</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">logic</span><span class="w"> </span><span class="n">fifo_empty</span><span class="p">,</span><span class="w"> </span><span class="n">fifo_full</span><span class="p">;</span>
+
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">fifo_empty</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">wr_ptr</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">rd_ptr</span><span class="p">);</span>
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">fifo_full</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">wr_ptr</span><span class="p">[</span><span class="n">PTR_W</span><span class="p">]</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">rd_ptr</span><span class="p">[</span><span class="n">PTR_W</span><span class="p">])</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="p">(</span><span class="n">wr_ptr</span><span class="p">[</span><span class="n">PTR_W</span><span class="o">-</span><span class="mi">1</span><span class="o">:</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">rd_ptr</span><span class="p">[</span><span class="n">PTR_W</span><span class="o">-</span><span class="mi">1</span><span class="o">:</span><span class="mi">0</span><span class="p">]);</span>
+
+<span class="w">  </span><span class="kt">logic</span><span class="w"> </span><span class="n">fifo_ren</span><span class="p">;</span>
+
+<span class="w">  </span><span class="k">always_ff</span><span class="w"> </span><span class="p">@(</span><span class="k">posedge</span><span class="w"> </span><span class="n">clk</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">rst_n</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">IN_clear</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">      </span><span class="n">wr_ptr</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="m">&#39;0</span><span class="p">;</span>
+<span class="w">      </span><span class="n">rd_ptr</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="m">&#39;0</span><span class="p">;</span>
+<span class="w">    </span><span class="k">end</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">      </span><span class="c1">// push : upper module feeds status continuously</span>
+<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">IN_valid</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="o">!</span><span class="n">fifo_full</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">        </span><span class="n">mem</span><span class="p">[</span><span class="n">wr_ptr</span><span class="p">[</span><span class="n">PTR_W</span><span class="o">-</span><span class="mi">1</span><span class="o">:</span><span class="mi">0</span><span class="p">]]</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">IN_data</span><span class="p">;</span>
+<span class="w">        </span><span class="n">wr_ptr</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">wr_ptr</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mb">1&#39;b1</span><span class="p">;</span>
+<span class="w">      </span><span class="k">end</span>
+<span class="w">      </span><span class="c1">// pop : CPU consumed the data</span>
+<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">fifo_ren</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="o">!</span><span class="n">fifo_empty</span><span class="p">)</span><span class="w"> </span><span class="n">rd_ptr</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">rd_ptr</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mb">1&#39;b1</span><span class="p">;</span>
+<span class="w">    </span><span class="k">end</span>
+<span class="w">  </span><span class="k">end</span>
+
+<span class="w">  </span><span class="cm">/*─────────────────────────────────────────────</span>
+<span class="cm">  AXI4-Lite Read Path</span>
+<span class="cm">  Wait for AR, then pop one entry from FIFO and return it.</span>
+<span class="cm">  Hold rvalid until CPU acknowledges with rready.</span>
+<span class="cm">  ───────────────────────────────────────────────*/</span>
+<span class="w">  </span><span class="kt">logic</span><span class="w"> </span><span class="p">[</span><span class="no">`ISA_WIDTH</span><span class="o">-</span><span class="mi">1</span><span class="o">:</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="n">rdata_r</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">logic</span><span class="w">                  </span><span class="n">rvalid_r</span><span class="p">;</span>
+
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">s_rdata</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="n">rdata_r</span><span class="p">;</span>
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">s_rresp</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="mb">2&#39;b00</span><span class="p">;</span>
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">s_rvalid</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">rvalid_r</span><span class="p">;</span>
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">s_arready</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="n">rvalid_r</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="o">~</span><span class="n">fifo_empty</span><span class="p">;</span><span class="w">  </span><span class="c1">// ready only when FIFO has data</span>
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">fifo_ren</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">s_arvalid</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">s_arready</span><span class="p">;</span><span class="w">  </span><span class="c1">// pop on AR handshake</span>
+
+<span class="w">  </span><span class="k">always_ff</span><span class="w"> </span><span class="p">@(</span><span class="k">posedge</span><span class="w"> </span><span class="n">clk</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">rst_n</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">IN_clear</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">      </span><span class="n">rdata_r</span><span class="w">  </span><span class="o">&lt;=</span><span class="w"> </span><span class="m">&#39;0</span><span class="p">;</span>
+<span class="w">      </span><span class="n">rvalid_r</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mb">1&#39;b0</span><span class="p">;</span>
+<span class="w">    </span><span class="k">end</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">      </span><span class="c1">// AR handshake → latch FIFO head and assert rvalid</span>
+<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">s_arvalid</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">s_arready</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">        </span><span class="n">rdata_r</span><span class="w">  </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">mem</span><span class="p">[</span><span class="n">rd_ptr</span><span class="p">[</span><span class="n">PTR_W</span><span class="o">-</span><span class="mi">1</span><span class="o">:</span><span class="mi">0</span><span class="p">]];</span>
+<span class="w">        </span><span class="n">rvalid_r</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mb">1&#39;b1</span><span class="p">;</span>
+<span class="w">      </span><span class="k">end</span>
+<span class="w">      </span><span class="c1">// R handshake → CPU consumed data, release</span>
+<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">rvalid_r</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">s_rready</span><span class="p">)</span><span class="w"> </span><span class="n">rvalid_r</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mb">1&#39;b0</span><span class="p">;</span>
+<span class="w">    </span><span class="k">end</span>
+<span class="w">  </span><span class="k">end</span>
+
+<span class="k">endmodule</span>
+</pre></div>
+</div>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
+<summary class="sd-summary-title sd-card-header sd-bg-muted sd-bg-text-muted">
+<span class="sd-summary-icon"><svg version="1.1" width="1.0em" height="1.0em" class="sd-octicon sd-octicon-code" viewBox="0 0 16 16" aria-hidden="true"><path d="m11.28 3.22 4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.749.749 0 0 1-1.275-.326.749.749 0 0 1 .215-.734L13.94 8l-3.72-3.72a.749.749 0 0 1 .326-1.275.749.749 0 0 1 .734.215Zm-6.56 0a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042L2.06 8l3.72 3.72a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215L.47 8.53a.75.75 0 0 1 0-1.06Z"></path></svg></span><span class="sd-summary-text"><code class="docutils literal notranslate"><span class="pre">ctrl_npu_interface.sv</span></code></span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<div class="highlight-systemverilog notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+</details></section>
+<section id="control-unit">
+<h2>Control Unit (디코드 + 디스패치)<a class="headerlink" href="#control-unit" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">ctrl_decode_const.svh</span></code> — 디코드 단계 상수 (필드 폭, 마스크).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ctrl_npu_decoder.sv</span></code> — 64 비트 VLIW 에서 4 비트 오피코드를 떼고
+60 비트 본문을 해당 FIFO 로 라우팅.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ctrl_npu_dispatcher.sv</span></code> — 엔진별 로컬 디스패처. 큐잉된 마이크로
+옵을 꺼내 오퍼랜드 준비 시 엔진을 발사.</p></li>
+</ul>
+<details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
+<summary class="sd-summary-title sd-card-header sd-bg-muted sd-bg-text-muted">
+<span class="sd-summary-icon"><svg version="1.1" width="1.0em" height="1.0em" class="sd-octicon sd-octicon-code" viewBox="0 0 16 16" aria-hidden="true"><path d="m11.28 3.22 4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.749.749 0 0 1-1.275-.326.749.749 0 0 1 .215-.734L13.94 8l-3.72-3.72a.749.749 0 0 1 .326-1.275.749.749 0 0 1 .734.215Zm-6.56 0a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042L2.06 8l3.72 3.72a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215L.47 8.53a.75.75 0 0 1 0-1.06Z"></path></svg></span><span class="sd-summary-text"><code class="docutils literal notranslate"><span class="pre">ctrl_decode_const.svh</span></code></span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<div class="highlight-systemverilog notranslate"><div class="highlight"><pre><span></span><span class="cp">`define MAX_CMD_CHAIN 4</span>
+
+<span class="c1">// NPU Architecture</span>
+<span class="c1">//`define ISA_WIDTH 32</span>
+
+<span class="c1">// memcpy option flags</span>
+
+<span class="c1">// memcpy</span>
+<span class="cp">`define MEMCPY_INT4 2&#39;b00</span>
+<span class="cp">`define MEMCPY_INT8 2&#39;b01</span>
+<span class="cp">`define MEMCPY_INT16 2&#39;b10</span>
+<span class="cp">`define MEMCPY_BF16 2&#39;b11</span>
+
+
+<span class="cp">`define MEMCPY_OPT_INT_IS_SCALED 4&#39;b1000</span>
+
+
+<span class="cp">`define MEMCPY_FLAG_BF16_ALIGN 4&#39;b1000</span>
+<span class="cp">`define MEMCPY_FLAG_BF16_ALIGN_H 4&#39;b0100</span>
+<span class="cp">`define MEMCPY_FLAG_BF16_ALIGN_V 4&#39;b0010</span>
+<span class="c1">//`define MEMCPY_OPT_BF16_ 4&#39;b0</span>
+
+
+
+<span class="cp">`define DIM_X 1&#39;b00</span>
+<span class="cp">`define DIM_Y 1&#39;b01</span>
+<span class="cp">`define DIM_Z 2&#39;b10</span>
+<span class="cp">`define DIM_W 3&#39;b11</span>
+
+<span class="cp">`define MAX_MATRIX_DIM 4</span>
+<span class="cp">`define MAX_MATRIX_WIDTH 32</span>
+
+<span class="c1">//`define GEMV_LANE_0 4&#39;b0000</span>
+<span class="cp">`define GEMV_LANE_1 4&#39;b0001</span>
+<span class="cp">`define GEMV_LANE_2 4&#39;b0010</span>
+<span class="cp">`define GEMV_LANE_3 4&#39;b0100</span>
+<span class="cp">`define GEMV_LANE_4 4&#39;b1000</span>
+
+<span class="cp">`define MASKING_WEIGHT 2&#39;b00</span>
+<span class="cp">`define BUFFER_WEIGHT_A1 4&#39;b0000</span>
+<span class="cp">`define BUFFER_WEIGHT_A2 4&#39;b0001</span>
+<span class="cp">`define BUFFER_WEIGHT_A3 4&#39;b0010</span>
+<span class="cp">`define BUFFER_WEIGHT_A4 4&#39;b0011</span>
+
+<span class="cp">`define MASKING_SCALE 2&#39;b01</span>
+<span class="cp">`define BUFFER_SCALE 4&#39;b0100</span>
+<span class="cp">`define CACHE_SCALE 4&#39;b0101</span>
+
+<span class="cp">`define MASKING_FMAP 2&#39;b10</span>
+<span class="cp">`define BUFFER_FMAP_C 4&#39;b1000</span>
+<span class="cp">`define CACHE_FMAP_C1 4&#39;b1001</span>
+<span class="cp">`define CACHE_FMAP_C2 4&#39;b1010</span>
+</pre></div>
+</div>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
+<summary class="sd-summary-title sd-card-header sd-bg-muted sd-bg-text-muted">
+<span class="sd-summary-icon"><svg version="1.1" width="1.0em" height="1.0em" class="sd-octicon sd-octicon-code" viewBox="0 0 16 16" aria-hidden="true"><path d="m11.28 3.22 4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.749.749 0 0 1-1.275-.326.749.749 0 0 1 .215-.734L13.94 8l-3.72-3.72a.749.749 0 0 1 .326-1.275.749.749 0 0 1 .734.215Zm-6.56 0a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042L2.06 8l3.72 3.72a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215L.47 8.53a.75.75 0 0 1 0-1.06Z"></path></svg></span><span class="sd-summary-text"><code class="docutils literal notranslate"><span class="pre">ctrl_npu_decoder.sv</span></code></span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<div class="highlight-systemverilog notranslate"><div class="highlight"><pre><span></span><span class="no">`timescale</span><span class="w"> </span><span class="mi">1</span><span class="n">ns</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">1</span><span class="n">ps</span>
+<span class="no">`include</span><span class="w"> </span><span class="s">&quot;GLOBAL_CONST.svh&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">isa_pkg::*</span><span class="p">;</span>
+
+<span class="c1">// ===| NPU Opcode Decoder |======================================================</span>
+<span class="c1">// Receives raw 64-bit VLIW instructions from the frontend FIFO.</span>
+<span class="c1">// Strips the 4-bit opcode, asserts the matching valid pulse for one cycle,</span>
+<span class="c1">// and forwards the 60-bit body to the Global Scheduler.</span>
+<span class="c1">// ===============================================================================</span>
+
+<span class="k">module</span><span class="w"> </span><span class="n">ctrl_npu_decoder</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="k">input</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="n">clk</span><span class="p">,</span>
+<span class="w">    </span><span class="k">input</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="n">rst_n</span><span class="p">,</span>
+
+<span class="w">    </span><span class="c1">// ===| From Frontend |=======================================================</span>
+<span class="w">    </span><span class="k">input</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="p">[</span><span class="no">`ISA_WIDTH</span><span class="o">-</span><span class="mi">1</span><span class="o">:</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="n">IN_raw_instruction</span><span class="p">,</span>
+<span class="w">    </span><span class="k">input</span><span class="w"> </span><span class="kt">logic</span><span class="w">                  </span><span class="n">raw_instruction_pop_valid</span><span class="p">,</span>
+
+<span class="w">    </span><span class="c1">// ===| Flow Control |========================================================</span>
+<span class="w">    </span><span class="k">output</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="n">OUT_fetch_PC_ready</span><span class="p">,</span>
+
+<span class="w">    </span><span class="c1">// ===| Decoded Valid Pulses (one-hot, one cycle) |===========================</span>
+<span class="w">    </span><span class="k">output</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="n">OUT_GEMV_op_x64_valid</span><span class="p">,</span>
+<span class="w">    </span><span class="k">output</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="n">OUT_GEMM_op_x64_valid</span><span class="p">,</span>
+<span class="w">    </span><span class="k">output</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="n">OUT_memcpy_op_x64_valid</span><span class="p">,</span>
+<span class="w">    </span><span class="k">output</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="n">OUT_memset_op_x64_valid</span><span class="p">,</span>
+<span class="w">    </span><span class="k">output</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="n">OUT_cvo_op_x64_valid</span><span class="p">,</span>
+
+<span class="w">    </span><span class="c1">// ===| Instruction Body (60-bit, opcode stripped) |=========================</span>
+<span class="w">    </span><span class="k">output</span><span class="w"> </span><span class="n">instruction_op_x64_t</span><span class="w"> </span><span class="n">OUT_op_x64</span>
+<span class="p">);</span>
+
+<span class="w">  </span><span class="c1">// ===| Internal |==============================================================</span>
+<span class="w">  </span><span class="kt">logic</span><span class="w"> </span><span class="p">[</span><span class="mi">3</span><span class="o">:</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="n">OUT_valid</span><span class="p">;</span>
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">OUT_GEMV_op_x64_valid</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="n">OUT_valid</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">OUT_GEMM_op_x64_valid</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="n">OUT_valid</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">OUT_memcpy_op_x64_valid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">OUT_valid</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">OUT_memset_op_x64_valid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">OUT_valid</span><span class="p">[</span><span class="mi">3</span><span class="p">];</span>
+<span class="w">  </span><span class="c1">// CVO valid uses a separate FF (5th opcode)</span>
+<span class="w">  </span><span class="kt">logic</span><span class="w"> </span><span class="n">cvo_valid_ff</span><span class="p">;</span>
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">OUT_cvo_op_x64_valid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cvo_valid_ff</span><span class="p">;</span>
+
+<span class="w">  </span><span class="c1">// ===| Opcode Decoder |========================================================</span>
+<span class="w">  </span><span class="c1">// Top 4 bits are the opcode; bottom 60 bits are the instruction body.</span>
+<span class="w">  </span><span class="k">always_ff</span><span class="w"> </span><span class="p">@(</span><span class="k">posedge</span><span class="w"> </span><span class="n">clk</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">rst_n</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">      </span><span class="n">OUT_valid</span><span class="w">        </span><span class="o">&lt;=</span><span class="w"> </span><span class="mb">4&#39;b0000</span><span class="p">;</span>
+<span class="w">      </span><span class="n">cvo_valid_ff</span><span class="w">     </span><span class="o">&lt;=</span><span class="w"> </span><span class="mb">1&#39;b0</span><span class="p">;</span>
+<span class="w">      </span><span class="n">OUT_fetch_PC_ready</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="no">`TRUE</span><span class="p">;</span>
+<span class="w">      </span><span class="n">OUT_op_x64</span><span class="w">       </span><span class="o">&lt;=</span><span class="w"> </span><span class="m">&#39;0</span><span class="p">;</span>
+<span class="w">    </span><span class="k">end</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">      </span><span class="n">OUT_valid</span><span class="w">      </span><span class="o">&lt;=</span><span class="w"> </span><span class="mb">4&#39;b0000</span><span class="p">;</span>
+<span class="w">      </span><span class="n">cvo_valid_ff</span><span class="w">   </span><span class="o">&lt;=</span><span class="w"> </span><span class="mb">1&#39;b0</span><span class="p">;</span>
+
+<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">raw_instruction_pop_valid</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">        </span><span class="c1">// Body: bits [59:0] (opcode at [63:60] already stripped by slicing)</span>
+<span class="w">        </span><span class="n">OUT_op_x64</span><span class="p">.</span><span class="n">instruction</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">IN_raw_instruction</span><span class="p">[</span><span class="no">`ISA_BODY_WIDTH</span><span class="o">-</span><span class="mi">1</span><span class="o">:</span><span class="mi">0</span><span class="p">];</span>
+
+<span class="w">        </span><span class="k">case</span><span class="w"> </span><span class="p">(</span><span class="n">IN_raw_instruction</span><span class="p">[</span><span class="no">`ISA_WIDTH</span><span class="o">-</span><span class="mi">1</span><span class="o">:</span><span class="no">`ISA_WIDTH</span><span class="o">-</span><span class="no">`ISA_OPCODE_WIDTH</span><span class="p">])</span>
+<span class="w">          </span><span class="nl">OP_GEMV:</span><span class="w">   </span><span class="n">OUT_valid</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mb">4&#39;b0001</span><span class="p">;</span>
+<span class="w">          </span><span class="nl">OP_GEMM:</span><span class="w">   </span><span class="n">OUT_valid</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mb">4&#39;b0010</span><span class="p">;</span>
+<span class="w">          </span><span class="nl">OP_MEMCPY:</span><span class="w"> </span><span class="n">OUT_valid</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mb">4&#39;b0100</span><span class="p">;</span>
+<span class="w">          </span><span class="nl">OP_MEMSET:</span><span class="w"> </span><span class="n">OUT_valid</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mb">4&#39;b1000</span><span class="p">;</span>
+<span class="w">          </span><span class="nl">OP_CVO:</span><span class="w">    </span><span class="n">cvo_valid_ff</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mb">1&#39;b1</span><span class="p">;</span>
+<span class="w">          </span><span class="k">default</span><span class="o">:</span><span class="w">   </span><span class="p">;</span><span class="w">  </span><span class="c1">// unknown opcode: drop silently</span>
+<span class="w">        </span><span class="k">endcase</span>
+<span class="w">      </span><span class="k">end</span>
+<span class="w">    </span><span class="k">end</span>
+<span class="w">  </span><span class="k">end</span>
+
+<span class="w">  </span><span class="c1">// ===| Backpressure |==========================================================</span>
+<span class="w">  </span><span class="c1">// Always ready — the frontend FIFO provides buffering; the decoder is single-cycle.</span>
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">OUT_fetch_PC_ready</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mb">1&#39;b1</span><span class="p">;</span>
+
+<span class="k">endmodule</span>
+</pre></div>
+</div>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
+<summary class="sd-summary-title sd-card-header sd-bg-muted sd-bg-text-muted">
+<span class="sd-summary-icon"><svg version="1.1" width="1.0em" height="1.0em" class="sd-octicon sd-octicon-code" viewBox="0 0 16 16" aria-hidden="true"><path d="m11.28 3.22 4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.749.749 0 0 1-1.275-.326.749.749 0 0 1 .215-.734L13.94 8l-3.72-3.72a.749.749 0 0 1 .326-1.275.749.749 0 0 1 .734.215Zm-6.56 0a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042L2.06 8l3.72 3.72a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215L.47 8.53a.75.75 0 0 1 0-1.06Z"></path></svg></span><span class="sd-summary-text"><code class="docutils literal notranslate"><span class="pre">ctrl_npu_dispatcher.sv</span></code></span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<div class="highlight-systemverilog notranslate"><div class="highlight"><pre><span></span><span class="c1">// `timeOUT_scale 1ns / 1ps</span>
+<span class="c1">// `include &quot;GEMM_Array.svh&quot;</span>
+<span class="c1">// `include &quot;npu_interfaces.svh&quot;</span>
+<span class="c1">// `include &quot;GLOBAL_CONST.svh&quot;</span>
+
+<span class="c1">// import isa_pkg::*;</span>
+
+<span class="c1">// module cu_npu_dispatcher (</span>
+<span class="c1">//     input  logic         clk,</span>
+<span class="c1">//     input  logic         rst_n,</span>
+<span class="c1">//     input  instruction_t IN_inst,</span>
+<span class="c1">//     input  logic         IN_valid,</span>
+<span class="c1">//     output logic         o_valid,</span>
+
+
+<span class="c1">//     // GEMV / GEMM controls</span>
+<span class="c1">//     output logic [3:0] OUT_activate_top,</span>
+<span class="c1">//     output logic [3:0] OUT_activate_lane,</span>
+<span class="c1">//     output logic       OUT_result_emax_align,</span>
+<span class="c1">//     output logic       OUT_result_accm,</span>
+<span class="c1">//     output logic       OUT_result_scale,</span>
+
+
+<span class="c1">//     // memcpy</span>
+<span class="c1">//     output memory_uop_t OUT_memcpy_cmd,</span>
+
+<span class="c1">//     // if INT group size?</span>
+<span class="c1">// );</span>
+
+<span class="c1">//   /*─────────────────────────────────────────────</span>
+<span class="c1">//   Lane activation bitmask</span>
+<span class="c1">//   bit[0]=lane1, bit[1]=lane2 ...</span>
+<span class="c1">//   ─────────────────────────────────────────────*/</span>
+<span class="c1">//   localparam logic [3:0] LANE_1 = 4&#39;b0001;</span>
+<span class="c1">//   localparam logic [3:0] LANE_2 = 4&#39;b0010;</span>
+<span class="c1">//   localparam logic [3:0] LANE_3 = 4&#39;b0100;</span>
+<span class="c1">//   localparam logic [3:0] LANE_4 = 4&#39;b1000;</span>
+
+<span class="c1">//   always_ff @(posedge clk) begin</span>
+<span class="c1">//     if (!rst_n) begin</span>
+<span class="c1">//       o_valid           &lt;= 1&#39;b0;</span>
+<span class="c1">//       OUT_activate_lane     &lt;= &#39;0;</span>
+<span class="c1">//       OUT_result_emax_align        &lt;= 1&#39;b0;</span>
+<span class="c1">//       OUT_result_accm              &lt;= 1&#39;b0;</span>
+<span class="c1">//       OUT_result_scale             &lt;= 1&#39;b0;</span>
+<span class="c1">//       OUT_memcpy_destination_queue &lt;= &#39;0;</span>
+<span class="c1">//       for (int i = 0; i &lt; `MAX_MATRIX_DIM; i++) OUT_memcpy_matrix_shape[i] &lt;= &#39;0;</span>
+<span class="c1">//     end else begin</span>
+
+<span class="c1">//       o_valid &lt;= 1&#39;b0;  // default : deassert every cycle</span>
+
+<span class="c1">//       if (IN_valid) begin</span>
+<span class="c1">//         case (IN_inst.opcode)</span>
+
+<span class="c1">//           OP_GEMV: begin</span>
+<span class="c1">//             o_valid &lt;= 1&#39;b1;</span>
+
+<span class="c1">//             if (IN_inst.cmd_chaining) begin</span>
+<span class="c1">//               // TODO: chaining logic</span>
+<span class="c1">//             end</span>
+<span class="c1">//             if (IN_inst.override) begin</span>
+<span class="c1">//               // TODO: override logic</span>
+<span class="c1">//             end</span>
+
+<span class="c1">//             // lane activation (OR mask, cumulative)</span>
+<span class="c1">//             case (IN_inst.payload.dotm.lane_idq)</span>
+<span class="c1">//               2&#39;b00: OUT_activate_lane &lt;= LANE_1;</span>
+<span class="c1">//               2&#39;b01: OUT_activate_lane &lt;= LANE_1 | LANE_2;</span>
+<span class="c1">//               2&#39;b10: OUT_activate_lane &lt;= LANE_1 | LANE_2 | LANE_3;</span>
+<span class="c1">//               2&#39;b11: OUT_activate_lane &lt;= LANE_1 | LANE_2 | LANE_3 | LANE_4;</span>
+<span class="c1">//               default: begin</span>
+<span class="c1">//                 o_valid &lt;= 1&#39;b0;  // unknown → drop + TODO: interrupt</span>
+<span class="c1">//               end</span>
+<span class="c1">//             endcase</span>
+
+<span class="c1">//             OUT_result_emax_align &lt;= IN_inst.payload.dotm.find_emax_align;</span>
+<span class="c1">//             OUT_result_accm       &lt;= IN_inst.payload.dotm.OUT_result_accm;</span>
+<span class="c1">//             // activate when added to ISA</span>
+<span class="c1">//             // OUT_result_scale      &lt;= IN_inst.payload.dotm.OUT_result_scale;</span>
+<span class="c1">//             OUT_activate_top[`TOP_GEMV] &lt;= `TRUE;</span>
+<span class="c1">//           end</span>
+
+<span class="c1">//           OP_GEMM: begin</span>
+<span class="c1">//             if (IN_inst.override) begin</span>
+<span class="c1">//               if (IN_inst.cmd_chaining) begin</span>
+<span class="c1">//                 // TODO</span>
+<span class="c1">//               end else begin</span>
+<span class="c1">//                 // TODO</span>
+<span class="c1">//               end</span>
+<span class="c1">//             end else begin</span>
+<span class="c1">//               if (IN_inst.cmd_chaining) begin</span>
+<span class="c1">//                 // TODO</span>
+<span class="c1">//               end else begin</span>
+<span class="c1">//                 o_valid &lt;= 1&#39;b1;</span>
+
+<span class="c1">//                 OUT_result_emax_align &lt;= IN_inst.payload.dotm.align;</span>
+<span class="c1">//                 OUT_result_accm       &lt;= IN_inst.payload.dotm.OUT_result_accm;</span>
+<span class="c1">//                 OUT_activate_top[`TOP_GEMV] &lt;= `TRUE;</span>
+<span class="c1">//               end</span>
+<span class="c1">//             end</span>
+
+<span class="c1">//           end</span>
+
+<span class="c1">//           OP_MEMCPY: begin</span>
+<span class="c1">//             if (IN_inst.override) begin</span>
+<span class="c1">//               if (IN_inst.cmd_chaining) begin</span>
+<span class="c1">//                 // accumulate matrix shape across chained instructions</span>
+<span class="c1">//                 OUT_memcpy_matrix_shape[IN_inst.payload.memcpy.dim_xyz]</span>
+<span class="c1">//                     &lt;= IN_inst.payload.memcpy.dim_x;</span>
+
+
+<span class="c1">//               end else begin</span>
+<span class="c1">//                 // chaining end → dispatch memcpy</span>
+<span class="c1">//                 o_valid           &lt;= 1&#39;b1;</span>
+<span class="c1">//                 OUT_memcpy_destination_queue &lt;= IN_inst.payload.memcpy.dest_queue;</span>
+
+<span class="c1">//                 case (IN_inst.payload.memcpy.dest_queue[3:2])</span>
+<span class="c1">//                   `MASKING_WEIGHT: begin</span>
+<span class="c1">//                     // TODO: → weight buffer</span>
+<span class="c1">//                   end</span>
+<span class="c1">//                   `MASKING_OUT_scale: begin</span>
+<span class="c1">//                     // TODO: ACP → OUT_result_scale cache</span>
+<span class="c1">//                   end</span>
+<span class="c1">//                   `MASKING_FMAP: begin</span>
+<span class="c1">//                     // TODO: ACP → find emax &amp; align → cache</span>
+<span class="c1">//                   end</span>
+<span class="c1">//                   default: o_valid &lt;= 1&#39;b0;  // undefined</span>
+<span class="c1">//                 endcase</span>
+<span class="c1">//               end</span>
+
+<span class="c1">//             end else begin</span>
+<span class="c1">//               // non-override memcpy</span>
+<span class="c1">//               // TODO</span>
+<span class="c1">//             end</span>
+
+<span class="c1">//             // Determine logic based on datatype and mask IN_inst.payload.memcpy.option_flags using bitwise AND (&amp;)</span>
+<span class="c1">//             if (IN_inst.payload.memcpy.datatype == `BF16) begin</span>
+<span class="c1">//                 // Example: BF16 processing mode</span>
+<span class="c1">//                 // Check if the 4th bit (ALIGN) is set to 1</span>
+<span class="c1">//                 if ((IN_inst.payload.memcpy.option_flags &amp; `MEMCPY_FLAG_BF16_ALIGN) != 4&#39;b0000) begin</span>
+<span class="c1">//                     OUT_align &lt;= `TRUE;</span>
+
+<span class="c1">//                     // Determine the alignment direction</span>
+<span class="c1">//                     if ((IN_inst.payload.memcpy.option_flags &amp; `MEMCPY_FLAG_BF16_ALIGN_V) != 4&#39;b0000) begin</span>
+<span class="c1">//                         OUT_align_dir &lt;= `ALIGN_VERTICAL;</span>
+<span class="c1">//                     end else if ((IN_inst.payload.memcpy.option_flags &amp; `MEMCPY_FLAG_BF16_ALIGN_H) != 4&#39;b0000) begin</span>
+<span class="c1">//                         OUT_align_dir &lt;= `ALIGN_HORIZONTAL;</span>
+<span class="c1">//                     end else begin</span>
+<span class="c1">//                         // Default direction if neither V nor H is specified</span>
+<span class="c1">//                     end</span>
+
+<span class="c1">//                 end else begin</span>
+<span class="c1">//                     // If ALIGN flag is missing</span>
+<span class="c1">//                     OUT_align &lt;= `FALSE;</span>
+<span class="c1">//                 end</span>
+<span class="c1">//             end else begin</span>
+<span class="c1">//                 // Example: INT processing mode</span>
+<span class="c1">//                 if ((IN_inst.payload.memcpy.option_flags &amp; `MEMCPY_OPT_INT_IS_SCALED) != 4&#39;b0000) begin</span>
+<span class="c1">//                     // Logic for scaled INT</span>
+<span class="c1">//                     OUT_align &lt;= `TRUE; // (Adjust according to your actual spec)</span>
+<span class="c1">//                 end else begin</span>
+<span class="c1">//                     OUT_align &lt;= `FALSE;</span>
+<span class="c1">//                 end</span>
+<span class="c1">//             end</span>
+
+<span class="c1">//             OUT_datatype &lt;= IN_inst.payload.memcpy.datatype;</span>
+
+<span class="c1">//           end</span>
+<span class="c1">//           default: o_valid &lt;= 1&#39;b0;  // unknown opcode → drop</span>
+<span class="c1">//         endcase</span>
+<span class="c1">//       end</span>
+<span class="c1">//     end</span>
+<span class="c1">//   end</span>
+
+<span class="c1">// endmodule</span>
+</pre></div>
+</div>
+</div>
+</details></section>
+<section id="global-scheduler">
+<h2>Global Scheduler + 컨트롤러 최상위<a class="headerlink" href="#global-scheduler" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Global_Scheduler.sv</span></code> — 엔진 간 중재. 메모리 전송과 연산 순서,
+ACC / FINDEMAX 해저드 처리.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">npu_controller_top.sv</span></code> — 컨트롤러 최상위 래퍼. 프론트엔드 + 디코드/
+디스패치 + 스케줄러를 인스턴스화하고 <code class="docutils literal notranslate"><span class="pre">npu_if</span></code> 번들에 연결.</p></li>
+</ul>
+<details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
+<summary class="sd-summary-title sd-card-header sd-bg-muted sd-bg-text-muted">
+<span class="sd-summary-icon"><svg version="1.1" width="1.0em" height="1.0em" class="sd-octicon sd-octicon-code" viewBox="0 0 16 16" aria-hidden="true"><path d="m11.28 3.22 4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.749.749 0 0 1-1.275-.326.749.749 0 0 1 .215-.734L13.94 8l-3.72-3.72a.749.749 0 0 1 .326-1.275.749.749 0 0 1 .734.215Zm-6.56 0a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042L2.06 8l3.72 3.72a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215L.47 8.53a.75.75 0 0 1 0-1.06Z"></path></svg></span><span class="sd-summary-text"><code class="docutils literal notranslate"><span class="pre">Global_Scheduler.sv</span></code></span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<div class="highlight-systemverilog notranslate"><div class="highlight"><pre><span></span><span class="no">`timescale</span><span class="w"> </span><span class="mi">1</span><span class="n">ns</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">1</span><span class="n">ps</span>
+<span class="no">`include</span><span class="w"> </span><span class="s">&quot;GEMM_Array.svh&quot;</span>
+<span class="no">`include</span><span class="w"> </span><span class="s">&quot;GLOBAL_CONST.svh&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">isa_pkg::*</span><span class="p">;</span>
+
+<span class="c1">// ===| Global Scheduler |========================================================</span>
+<span class="c1">// Translates decoded VLIW instructions into engine micro-ops.</span>
+<span class="c1">//</span>
+<span class="c1">// Single always_ff drives each output to avoid multiple-driver conflicts.</span>
+<span class="c1">// Priority for OUT_LOAD_uop: GEMM &gt; GEMV &gt; MEMCPY &gt; CVO (one active per cycle).</span>
+<span class="c1">//</span>
+<span class="c1">// OUT_STORE_uop  : registered at issue time; mem_dispatcher uses it to initiate</span>
+<span class="c1">//                  result writeback after the engine signals completion.</span>
+<span class="c1">// OUT_sram_rd_start : one-cycle pulse when a GEMM or GEMV load is dispatched,</span>
+<span class="c1">//                     triggering preprocess_fmap to begin broadcasting from cache.</span>
+<span class="c1">// ===============================================================================</span>
+
+<span class="k">module</span><span class="w"> </span><span class="n">Global_Scheduler</span><span class="w"> </span><span class="p">#()</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="k">input</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="n">clk_core</span><span class="p">,</span>
+<span class="w">    </span><span class="k">input</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="n">rst_n_core</span><span class="p">,</span>
+
+<span class="w">    </span><span class="c1">// ===| From ctrl_npu_decoder |===============================================</span>
+<span class="w">    </span><span class="k">input</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="n">IN_GEMV_op_x64_valid</span><span class="p">,</span>
+<span class="w">    </span><span class="k">input</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="n">IN_GEMM_op_x64_valid</span><span class="p">,</span>
+<span class="w">    </span><span class="k">input</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="n">IN_memcpy_op_x64_valid</span><span class="p">,</span>
+<span class="w">    </span><span class="k">input</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="n">IN_memset_op_x64_valid</span><span class="p">,</span>
+<span class="w">    </span><span class="k">input</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="n">IN_cvo_op_x64_valid</span><span class="p">,</span>
+
+<span class="w">    </span><span class="k">input</span><span class="w"> </span><span class="n">instruction_op_x64_t</span><span class="w"> </span><span class="n">instruction</span><span class="p">,</span>
+
+<span class="w">    </span><span class="c1">// ===| Engine micro-ops |====================================================</span>
+<span class="w">    </span><span class="k">output</span><span class="w"> </span><span class="n">gemm_control_uop_t</span><span class="w">   </span><span class="n">OUT_GEMM_uop</span><span class="p">,</span>
+<span class="w">    </span><span class="k">output</span><span class="w"> </span><span class="n">GEMV_control_uop_t</span><span class="w">   </span><span class="n">OUT_GEMV_uop</span><span class="p">,</span>
+<span class="w">    </span><span class="k">output</span><span class="w"> </span><span class="n">memory_control_uop_t</span><span class="w"> </span><span class="n">OUT_LOAD_uop</span><span class="p">,</span>
+<span class="w">    </span><span class="k">output</span><span class="w"> </span><span class="n">memory_control_uop_t</span><span class="w"> </span><span class="n">OUT_STORE_uop</span><span class="p">,</span>
+<span class="w">    </span><span class="k">output</span><span class="w"> </span><span class="n">memory_set_uop_t</span><span class="w">     </span><span class="n">OUT_mem_set_uop</span><span class="p">,</span>
+<span class="w">    </span><span class="k">output</span><span class="w"> </span><span class="n">cvo_control_uop_t</span><span class="w">    </span><span class="n">OUT_CVO_uop</span><span class="p">,</span>
+
+<span class="w">    </span><span class="c1">// ===| Datapath control |====================================================</span>
+<span class="w">    </span><span class="k">output</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="n">OUT_sram_rd_start</span><span class="w">   </span><span class="c1">// pulse: start fmap cache broadcast</span>
+<span class="p">);</span>
+
+<span class="w">  </span><span class="c1">// ===| Combinational instruction body casts |==================================</span>
+<span class="w">  </span><span class="n">GEMV_op_x64_t</span><span class="w">   </span><span class="n">GEMV_op_x64</span><span class="p">;</span>
+<span class="w">  </span><span class="n">GEMM_op_x64_t</span><span class="w">   </span><span class="n">GEMM_op_x64</span><span class="p">;</span>
+<span class="w">  </span><span class="n">memcpy_op_x64_t</span><span class="w"> </span><span class="n">memcpy_op_x64</span><span class="p">;</span>
+<span class="w">  </span><span class="n">memset_op_x64_t</span><span class="w"> </span><span class="n">memset_op_x64</span><span class="p">;</span>
+<span class="w">  </span><span class="n">cvo_op_x64_t</span><span class="w">    </span><span class="n">cvo_op_x64</span><span class="p">;</span>
+
+<span class="w">  </span><span class="k">always_comb</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">    </span><span class="n">GEMV_op_x64</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="n">GEMV_op_x64_t</span><span class="p">&#39;(</span><span class="n">instruction</span><span class="p">.</span><span class="n">instruction</span><span class="p">);</span>
+<span class="w">    </span><span class="n">GEMM_op_x64</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="n">GEMM_op_x64_t</span><span class="p">&#39;(</span><span class="n">instruction</span><span class="p">.</span><span class="n">instruction</span><span class="p">);</span>
+<span class="w">    </span><span class="n">memcpy_op_x64</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">memcpy_op_x64_t</span><span class="p">&#39;(</span><span class="n">instruction</span><span class="p">.</span><span class="n">instruction</span><span class="p">);</span>
+<span class="w">    </span><span class="n">memset_op_x64</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">memset_op_x64_t</span><span class="p">&#39;(</span><span class="n">instruction</span><span class="p">.</span><span class="n">instruction</span><span class="p">);</span>
+<span class="w">    </span><span class="n">cvo_op_x64</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="n">cvo_op_x64_t</span><span class="p">&#39;(</span><span class="n">instruction</span><span class="p">.</span><span class="n">instruction</span><span class="p">);</span>
+<span class="w">  </span><span class="k">end</span>
+
+<span class="w">  </span><span class="c1">// ===| MEMSET uop |============================================================</span>
+<span class="w">  </span><span class="k">always_ff</span><span class="w"> </span><span class="p">@(</span><span class="k">posedge</span><span class="w"> </span><span class="n">clk_core</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">rst_n_core</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">      </span><span class="n">OUT_mem_set_uop</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="m">&#39;0</span><span class="p">;</span>
+<span class="w">    </span><span class="k">end</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">IN_memset_op_x64_valid</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">      </span><span class="n">OUT_mem_set_uop</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="p">&#39;{</span>
+<span class="w">          </span><span class="n">dest_cache</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">dest_cache_e</span><span class="p">&#39;(</span><span class="n">memset_op_x64</span><span class="p">.</span><span class="n">dest_cache</span><span class="p">),</span>
+<span class="w">          </span><span class="n">dest_addr</span><span class="w">  </span><span class="o">:</span><span class="w"> </span><span class="n">memset_op_x64</span><span class="p">.</span><span class="n">dest_addr</span><span class="p">,</span>
+<span class="w">          </span><span class="n">a_value</span><span class="w">    </span><span class="o">:</span><span class="w"> </span><span class="n">memset_op_x64</span><span class="p">.</span><span class="n">a_value</span><span class="p">,</span>
+<span class="w">          </span><span class="n">b_value</span><span class="w">    </span><span class="o">:</span><span class="w"> </span><span class="n">memset_op_x64</span><span class="p">.</span><span class="n">b_value</span><span class="p">,</span>
+<span class="w">          </span><span class="n">c_value</span><span class="w">    </span><span class="o">:</span><span class="w"> </span><span class="n">memset_op_x64</span><span class="p">.</span><span class="n">c_value</span>
+<span class="w">      </span><span class="p">};</span>
+<span class="w">    </span><span class="k">end</span>
+<span class="w">  </span><span class="k">end</span>
+
+<span class="w">  </span><span class="c1">// ===| MEMCPY route translation ===============================================</span>
+<span class="w">  </span><span class="c1">// from_device/to_device (1-bit each) → data_route_e (8-bit enum)</span>
+<span class="w">  </span><span class="n">data_route_e</span><span class="w"> </span><span class="n">memcpy_route</span><span class="p">;</span>
+<span class="w">  </span><span class="k">always_comb</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">memcpy_op_x64</span><span class="p">.</span><span class="n">from_device</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">FROM_HOST</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">memcpy_op_x64</span><span class="p">.</span><span class="n">to_device</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">TO_NPU</span><span class="p">)</span>
+<span class="w">      </span><span class="n">memcpy_route</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">from_host_to_L2</span><span class="p">;</span>
+<span class="w">    </span><span class="k">else</span>
+<span class="w">      </span><span class="n">memcpy_route</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">from_L2_to_host</span><span class="p">;</span>
+<span class="w">  </span><span class="k">end</span>
+
+<span class="w">  </span><span class="c1">// ===| LOAD uop — single driver (priority: GEMM &gt; GEMV &gt; MEMCPY &gt; CVO) |======</span>
+<span class="w">  </span><span class="k">always_ff</span><span class="w"> </span><span class="p">@(</span><span class="k">posedge</span><span class="w"> </span><span class="n">clk_core</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">rst_n_core</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">      </span><span class="n">OUT_LOAD_uop</span><span class="w">      </span><span class="o">&lt;=</span><span class="w"> </span><span class="m">&#39;0</span><span class="p">;</span>
+<span class="w">      </span><span class="n">OUT_sram_rd_start</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mb">1&#39;b0</span><span class="p">;</span>
+<span class="w">    </span><span class="k">end</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">      </span><span class="n">OUT_sram_rd_start</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mb">1&#39;b0</span><span class="p">;</span><span class="w">   </span><span class="c1">// default: no pulse</span>
+
+<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">IN_GEMM_op_x64_valid</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">        </span><span class="n">OUT_LOAD_uop</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="p">&#39;{</span>
+<span class="w">            </span><span class="n">data_dest</span><span class="w">      </span><span class="o">:</span><span class="w"> </span><span class="n">from_L2_to_L1_GEMM</span><span class="p">,</span>
+<span class="w">            </span><span class="n">dest_addr</span><span class="w">      </span><span class="o">:</span><span class="w"> </span><span class="m">&#39;0</span><span class="p">,</span>
+<span class="w">            </span><span class="n">src_addr</span><span class="w">       </span><span class="o">:</span><span class="w"> </span><span class="n">GEMM_op_x64</span><span class="p">.</span><span class="n">src_addr</span><span class="p">,</span>
+<span class="w">            </span><span class="n">shape_ptr_addr</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">GEMM_op_x64</span><span class="p">.</span><span class="n">shape_ptr_addr</span><span class="p">,</span>
+<span class="w">            </span><span class="n">async</span><span class="w">          </span><span class="o">:</span><span class="w"> </span><span class="n">SYNC_OP</span>
+<span class="w">        </span><span class="p">};</span>
+<span class="w">        </span><span class="n">OUT_sram_rd_start</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mb">1&#39;b1</span><span class="p">;</span>
+
+<span class="w">      </span><span class="k">end</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">IN_GEMV_op_x64_valid</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">        </span><span class="n">OUT_LOAD_uop</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="p">&#39;{</span>
+<span class="w">            </span><span class="n">data_dest</span><span class="w">      </span><span class="o">:</span><span class="w"> </span><span class="n">from_L2_to_L1_GEMV</span><span class="p">,</span>
+<span class="w">            </span><span class="n">dest_addr</span><span class="w">      </span><span class="o">:</span><span class="w"> </span><span class="m">&#39;0</span><span class="p">,</span>
+<span class="w">            </span><span class="n">src_addr</span><span class="w">       </span><span class="o">:</span><span class="w"> </span><span class="n">GEMV_op_x64</span><span class="p">.</span><span class="n">src_addr</span><span class="p">,</span>
+<span class="w">            </span><span class="n">shape_ptr_addr</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">GEMV_op_x64</span><span class="p">.</span><span class="n">shape_ptr_addr</span><span class="p">,</span>
+<span class="w">            </span><span class="n">async</span><span class="w">          </span><span class="o">:</span><span class="w"> </span><span class="n">SYNC_OP</span>
+<span class="w">        </span><span class="p">};</span>
+<span class="w">        </span><span class="n">OUT_sram_rd_start</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mb">1&#39;b1</span><span class="p">;</span>
+
+<span class="w">      </span><span class="k">end</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">IN_memcpy_op_x64_valid</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">        </span><span class="n">OUT_LOAD_uop</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="p">&#39;{</span>
+<span class="w">            </span><span class="n">data_dest</span><span class="w">      </span><span class="o">:</span><span class="w"> </span><span class="n">memcpy_route</span><span class="p">,</span>
+<span class="w">            </span><span class="n">dest_addr</span><span class="w">      </span><span class="o">:</span><span class="w"> </span><span class="n">memcpy_op_x64</span><span class="p">.</span><span class="n">dest_addr</span><span class="p">,</span>
+<span class="w">            </span><span class="n">src_addr</span><span class="w">       </span><span class="o">:</span><span class="w"> </span><span class="n">memcpy_op_x64</span><span class="p">.</span><span class="n">src_addr</span><span class="p">,</span>
+<span class="w">            </span><span class="n">shape_ptr_addr</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">memcpy_op_x64</span><span class="p">.</span><span class="n">shape_ptr_addr</span><span class="p">,</span>
+<span class="w">            </span><span class="n">async</span><span class="w">          </span><span class="o">:</span><span class="w"> </span><span class="n">memcpy_op_x64</span><span class="p">.</span><span class="n">async</span>
+<span class="w">        </span><span class="p">};</span>
+
+<span class="w">      </span><span class="k">end</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">IN_cvo_op_x64_valid</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">        </span><span class="n">OUT_LOAD_uop</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="p">&#39;{</span>
+<span class="w">            </span><span class="n">data_dest</span><span class="w">      </span><span class="o">:</span><span class="w"> </span><span class="n">from_L2_to_CVO</span><span class="p">,</span>
+<span class="w">            </span><span class="n">dest_addr</span><span class="w">      </span><span class="o">:</span><span class="w"> </span><span class="m">&#39;0</span><span class="p">,</span>
+<span class="w">            </span><span class="n">src_addr</span><span class="w">       </span><span class="o">:</span><span class="w"> </span><span class="n">cvo_op_x64</span><span class="p">.</span><span class="n">src_addr</span><span class="p">,</span>
+<span class="w">            </span><span class="n">shape_ptr_addr</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="m">&#39;0</span><span class="p">,</span>
+<span class="w">            </span><span class="n">async</span><span class="w">          </span><span class="o">:</span><span class="w"> </span><span class="n">cvo_op_x64</span><span class="p">.</span><span class="n">async</span>
+<span class="w">        </span><span class="p">};</span>
+<span class="w">      </span><span class="k">end</span>
+<span class="w">    </span><span class="k">end</span>
+<span class="w">  </span><span class="k">end</span>
+
+<span class="w">  </span><span class="c1">// ===| STORE uop — latched at issue time |=====================================</span>
+<span class="w">  </span><span class="c1">// Held until the engine signals completion (external handshake, not shown here).</span>
+<span class="w">  </span><span class="k">always_ff</span><span class="w"> </span><span class="p">@(</span><span class="k">posedge</span><span class="w"> </span><span class="n">clk_core</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">rst_n_core</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">      </span><span class="n">OUT_STORE_uop</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="m">&#39;0</span><span class="p">;</span>
+<span class="w">    </span><span class="k">end</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">IN_GEMM_op_x64_valid</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">      </span><span class="n">OUT_STORE_uop</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="p">&#39;{</span>
+<span class="w">          </span><span class="n">data_dest</span><span class="w">      </span><span class="o">:</span><span class="w"> </span><span class="n">from_GEMM_res_to_L2</span><span class="p">,</span>
+<span class="w">          </span><span class="n">dest_addr</span><span class="w">      </span><span class="o">:</span><span class="w"> </span><span class="n">GEMM_op_x64</span><span class="p">.</span><span class="n">dest_reg</span><span class="p">,</span>
+<span class="w">          </span><span class="n">src_addr</span><span class="w">       </span><span class="o">:</span><span class="w"> </span><span class="m">&#39;0</span><span class="p">,</span>
+<span class="w">          </span><span class="n">shape_ptr_addr</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">GEMM_op_x64</span><span class="p">.</span><span class="n">shape_ptr_addr</span><span class="p">,</span>
+<span class="w">          </span><span class="n">async</span><span class="w">          </span><span class="o">:</span><span class="w"> </span><span class="n">SYNC_OP</span>
+<span class="w">      </span><span class="p">};</span>
+<span class="w">    </span><span class="k">end</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">IN_GEMV_op_x64_valid</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">      </span><span class="n">OUT_STORE_uop</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="p">&#39;{</span>
+<span class="w">          </span><span class="n">data_dest</span><span class="w">      </span><span class="o">:</span><span class="w"> </span><span class="n">from_GEMV_res_to_L2</span><span class="p">,</span>
+<span class="w">          </span><span class="n">dest_addr</span><span class="w">      </span><span class="o">:</span><span class="w"> </span><span class="n">GEMV_op_x64</span><span class="p">.</span><span class="n">dest_reg</span><span class="p">,</span>
+<span class="w">          </span><span class="n">src_addr</span><span class="w">       </span><span class="o">:</span><span class="w"> </span><span class="m">&#39;0</span><span class="p">,</span>
+<span class="w">          </span><span class="n">shape_ptr_addr</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">GEMV_op_x64</span><span class="p">.</span><span class="n">shape_ptr_addr</span><span class="p">,</span>
+<span class="w">          </span><span class="n">async</span><span class="w">          </span><span class="o">:</span><span class="w"> </span><span class="n">SYNC_OP</span>
+<span class="w">      </span><span class="p">};</span>
+<span class="w">    </span><span class="k">end</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">IN_cvo_op_x64_valid</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">      </span><span class="n">OUT_STORE_uop</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="p">&#39;{</span>
+<span class="w">          </span><span class="n">data_dest</span><span class="w">      </span><span class="o">:</span><span class="w"> </span><span class="n">from_CVO_res_to_L2</span><span class="p">,</span>
+<span class="w">          </span><span class="n">dest_addr</span><span class="w">      </span><span class="o">:</span><span class="w"> </span><span class="n">cvo_op_x64</span><span class="p">.</span><span class="n">dst_addr</span><span class="p">,</span>
+<span class="w">          </span><span class="n">src_addr</span><span class="w">       </span><span class="o">:</span><span class="w"> </span><span class="m">&#39;0</span><span class="p">,</span>
+<span class="w">          </span><span class="n">shape_ptr_addr</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="m">&#39;0</span><span class="p">,</span>
+<span class="w">          </span><span class="n">async</span><span class="w">          </span><span class="o">:</span><span class="w"> </span><span class="n">cvo_op_x64</span><span class="p">.</span><span class="n">async</span>
+<span class="w">      </span><span class="p">};</span>
+<span class="w">    </span><span class="k">end</span>
+<span class="w">  </span><span class="k">end</span>
+
+<span class="w">  </span><span class="c1">// ===| GEMM uop |==============================================================</span>
+<span class="w">  </span><span class="k">always_ff</span><span class="w"> </span><span class="p">@(</span><span class="k">posedge</span><span class="w"> </span><span class="n">clk_core</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">rst_n_core</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">      </span><span class="n">OUT_GEMM_uop</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="m">&#39;0</span><span class="p">;</span>
+<span class="w">    </span><span class="k">end</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">IN_GEMM_op_x64_valid</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">      </span><span class="n">OUT_GEMM_uop</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="p">&#39;{</span>
+<span class="w">          </span><span class="n">flags</span><span class="w">         </span><span class="o">:</span><span class="w"> </span><span class="n">GEMM_op_x64</span><span class="p">.</span><span class="n">flags</span><span class="p">,</span>
+<span class="w">          </span><span class="n">size_ptr_addr</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">GEMM_op_x64</span><span class="p">.</span><span class="n">size_ptr_addr</span><span class="p">,</span>
+<span class="w">          </span><span class="n">parallel_lane</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">GEMM_op_x64</span><span class="p">.</span><span class="n">parallel_lane</span>
+<span class="w">      </span><span class="p">};</span>
+<span class="w">    </span><span class="k">end</span>
+<span class="w">  </span><span class="k">end</span>
+
+<span class="w">  </span><span class="c1">// ===| GEMV uop |==============================================================</span>
+<span class="w">  </span><span class="k">always_ff</span><span class="w"> </span><span class="p">@(</span><span class="k">posedge</span><span class="w"> </span><span class="n">clk_core</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">rst_n_core</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">      </span><span class="n">OUT_GEMV_uop</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="m">&#39;0</span><span class="p">;</span>
+<span class="w">    </span><span class="k">end</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">IN_GEMV_op_x64_valid</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">      </span><span class="n">OUT_GEMV_uop</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="p">&#39;{</span>
+<span class="w">          </span><span class="n">flags</span><span class="w">         </span><span class="o">:</span><span class="w"> </span><span class="n">GEMV_op_x64</span><span class="p">.</span><span class="n">flags</span><span class="p">,</span>
+<span class="w">          </span><span class="n">size_ptr_addr</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">GEMV_op_x64</span><span class="p">.</span><span class="n">size_ptr_addr</span><span class="p">,</span>
+<span class="w">          </span><span class="n">parallel_lane</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">GEMV_op_x64</span><span class="p">.</span><span class="n">parallel_lane</span>
+<span class="w">      </span><span class="p">};</span>
+<span class="w">    </span><span class="k">end</span>
+<span class="w">  </span><span class="k">end</span>
+
+<span class="w">  </span><span class="c1">// ===| CVO uop |===============================================================</span>
+<span class="w">  </span><span class="k">always_ff</span><span class="w"> </span><span class="p">@(</span><span class="k">posedge</span><span class="w"> </span><span class="n">clk_core</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">rst_n_core</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">      </span><span class="n">OUT_CVO_uop</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="m">&#39;0</span><span class="p">;</span>
+<span class="w">    </span><span class="k">end</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">IN_cvo_op_x64_valid</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">      </span><span class="n">OUT_CVO_uop</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="p">&#39;{</span>
+<span class="w">          </span><span class="n">cvo_func</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">cvo_func_e</span><span class="p">&#39;(</span><span class="n">cvo_op_x64</span><span class="p">.</span><span class="n">cvo_func</span><span class="p">),</span>
+<span class="w">          </span><span class="n">src_addr</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">cvo_op_x64</span><span class="p">.</span><span class="n">src_addr</span><span class="p">,</span>
+<span class="w">          </span><span class="n">dst_addr</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">cvo_op_x64</span><span class="p">.</span><span class="n">dst_addr</span><span class="p">,</span>
+<span class="w">          </span><span class="n">length</span><span class="w">   </span><span class="o">:</span><span class="w"> </span><span class="n">cvo_op_x64</span><span class="p">.</span><span class="n">length</span><span class="p">,</span>
+<span class="w">          </span><span class="n">flags</span><span class="w">    </span><span class="o">:</span><span class="w"> </span><span class="n">cvo_flags_t</span><span class="p">&#39;(</span><span class="n">cvo_op_x64</span><span class="p">.</span><span class="n">flags</span><span class="p">),</span>
+<span class="w">          </span><span class="n">async</span><span class="w">    </span><span class="o">:</span><span class="w"> </span><span class="n">cvo_op_x64</span><span class="p">.</span><span class="n">async</span>
+<span class="w">      </span><span class="p">};</span>
+<span class="w">    </span><span class="k">end</span>
+<span class="w">  </span><span class="k">end</span>
+
+<span class="k">endmodule</span>
+</pre></div>
+</div>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
+<summary class="sd-summary-title sd-card-header sd-bg-muted sd-bg-text-muted">
+<span class="sd-summary-icon"><svg version="1.1" width="1.0em" height="1.0em" class="sd-octicon sd-octicon-code" viewBox="0 0 16 16" aria-hidden="true"><path d="m11.28 3.22 4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.749.749 0 0 1-1.275-.326.749.749 0 0 1 .215-.734L13.94 8l-3.72-3.72a.749.749 0 0 1 .326-1.275.749.749 0 0 1 .734.215Zm-6.56 0a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042L2.06 8l3.72 3.72a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215L.47 8.53a.75.75 0 0 1 0-1.06Z"></path></svg></span><span class="sd-summary-text"><code class="docutils literal notranslate"><span class="pre">npu_controller_top.sv</span></code></span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<div class="highlight-systemverilog notranslate"><div class="highlight"><pre><span></span><span class="no">`timescale</span><span class="w"> </span><span class="mi">1</span><span class="n">ns</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">1</span><span class="n">ps</span>
+
+<span class="no">`include</span><span class="w"> </span><span class="s">&quot;GLOBAL_CONST.svh&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">isa_pkg::*</span><span class="p">;</span>
+
+<span class="c1">// ===| NPU Controller Top |======================================================</span>
+<span class="c1">// Wraps the AXI-Lite frontend and the opcode decoder.</span>
+<span class="c1">// Outputs one valid pulse per instruction type along with the raw 60-bit body.</span>
+<span class="c1">// ===============================================================================</span>
+
+<span class="k">module</span><span class="w"> </span><span class="n">npu_controller_top</span><span class="w"> </span><span class="p">#()</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="k">input</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="n">clk</span><span class="p">,</span>
+<span class="w">    </span><span class="k">input</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="n">rst_n</span><span class="p">,</span>
+<span class="w">    </span><span class="k">input</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="n">i_clear</span><span class="p">,</span>
+
+<span class="w">    </span><span class="c1">// ===| AXI4-Lite Slave : PS &lt;-&gt; NPU control plane |=========================</span>
+<span class="w">    </span><span class="n">axil_if</span><span class="p">.</span><span class="n">slave</span><span class="w"> </span><span class="n">S_AXIL_CTRL</span><span class="p">,</span>
+
+<span class="w">    </span><span class="c1">// ===| Decoded Instruction Valids |=========================================</span>
+<span class="w">    </span><span class="k">output</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="n">OUT_GEMV_op_x64_valid</span><span class="p">,</span>
+<span class="w">    </span><span class="k">output</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="n">OUT_GEMM_op_x64_valid</span><span class="p">,</span>
+<span class="w">    </span><span class="k">output</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="n">OUT_memcpy_op_x64_valid</span><span class="p">,</span>
+<span class="w">    </span><span class="k">output</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="n">OUT_memset_op_x64_valid</span><span class="p">,</span>
+<span class="w">    </span><span class="k">output</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="n">OUT_cvo_op_x64_valid</span><span class="p">,</span>
+
+<span class="w">    </span><span class="c1">// ===| Raw Instruction Body (60-bit, opcode stripped) |=====================</span>
+<span class="w">    </span><span class="k">output</span><span class="w"> </span><span class="n">instruction_op_x64_t</span><span class="w"> </span><span class="n">OUT_op_x64</span>
+<span class="p">);</span>
+
+<span class="w">  </span><span class="c1">// ===| Internal Wires |========================================================</span>
+<span class="w">  </span><span class="kt">logic</span><span class="w"> </span><span class="p">[</span><span class="no">`ISA_WIDTH</span><span class="o">-</span><span class="mi">1</span><span class="o">:</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="n">raw_instruction</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">logic</span><span class="w">                  </span><span class="n">raw_instruction_pop_valid</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">logic</span><span class="w">                  </span><span class="n">fetch_PC_ready</span><span class="p">;</span>
+
+<span class="w">  </span><span class="c1">// ===| Frontend : AXI-Lite CMD/STAT |==========================================</span>
+<span class="w">  </span><span class="n">ctrl_npu_frontend</span><span class="w"> </span><span class="p">#()</span><span class="w"> </span><span class="n">u_npu_frontend</span><span class="w"> </span><span class="p">(</span>
+<span class="w">      </span><span class="p">.</span><span class="n">clk</span><span class="w">     </span><span class="p">(</span><span class="n">clk</span><span class="p">),</span>
+<span class="w">      </span><span class="p">.</span><span class="n">rst_n</span><span class="w">   </span><span class="p">(</span><span class="n">rst_n</span><span class="p">),</span>
+<span class="w">      </span><span class="p">.</span><span class="n">IN_clear</span><span class="p">(</span><span class="n">i_clear</span><span class="p">),</span>
+
+<span class="w">      </span><span class="p">.</span><span class="n">S_AXIL_CTRL</span><span class="p">(</span><span class="n">S_AXIL_CTRL</span><span class="p">),</span>
+
+<span class="w">      </span><span class="p">.</span><span class="n">OUT_RAW_instruction</span><span class="p">(</span><span class="n">raw_instruction</span><span class="p">),</span>
+<span class="w">      </span><span class="p">.</span><span class="n">OUT_kick</span><span class="w">           </span><span class="p">(</span><span class="n">raw_instruction_pop_valid</span><span class="p">),</span>
+
+<span class="w">      </span><span class="p">.</span><span class="n">IN_enc_stat</span><span class="w"> </span><span class="p">(</span><span class="m">&#39;0</span><span class="p">),</span>
+<span class="w">      </span><span class="p">.</span><span class="n">IN_enc_valid</span><span class="p">(</span><span class="mb">1&#39;b0</span><span class="p">),</span>
+
+<span class="w">      </span><span class="p">.</span><span class="n">IN_fetch_ready</span><span class="p">(</span><span class="n">fetch_PC_ready</span><span class="p">)</span>
+<span class="w">  </span><span class="p">);</span>
+
+<span class="w">  </span><span class="c1">// ===| Decoder : Opcode -&gt; Engine FIFOs |======================================</span>
+<span class="w">  </span><span class="n">ctrl_npu_decoder</span><span class="w"> </span><span class="n">u_decoder</span><span class="w"> </span><span class="p">(</span>
+<span class="w">      </span><span class="p">.</span><span class="n">clk</span><span class="w">                    </span><span class="p">(</span><span class="n">clk</span><span class="p">),</span>
+<span class="w">      </span><span class="p">.</span><span class="n">rst_n</span><span class="w">                  </span><span class="p">(</span><span class="n">rst_n</span><span class="p">),</span>
+<span class="w">      </span><span class="p">.</span><span class="n">IN_raw_instruction</span><span class="w">     </span><span class="p">(</span><span class="n">raw_instruction</span><span class="p">),</span>
+<span class="w">      </span><span class="p">.</span><span class="n">raw_instruction_pop_valid</span><span class="p">(</span><span class="n">raw_instruction_pop_valid</span><span class="p">),</span>
+
+<span class="w">      </span><span class="p">.</span><span class="n">OUT_fetch_PC_ready</span><span class="w">     </span><span class="p">(</span><span class="n">fetch_PC_ready</span><span class="p">),</span>
+
+<span class="w">      </span><span class="p">.</span><span class="n">OUT_GEMV_op_x64_valid</span><span class="w">  </span><span class="p">(</span><span class="n">OUT_GEMV_op_x64_valid</span><span class="p">),</span>
+<span class="w">      </span><span class="p">.</span><span class="n">OUT_GEMM_op_x64_valid</span><span class="w">  </span><span class="p">(</span><span class="n">OUT_GEMM_op_x64_valid</span><span class="p">),</span>
+<span class="w">      </span><span class="p">.</span><span class="n">OUT_memcpy_op_x64_valid</span><span class="p">(</span><span class="n">OUT_memcpy_op_x64_valid</span><span class="p">),</span>
+<span class="w">      </span><span class="p">.</span><span class="n">OUT_memset_op_x64_valid</span><span class="p">(</span><span class="n">OUT_memset_op_x64_valid</span><span class="p">),</span>
+<span class="w">      </span><span class="p">.</span><span class="n">OUT_cvo_op_x64_valid</span><span class="w">   </span><span class="p">(</span><span class="n">OUT_cvo_op_x64_valid</span><span class="p">),</span>
+
+<span class="w">      </span><span class="p">.</span><span class="n">OUT_op_x64</span><span class="p">(</span><span class="n">OUT_op_x64</span><span class="p">)</span>
+<span class="w">  </span><span class="p">);</span>
+
+<span class="k">endmodule</span>
+</pre></div>
+</div>
+</div>
+</details></section>
+<section id="fsm-out-logic">
+<h2>FSM Out Logic (상태 집계)<a class="headerlink" href="#fsm-out-logic" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">fsmout_npu_stat_collector.sv</span></code> — 엔진별 busy/done 플래그 샘플링.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">fsmout_npu_stat_encoder.sv</span></code> — 수집된 플래그를 <code class="docutils literal notranslate"><span class="pre">AXIL_STAT_OUT</span></code> 가
+노출하는 32 비트 상태 레지스터로 인코딩.</p></li>
+</ul>
+<details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
+<summary class="sd-summary-title sd-card-header sd-bg-muted sd-bg-text-muted">
+<span class="sd-summary-icon"><svg version="1.1" width="1.0em" height="1.0em" class="sd-octicon sd-octicon-code" viewBox="0 0 16 16" aria-hidden="true"><path d="m11.28 3.22 4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.749.749 0 0 1-1.275-.326.749.749 0 0 1 .215-.734L13.94 8l-3.72-3.72a.749.749 0 0 1 .326-1.275.749.749 0 0 1 .734.215Zm-6.56 0a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042L2.06 8l3.72 3.72a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215L.47 8.53a.75.75 0 0 1 0-1.06Z"></path></svg></span><span class="sd-summary-text"><code class="docutils literal notranslate"><span class="pre">fsmout_npu_stat_collector.sv</span></code></span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<div class="highlight-systemverilog notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
+<summary class="sd-summary-title sd-card-header sd-bg-muted sd-bg-text-muted">
+<span class="sd-summary-icon"><svg version="1.1" width="1.0em" height="1.0em" class="sd-octicon sd-octicon-code" viewBox="0 0 16 16" aria-hidden="true"><path d="m11.28 3.22 4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.749.749 0 0 1-1.275-.326.749.749 0 0 1 .215-.734L13.94 8l-3.72-3.72a.749.749 0 0 1 .326-1.275.749.749 0 0 1 .734.215Zm-6.56 0a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042L2.06 8l3.72 3.72a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215L.47 8.53a.75.75 0 0 1 0-1.06Z"></path></svg></span><span class="sd-summary-text"><code class="docutils literal notranslate"><span class="pre">fsmout_npu_stat_encoder.sv</span></code></span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<div class="highlight-systemverilog notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+</details></section>
+</section>
+
+    <script type="text/javascript">
+        function init() {
+            WaveDrom.ProcessAll();
+        }
+        window.onload = init;
+    </script>
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="mat_core.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">행렬 코어 (GEMM)</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="packages.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">패키지와 상수</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2026, hwkim
+            </div>
+            Made with 
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            <div class="last-updated">
+              Last updated on 2026-04-18</div>
+          </div>
+          <div class="right-details">
+            <div class="icons">
+              <a class="muted-link " href="https://github.com/hwkim-dev/pccx" aria-label="GitHub"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 16 16" width="1em" height="1em"><path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg></a>
+              
+            </div>
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">NPU 컨트롤러</a><ul>
+<li><a class="reference internal" href="#id1">토폴로지</a></li>
+<li><a class="reference internal" href="#axi-lite">프론트엔드 (AXI-Lite 서피스)</a></li>
+<li><a class="reference internal" href="#control-unit">Control Unit (디코드 + 디스패치)</a></li>
+<li><a class="reference internal" href="#global-scheduler">Global Scheduler + 컨트롤러 최상위</a></li>
+<li><a class="reference internal" href="#fsm-out-logic">FSM Out Logic (상태 집계)</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="../../../../_static/documentation_options.js?v=cee9339f"></script>
+    <script src="../../../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../../_static/copybutton.js?v=f281be69"></script>
+    <script>let toggleHintShow = '표시하려면 클릭';</script>
+    <script>let toggleHintHide = '숨기려면 클릭';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../../../_static/togglebutton.js?v=b8b12719"></script>
+    <script src="../../../../_static/translations.js?v=e33e7ba0"></script>
+    <script src="../../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="https://wavedrom.com/skins/default.js"></script>
+    <script src="https://wavedrom.com/wavedrom.min.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../../../_static/image-lightbox.js?v=dec353f8"></script>
+    <script src="../../../../_static/language-switcher.js?v=118c9f35"></script>
+    </body>
+</html>
