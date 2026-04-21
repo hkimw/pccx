@@ -83,7 +83,7 @@ Controls:
 Click the **Waveform** tab. To open a `.vcd` directly, use
 `File ▸ Open VCD…` (`Ctrl + Shift + O`).
 
-```{image} /_static/screenshots/waveform-enterprise.png
+```{image} /_static/screenshots/waveform.png
 :alt: Two-cursor waveform viewer with bookmarks and multi-radix
 :width: 100%
 ```

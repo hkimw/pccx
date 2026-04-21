@@ -454,6 +454,19 @@ between host DDR4 and the device-side L2 cache, the clock domain
 crossings, and the placement of each heterogeneous compute core.</span><a class="headerlink" href="#id1" title="Link to this image">¶</a></p>
 </figcaption>
 </figure>
+<figure class="align-center" id="id2">
+<a class="reference internal image-reference" href="../../../_images/v002_system_context.svg"><img alt="pccx v002 system context — PS, PL NPU, and external DRAM" src="../../../_images/v002_system_context.svg" style="width: 92%;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figure 2 </span><span class="caption-text"><strong>Figure 2.</strong> System context. The AXI-Lite command path (<code class="docutils literal notranslate"><span class="pre">CMD_IN</span></code>)
+moves 64-bit instructions from the host driver into the Dispatcher;
+the dual-direction AXI-Lite <code class="docutils literal notranslate"><span class="pre">STAT_OUT</span></code> reports async completion.
+Four 128-bit AXI-HP ports plus one ACP port handle the bulk data
+path (weights, activations, KV cache) between external DDR4 and the
+L2 cache. Coloured panels mark the three structural regions: PS
+(blue), PL NPU (orange), external DRAM (purple).</span><a class="headerlink" href="#id2" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
 <section id="design-principles">
 <h2>1. Design Principles<a class="headerlink" href="#design-principles" title="Link to this heading">¶</a></h2>
 <p>The top level is organized around four principles.</p>

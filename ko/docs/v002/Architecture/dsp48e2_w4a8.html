@@ -473,7 +473,7 @@ W5/W6 로 늘리려 하면 guard 영역이 부족해져 <code class="docutils li
 <a class="reference internal image-reference" href="../../../_images/Processing_Elements_GEMM_4_v002.png"><img alt="DSP48E2 Port A / Port B 의 W4A8 듀얼 채널 패킹 레이아웃" src="../../../_images/Processing_Elements_GEMM_4_v002.png" style="width: 95%;" />
 </a>
 <figcaption>
-<p><span class="caption-number">그림 8 </span><span class="caption-text"><strong>Figure W4A8-Layout.</strong> Port A (27-bit) 는 상위 4-bit 에 W₁, 하위 4-bit
+<p><span class="caption-number">그림 9 </span><span class="caption-text"><strong>Figure W4A8-Layout.</strong> Port A (27-bit) 는 상위 4-bit 에 W₁, 하위 4-bit
 에 W₂ 를 배치하고 그 사이 19-bit 를 guard 로 비웁니다. Port B (18-bit)
 는 상위 10-bit 를 <code class="docutils literal notranslate"><span class="pre">A₁[7]</span></code> 의 부호 확장으로, 하위 8-bit 에 액티베이션
 <code class="docutils literal notranslate"><span class="pre">A₁</span></code> 을 싣습니다.</span><a class="headerlink" href="#id10" title="Link to this image">¶</a></p>
@@ -615,7 +615,7 @@ W5/W6 로 늘리려 하면 guard 영역이 부족해져 <code class="docutils li
 <a class="reference internal image-reference" href="../../../_images/Processing_Elements_GEMM_5_v002.png"><img alt="부호 복원 Verilog 코드" src="../../../_images/Processing_Elements_GEMM_5_v002.png" style="width: 75%;" />
 </a>
 <figcaption>
-<p><span class="caption-number">그림 9 </span><span class="caption-text"><strong>Figure Sign-Recover.</strong> 누적 완료 사이클(<code class="docutils literal notranslate"><span class="pre">accumulate_done</span></code>) 에
+<p><span class="caption-number">그림 10 </span><span class="caption-text"><strong>Figure Sign-Recover.</strong> 누적 완료 사이클(<code class="docutils literal notranslate"><span class="pre">accumulate_done</span></code>) 에
 <code class="docutils literal notranslate"><span class="pre">acc[22]</span></code> 를 기준으로 상위 채널에 1 을 가산 복원하고, 하위 채널은
 23-bit 2 의 보수 결과를 그대로 저장합니다.</span><a class="headerlink" href="#id11" title="Link to this image">¶</a></p>
 </figcaption>

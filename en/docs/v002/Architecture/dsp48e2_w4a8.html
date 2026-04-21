@@ -476,7 +476,7 @@ dual-channel packing.</p>
 <a class="reference internal image-reference" href="../../../_images/Processing_Elements_GEMM_4_v002.png"><img alt="DSP48E2 Port A / Port B W4A8 dual-channel packing layout" src="../../../_images/Processing_Elements_GEMM_4_v002.png" style="width: 95%;" />
 </a>
 <figcaption>
-<p><span class="caption-number">Figure 8 </span><span class="caption-text"><strong>Figure W4A8-Layout.</strong> Port A (27 bits) holds W₁ in the top 4 bits
+<p><span class="caption-number">Figure 9 </span><span class="caption-text"><strong>Figure W4A8-Layout.</strong> Port A (27 bits) holds W₁ in the top 4 bits
 and W₂ in the bottom 4 bits, with 19 guard bits between them. Port B
 (18 bits) holds activation <code class="docutils literal notranslate"><span class="pre">A₁</span></code> in the bottom 8 bits and
 sign-extends it (<code class="docutils literal notranslate"><span class="pre">A₁[7]</span></code>) through the upper 10 bits.</span><a class="headerlink" href="#id1" title="Link to this image">¶</a></p>
@@ -626,7 +626,7 @@ accumulation completes.</p>
 <a class="reference internal image-reference" href="../../../_images/Processing_Elements_GEMM_5_v002.png"><img alt="Sign-recovery Verilog" src="../../../_images/Processing_Elements_GEMM_5_v002.png" style="width: 75%;" />
 </a>
 <figcaption>
-<p><span class="caption-number">Figure 9 </span><span class="caption-text"><strong>Figure Sign-Recover.</strong> On the <code class="docutils literal notranslate"><span class="pre">accumulate_done</span></code> cycle the upper
+<p><span class="caption-number">Figure 10 </span><span class="caption-text"><strong>Figure Sign-Recover.</strong> On the <code class="docutils literal notranslate"><span class="pre">accumulate_done</span></code> cycle the upper
 channel adds <code class="docutils literal notranslate"><span class="pre">acc[22]</span></code> back in; the lower channel keeps its
 23-bit two’s-complement value as-is.</span><a class="headerlink" href="#id2" title="Link to this image">¶</a></p>
 </figcaption>

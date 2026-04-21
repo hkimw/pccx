@@ -464,7 +464,7 @@ operation, see <a class="reference internal" href="gemv_core.html"><span class="
 <a class="reference internal image-reference" href="../../../_images/Processing_Elements_GEMM_3_v002.png"><img alt="GEMM operands — weight and activation matrices" src="../../../_images/Processing_Elements_GEMM_3_v002.png" style="width: 80%;" />
 </a>
 <figcaption>
-<p><span class="caption-number">Figure 3 </span><span class="caption-text"><strong>Figure GEMM-Operands.</strong> GEMM takes two 2D tensors (weight and
+<p><span class="caption-number">Figure 4 </span><span class="caption-text"><strong>Figure GEMM-Operands.</strong> GEMM takes two 2D tensors (weight and
 activation) and produces a partial-sum result. Both operands are
 defined as Row × Col; tile shapes are chosen by the software layer.</span><a class="headerlink" href="#id1" title="Link to this image">¶</a></p>
 </figcaption>
@@ -513,7 +513,7 @@ instantiates <code class="docutils literal notranslate"><span class="pre">GEMM_d
 <a class="reference internal image-reference" href="../../../_images/Processing_Elements_GEMM_1_v002.png"><img alt="GEMM systolic array block diagram" src="../../../_images/Processing_Elements_GEMM_1_v002.png" style="width: 92%;" />
 </a>
 <figcaption>
-<p><span class="caption-number">Figure 4 </span><span class="caption-text"><strong>Figure GEMM-Array.</strong> The systolic array is a <strong>Weight Stationary</strong>
+<p><span class="caption-number">Figure 5 </span><span class="caption-text"><strong>Figure GEMM-Array.</strong> The systolic array is a <strong>Weight Stationary</strong>
 structure: weights enter from the left, activations from the top, and
 partial sums collect in the Result Accumulator at the bottom. The
 zoomed-in green box shows the internals of a single PE.</span><a class="headerlink" href="#id2" title="Link to this image">¶</a></p>
@@ -578,7 +578,7 @@ lower accumulator. The math and the Verilog implementation live in
 <a class="reference internal image-reference" href="../../../_images/Processing_Elements_GEMM_2_v002.png"><img alt="GEMM PE internals" src="../../../_images/Processing_Elements_GEMM_2_v002.png" style="width: 70%;" />
 </a>
 <figcaption>
-<p><span class="caption-number">Figure 5 </span><span class="caption-text"><strong>Figure GEMM-PE.</strong> A single PE consists of the weight / activation
+<p><span class="caption-number">Figure 6 </span><span class="caption-text"><strong>Figure GEMM-PE.</strong> A single PE consists of the weight / activation
 input flip-flops, the DSP48E2 multiplier, the P register, the
 accumulator, and on/off control signals. The <code class="docutils literal notranslate"><span class="pre">Instruction</span></code> port
 carries μops extracted from the instruction (enable / flush /

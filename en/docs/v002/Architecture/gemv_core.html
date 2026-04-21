@@ -465,7 +465,7 @@ weight matrix</strong>.</p>
 <a class="reference internal image-reference" href="../../../_images/Processing_Elements_GEMV_2_v002.png"><img alt="GEMV operands — activation vector × weight matrix" src="../../../_images/Processing_Elements_GEMV_2_v002.png" style="width: 80%;" />
 </a>
 <figcaption>
-<p><span class="caption-number">Figure 6 </span><span class="caption-text"><strong>Figure GEMV-Operands.</strong> Activation is a 1 × N row vector, Weight is
+<p><span class="caption-number">Figure 7 </span><span class="caption-text"><strong>Figure GEMV-Operands.</strong> Activation is a 1 × N row vector, Weight is
 an N × N matrix. Their inner product produces a new length-N output
 vector. Both Attention’s <code class="docutils literal notranslate"><span class="pre">Q·Kᵀ</span></code> and FFN projections follow this
 same shape.</span><a class="headerlink" href="#id1" title="Link to this image">¶</a></p>
@@ -515,7 +515,7 @@ per slice across upper / lower halves of the floorplan)</p></td>
 <a class="reference internal image-reference" href="../../../_images/Processing_Elements_GEMV_1_v002.png"><img alt="GEMV core pipeline and reduction tree" src="../../../_images/Processing_Elements_GEMV_1_v002.png" style="width: 90%;" />
 </a>
 <figcaption>
-<p><span class="caption-number">Figure 7 </span><span class="caption-text"><strong>Figure GEMV-Core.</strong> The <strong>Pre-Process</strong> block dequantizes one
+<p><span class="caption-number">Figure 8 </span><span class="caption-text"><strong>Figure GEMV-Core.</strong> The <strong>Pre-Process</strong> block dequantizes one
 activation row and one weight column, then 32 LUT-based multipliers
 compute <code class="docutils literal notranslate"><span class="pre">W</span> <span class="pre">×</span> <span class="pre">A</span></code> in a single cycle. The 32 partial products feed a
 5-stage reduction adder tree (Stage 1: 16 DSP48E2 slices; Stages 2–5:

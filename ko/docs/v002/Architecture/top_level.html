@@ -7,12 +7,12 @@
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://hwkim-dev.github.io/pccx/docs/v002/Architecture/top_level.html" />
 <meta property="og:site_name" content="pccx — Parallel Compute Core eXecutor" />
-<meta property="og:description" content="pccx v002 탑레벨 블록 다이어그램 Figure 1. pccx v002 탑레벨 블록 다이어그램. 호스트(DDR4)와 디바이스(L2 Cache) 간의 데이터 경로, 클럭 도메인 크로싱, 이기종 컴퓨트 코어의 배치를 나타냅니다., 1. 설계 원칙: 탑레벨은 다음 네 가지 원칙에 따라 구성됩니다. 클럭 도메인 분리 — AXI 인프라(250 MHz) 와..." />
+<meta property="og:description" content="pccx v002 탑레벨 블록 다이어그램 Figure 1. pccx v002 탑레벨 블록 다이어그램. 호스트(DDR4)와 디바이스(L2 Cache) 간의 데이터 경로, 클럭 도메인 크로싱, 이기종 컴퓨트 코어의 배치를 나타냅니다., pccx v002 시스템 컨텍스트 — PS, PL NPU, 외부 DRAM Figure 2. 시스템 컨텍스트. AXI-Li..." />
 <meta property="og:image:width" content="1146" />
 <meta property="og:image:height" content="600" />
-<meta property="og:image" content="https://hwkim-dev.github.io/pccx/_images/social_previews/summary_docs_v002_Architecture_top_level_d1f0854c.png" />
-<meta property="og:image:alt" content="pccx v002 탑레벨 블록 다이어그램 Figure 1. pccx v002 탑레벨 블록 다이어그램. 호스트(DDR4)와 디바이스(L2 Cache) 간의 데이터 경로, 클럭 도메인 크로싱, 이기종 컴퓨트 코어의 배치를 나타냅니다., 1. 설계 원칙: 탑레벨은 다음 네 가지 원칙에 따라 구성됩니다. 클럭 도메인 분리 — AXI 인프라(250 MHz) 와..." />
-<meta name="description" content="pccx v002 탑레벨 블록 다이어그램 Figure 1. pccx v002 탑레벨 블록 다이어그램. 호스트(DDR4)와 디바이스(L2 Cache) 간의 데이터 경로, 클럭 도메인 크로싱, 이기종 컴퓨트 코어의 배치를 나타냅니다., 1. 설계 원칙: 탑레벨은 다음 네 가지 원칙에 따라 구성됩니다. 클럭 도메인 분리 — AXI 인프라(250 MHz) 와..." />
+<meta property="og:image" content="https://hwkim-dev.github.io/pccx/_images/social_previews/summary_docs_v002_Architecture_top_level_4f247a43.png" />
+<meta property="og:image:alt" content="pccx v002 탑레벨 블록 다이어그램 Figure 1. pccx v002 탑레벨 블록 다이어그램. 호스트(DDR4)와 디바이스(L2 Cache) 간의 데이터 경로, 클럭 도메인 크로싱, 이기종 컴퓨트 코어의 배치를 나타냅니다., pccx v002 시스템 컨텍스트 — PS, PL NPU, 외부 DRAM Figure 2. 시스템 컨텍스트. AXI-Li..." />
+<meta name="description" content="pccx v002 탑레벨 블록 다이어그램 Figure 1. pccx v002 탑레벨 블록 다이어그램. 호스트(DDR4)와 디바이스(L2 Cache) 간의 데이터 경로, 클럭 도메인 크로싱, 이기종 컴퓨트 코어의 배치를 나타냅니다., pccx v002 시스템 컨텍스트 — PS, PL NPU, 외부 DRAM Figure 2. 시스템 컨텍스트. AXI-Li..." />
 <meta name="twitter:card" content="summary_large_image" />
 <link rel="index" title="색인" href="../../../genindex.html"><link rel="search" title="검색" href="../../../search.html"><link rel="next" title="물리 플로어플랜" href="floorplan.html"><link rel="prev" title="v001 → v002 설계 근거" href="rationale.html">
         <link rel="canonical" href="https://hwkim-dev.github.io/pccx/docs/v002/Architecture/top_level.html">
@@ -452,6 +452,19 @@
 <p><span class="caption-number">그림 1 </span><span class="caption-text"><strong>Figure 1.</strong> pccx v002 탑레벨 블록 다이어그램.
 호스트(DDR4)와 디바이스(L2 Cache) 간의 데이터 경로, 클럭 도메인 크로싱,
 이기종 컴퓨트 코어의 배치를 나타냅니다.</span><a class="headerlink" href="#id7" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+<figure class="align-center" id="id8">
+<a class="reference internal image-reference" href="../../../_images/v002_system_context.svg"><img alt="pccx v002 시스템 컨텍스트 — PS, PL NPU, 외부 DRAM" src="../../../_images/v002_system_context.svg" style="width: 92%;" />
+</a>
+<figcaption>
+<p><span class="caption-number">그림 2 </span><span class="caption-text"><strong>Figure 2.</strong> 시스템 컨텍스트. AXI-Lite 제어 경로(<code class="docutils literal notranslate"><span class="pre">CMD_IN</span></code>)는 호스트
+드라이버에서 64-bit 명령어를 Dispatcher 로 전달하고, 반대 방향의
+AXI-Lite <code class="docutils literal notranslate"><span class="pre">STAT_OUT</span></code> 이 비동기 완료를 리포트한다. 벌크 데이터 경로는
+4 × 128-bit AXI-HP 포트와 1 × ACP 포트가 담당하며, 외부 DDR4 와
+L2 캐시 사이의 가중치·액티베이션·KV 캐시 전송을 처리한다. 색상
+패널은 세 구조 영역을 구분한다 — PS(파란색), PL NPU(주황색),
+외부 DRAM(보라색).</span><a class="headerlink" href="#id8" title="Link to this image">¶</a></p>
 </figcaption>
 </figure>
 <section id="id2">

@@ -81,7 +81,7 @@ npx tauri dev
 **Waveform** 탭을 클릭하십시오. `.vcd` 파일을 직접 열려면
 `File ▸ Open VCD…` (`Ctrl + Shift + O`) 를 사용합니다.
 
-```{image} ../_static/screenshots/waveform-enterprise.png
+```{image} ../_static/screenshots/waveform.png
 :alt: 2 커서 · 북마크 · 다중 radix 를 지원하는 웨이브폼 뷰어
 :width: 100%
 ```

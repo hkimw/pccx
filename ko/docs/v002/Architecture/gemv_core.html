@@ -464,7 +464,7 @@ L2 Cache 를 공유하는 이기종(heterogeneous) 구조를 채택했습니다.
 <a class="reference internal image-reference" href="../../../_images/Processing_Elements_GEMV_2_v002.png"><img alt="GEMV 연산 대상 — Activation 벡터 × Weight 행렬" src="../../../_images/Processing_Elements_GEMV_2_v002.png" style="width: 80%;" />
 </a>
 <figcaption>
-<p><span class="caption-number">그림 6 </span><span class="caption-text"><strong>Figure GEMV-Operands.</strong> Activation 은 1 × N 행 벡터, Weight 는
+<p><span class="caption-number">그림 7 </span><span class="caption-text"><strong>Figure GEMV-Operands.</strong> Activation 은 1 × N 행 벡터, Weight 는
 N × N 행렬이며 두 피연산자의 내적 결과가 새 길이 N 의 출력 벡터를
 구성합니다. Attention 의 <code class="docutils literal notranslate"><span class="pre">Q·Kᵀ</span></code>, FFN 의 projection 에 모두 동일한
 형태가 적용됩니다.</span><a class="headerlink" href="#id6" title="Link to this image">¶</a></p>
@@ -514,7 +514,7 @@ N × N 행렬이며 두 피연산자의 내적 결과가 새 길이 N 의 출력
 <a class="reference internal image-reference" href="../../../_images/Processing_Elements_GEMV_1_v002.png"><img alt="GEMV 코어 파이프라인과 reduction tree" src="../../../_images/Processing_Elements_GEMV_1_v002.png" style="width: 90%;" />
 </a>
 <figcaption>
-<p><span class="caption-number">그림 7 </span><span class="caption-text"><strong>Figure GEMV-Core.</strong> Activation 1 행과 Weight 1 열을 <strong>Pre-Process</strong>
+<p><span class="caption-number">그림 8 </span><span class="caption-text"><strong>Figure GEMV-Core.</strong> Activation 1 행과 Weight 1 열을 <strong>Pre-Process</strong>
 블록에서 dequantize 하여, 32 개 LUT 기반 곱셈기가 (W × A) 를 단일
 사이클에 병렬 수행합니다. 32 개의 부분곱은 5 단계 reduction adder
 tree (Stage 1: DSP48E2 16 슬라이스, Stage 2–5: LUT) 를 거쳐 스칼라로

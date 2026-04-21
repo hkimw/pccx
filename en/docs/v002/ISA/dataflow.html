@@ -454,7 +454,7 @@ from <a class="reference internal" href="../Architecture/top_level.html"><span c
 <a class="reference internal image-reference" href="../../../_images/DataFlow_GEMM_v002.png"><img alt="GEMM instruction dataflow" src="../../../_images/DataFlow_GEMM_v002.png" style="width: 85%;" />
 </a>
 <figcaption>
-<p><span class="caption-number">Figure 10 </span><span class="caption-text"><strong>Figure 5.</strong> Dataflow when a GEMM instruction dispatches.
+<p><span class="caption-number">Figure 11 </span><span class="caption-text"><strong>Figure 5.</strong> Dataflow when a GEMM instruction dispatches.
 <code class="docutils literal notranslate"><span class="pre">dest_addr</span></code> and <code class="docutils literal notranslate"><span class="pre">src_addr</span></code> live in the L2 cache address space;
 shape / size pointers index the Constant Cache.</span><a class="headerlink" href="#id2" title="Link to this image">¶</a></p>
 </figcaption>
@@ -478,7 +478,7 @@ ports.</p></li>
 <a class="reference internal image-reference" href="../../../_images/DataFlow_GEMV_v002.png"><img alt="GEMV instruction dataflow" src="../../../_images/DataFlow_GEMV_v002.png" style="width: 85%;" />
 </a>
 <figcaption>
-<p><span class="caption-number">Figure 11 </span><span class="caption-text"><strong>Figure 6.</strong> Dataflow for a GEMV instruction. Same ISA layout as
+<p><span class="caption-number">Figure 12 </span><span class="caption-text"><strong>Figure 6.</strong> Dataflow for a GEMV instruction. Same ISA layout as
 GEMM, but weights are consumed in a <strong>Weight Streaming</strong> pattern,
 fanning out across 4 GEMV cores in parallel.</span><a class="headerlink" href="#id3" title="Link to this image">¶</a></p>
 </figcaption>
@@ -500,7 +500,7 @@ fanning out across 4 GEMV cores in parallel.</span><a class="headerlink" href="#
 <a class="reference internal image-reference" href="../../../_images/DataFlow_MEMCPY_v002.png.png"><img alt="MEMCPY instruction dataflow" src="../../../_images/DataFlow_MEMCPY_v002.png.png" style="width: 70%;" />
 </a>
 <figcaption>
-<p><span class="caption-number">Figure 12 </span><span class="caption-text"><strong>Figure 7.</strong> MEMCPY instruction. The <code class="docutils literal notranslate"><span class="pre">from_device</span></code> / <code class="docutils literal notranslate"><span class="pre">to_device</span></code>
+<p><span class="caption-number">Figure 13 </span><span class="caption-text"><strong>Figure 7.</strong> MEMCPY instruction. The <code class="docutils literal notranslate"><span class="pre">from_device</span></code> / <code class="docutils literal notranslate"><span class="pre">to_device</span></code>
 combination supports host ↔ NPU and NPU ↔ NPU transfers.</span><a class="headerlink" href="#id4" title="Link to this image">¶</a></p>
 </figcaption>
 </figure>
@@ -545,7 +545,7 @@ immediately. The Global Scheduler tracks the completion fence.</p>
 <a class="reference internal image-reference" href="../../../_images/DataFlow_MEMSET_v002.png"><img alt="MEMSET instruction dataflow" src="../../../_images/DataFlow_MEMSET_v002.png" style="width: 70%;" />
 </a>
 <figcaption>
-<p><span class="caption-number">Figure 13 </span><span class="caption-text"><strong>Figure 8.</strong> MEMSET writes directly from the Dispatcher into the
+<p><span class="caption-number">Figure 14 </span><span class="caption-text"><strong>Figure 8.</strong> MEMSET writes directly from the Dispatcher into the
 Constant Cache — the only instruction that bypasses the L2 cache.</span><a class="headerlink" href="#id5" title="Link to this image">¶</a></p>
 </figcaption>
 </figure>

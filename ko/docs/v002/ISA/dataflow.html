@@ -455,7 +455,7 @@
 <a class="reference internal image-reference" href="../../../_images/DataFlow_GEMM_v002.png"><img alt="GEMM 명령어 데이터플로우" src="../../../_images/DataFlow_GEMM_v002.png" style="width: 85%;" />
 </a>
 <figcaption>
-<p><span class="caption-number">그림 10 </span><span class="caption-text"><strong>Figure 5.</strong> GEMM 명령어 디스패치 시의 데이터 경로.
+<p><span class="caption-number">그림 11 </span><span class="caption-text"><strong>Figure 5.</strong> GEMM 명령어 디스패치 시의 데이터 경로.
 dest_addr / src_addr 은 L2 Cache 주소공간을, shape/size pointer 는
 Constant Cache 인덱스를 가리킵니다.</span><a class="headerlink" href="#id7" title="Link to this image">¶</a></p>
 </figcaption>
@@ -478,7 +478,7 @@ Constant Cache 인덱스를 가리킵니다.</span><a class="headerlink" href="#
 <a class="reference internal image-reference" href="../../../_images/DataFlow_GEMV_v002.png"><img alt="GEMV 명령어 데이터플로우" src="../../../_images/DataFlow_GEMV_v002.png" style="width: 85%;" />
 </a>
 <figcaption>
-<p><span class="caption-number">그림 11 </span><span class="caption-text"><strong>Figure 6.</strong> GEMV 명령어 데이터 경로.
+<p><span class="caption-number">그림 12 </span><span class="caption-text"><strong>Figure 6.</strong> GEMV 명령어 데이터 경로.
 GEMM 과 동일한 ISA 레이아웃이지만, 가중치는 <strong>Weight Streaming</strong> 으로
 소비되며, 4 개 GEMV 코어가 병렬 분배됩니다.</span><a class="headerlink" href="#id8" title="Link to this image">¶</a></p>
 </figcaption>
@@ -500,7 +500,7 @@ GEMM 과 동일한 ISA 레이아웃이지만, 가중치는 <strong>Weight Stream
 <a class="reference internal image-reference" href="../../../_images/DataFlow_MEMCPY_v002.png.png"><img alt="MEMCPY 명령어 데이터플로우" src="../../../_images/DataFlow_MEMCPY_v002.png.png" style="width: 70%;" />
 </a>
 <figcaption>
-<p><span class="caption-number">그림 12 </span><span class="caption-text"><strong>Figure 7.</strong> MEMCPY 명령어.
+<p><span class="caption-number">그림 13 </span><span class="caption-text"><strong>Figure 7.</strong> MEMCPY 명령어.
 <code class="docutils literal notranslate"><span class="pre">from_device</span></code> / <code class="docutils literal notranslate"><span class="pre">to_device</span></code> 비트 조합으로 호스트 ↔ NPU, NPU ↔ NPU
 전송을 모두 지원합니다.</span><a class="headerlink" href="#id9" title="Link to this image">¶</a></p>
 </figcaption>
@@ -546,7 +546,7 @@ Global Scheduler 가 완료 fence 를 추적합니다.</p>
 <a class="reference internal image-reference" href="../../../_images/DataFlow_MEMSET_v002.png"><img alt="MEMSET 명령어 데이터플로우" src="../../../_images/DataFlow_MEMSET_v002.png" style="width: 70%;" />
 </a>
 <figcaption>
-<p><span class="caption-number">그림 13 </span><span class="caption-text"><strong>Figure 8.</strong> MEMSET 은 Dispatcher 에서 직접 Constant Cache 로 값을
+<p><span class="caption-number">그림 14 </span><span class="caption-text"><strong>Figure 8.</strong> MEMSET 은 Dispatcher 에서 직접 Constant Cache 로 값을
 기록합니다. L2 Cache 를 경유하지 않는 유일한 명령어입니다.</span><a class="headerlink" href="#id10" title="Link to this image">¶</a></p>
 </figcaption>
 </figure>
