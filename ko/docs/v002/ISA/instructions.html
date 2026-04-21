@@ -7,12 +7,12 @@
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://hwkim-dev.github.io/pccx/docs/v002/ISA/instructions.html" />
 <meta property="og:site_name" content="pccx — Parallel Compute Core eXecutor" />
-<meta property="og:description" content="각 명령어는 opcode[3:0] 이후 60-bit 본체(body) 로 구성됩니다. 본 페이지는 오피코드별로 body 레이아웃과 각 필드의 의미를 기술합니다. 1. GEMV / GEMM (opcode = 0x0 / 0x1): GEMV 와 GEMM 은 동일한 본체 레이아웃을 공유합니다.,,,, 비트, 폭, 필드, 설명,,,[59:43], 17, dest..." />
+<meta property="og:description" content="각 명령어는 opcode[3:0] 이후 60-bit 본체(body)로 구성된다. 본 문서에서는 오피코드별 body 레이아웃과 각 필드의 의미를 기술한다. 1. GEMV / GEMM (opcode = 0x0 / 0x1): GEMV와 GEMM은 동일한 본체 레이아웃을 공유한다.,,,, 비트, 폭, 필드, 설명,,,[59:43], 17, dest_reg, ..." />
 <meta property="og:image:width" content="1146" />
 <meta property="og:image:height" content="600" />
-<meta property="og:image" content="https://hwkim-dev.github.io/pccx/_images/social_previews/summary_docs_v002_ISA_instructions_cbb0b3cd.png" />
-<meta property="og:image:alt" content="각 명령어는 opcode[3:0] 이후 60-bit 본체(body) 로 구성됩니다. 본 페이지는 오피코드별로 body 레이아웃과 각 필드의 의미를 기술합니다. 1. GEMV / GEMM (opcode = 0x0 / 0x1): GEMV 와 GEMM 은 동일한 본체 레이아웃을 공유합니다.,,,, 비트, 폭, 필드, 설명,,,[59:43], 17, dest..." />
-<meta name="description" content="각 명령어는 opcode[3:0] 이후 60-bit 본체(body) 로 구성됩니다. 본 페이지는 오피코드별로 body 레이아웃과 각 필드의 의미를 기술합니다. 1. GEMV / GEMM (opcode = 0x0 / 0x1): GEMV 와 GEMM 은 동일한 본체 레이아웃을 공유합니다.,,,, 비트, 폭, 필드, 설명,,,[59:43], 17, dest..." />
+<meta property="og:image" content="https://hwkim-dev.github.io/pccx/_images/social_previews/summary_docs_v002_ISA_instructions_f0e73d73.png" />
+<meta property="og:image:alt" content="각 명령어는 opcode[3:0] 이후 60-bit 본체(body)로 구성된다. 본 문서에서는 오피코드별 body 레이아웃과 각 필드의 의미를 기술한다. 1. GEMV / GEMM (opcode = 0x0 / 0x1): GEMV와 GEMM은 동일한 본체 레이아웃을 공유한다.,,,, 비트, 폭, 필드, 설명,,,[59:43], 17, dest_reg, ..." />
+<meta name="description" content="각 명령어는 opcode[3:0] 이후 60-bit 본체(body)로 구성된다. 본 문서에서는 오피코드별 body 레이아웃과 각 필드의 의미를 기술한다. 1. GEMV / GEMM (opcode = 0x0 / 0x1): GEMV와 GEMM은 동일한 본체 레이아웃을 공유한다.,,,, 비트, 폭, 필드, 설명,,,[59:43], 17, dest_reg, ..." />
 <meta name="twitter:card" content="summary_large_image" />
 <link rel="index" title="색인" href="../../../genindex.html"><link rel="search" title="검색" href="../../../search.html"><link rel="next" title="명령어별 데이터플로우" href="dataflow.html"><link rel="prev" title="명령어 인코딩" href="encoding.html">
         <link rel="canonical" href="https://hwkim-dev.github.io/pccx/docs/v002/ISA/instructions.html">
@@ -445,11 +445,11 @@
         <article role="main" id="furo-main-content">
           <section id="id1">
 <h1>명령어 상세 인코딩<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h1>
-<p>각 명령어는 <code class="docutils literal notranslate"><span class="pre">opcode[3:0]</span></code> 이후 60-bit 본체(body) 로 구성됩니다.
-본 페이지는 오피코드별로 body 레이아웃과 각 필드의 의미를 기술합니다.</p>
+<p>각 명령어는 <code class="docutils literal notranslate"><span class="pre">opcode[3:0]</span></code> 이후 60-bit 본체(body)로 구성된다.
+본 문서에서는 오피코드별 body 레이아웃과 각 필드의 의미를 기술한다.</p>
 <section id="gemv-gemm-opcode-0x0-0x1">
 <h2>1. GEMV / GEMM (opcode = 0x0 / 0x1)<a class="headerlink" href="#gemv-gemm-opcode-0x0-0x1" title="Link to this heading">¶</a></h2>
-<p>GEMV 와 GEMM 은 동일한 본체 레이아웃을 공유합니다.</p>
+<p>GEMV와 GEMM은 동일한 본체 레이아웃을 공유한다.</p>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
@@ -603,7 +603,7 @@
 </section>
 <section id="memset-opcode-0x3">
 <h2>3. MEMSET (opcode = 0x3)<a class="headerlink" href="#memset-opcode-0x3" title="Link to this heading">¶</a></h2>
-<p>Constant Cache 의 shape / size / scale 레지스터 등을 초기화합니다.</p>
+<p>Constant Cache의 shape / size / scale 레지스터 등을 초기화한다.</p>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
@@ -664,7 +664,7 @@ a/b/c 세 슬롯을 제공합니다.</p>
 </section>
 <section id="cvo-opcode-0x4">
 <h2>4. CVO (opcode = 0x4)<a class="headerlink" href="#cvo-opcode-0x4" title="Link to this heading">¶</a></h2>
-<p>Complex Vector Operation — SFU 에 전달되는 명령어입니다.</p>
+<p>Complex Vector Operation — SFU에 전달되는 명령어이다.</p>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>

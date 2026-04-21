@@ -7,12 +7,12 @@
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://hwkim-dev.github.io/pccx/docs/v002/Architecture/dsp48e2_w4a8.html" />
 <meta property="og:site_name" content="pccx — Parallel Compute Core eXecutor" />
-<meta property="og:description" content="pccx v002 는 1 개의 DSP48E2 슬라이스에서 2 개의 독립 MAC 연산 을 동시에 실행하기 위해, Port A 에 23-bit shift 듀얼 가중치 패킹 을 적용 합니다. 본 페이지는 해당 기법의 수학적 근거, 음수 처리 전략, 그리고 RTL 수준의 구현 방법을 정리합니다. 1. 문제 정의: DSP48E2 는 단일 27-bit × 18-..." />
+<meta property="og:description" content="pccx v002는 1개의 DSP48E2 슬라이스에서 2개의 독립 MAC 연산 을 동시에 실행하기 위해, Port A에 23-bit shift 듀얼 가중치 패킹 을 적용 한다. 본 문서에서는 해당 기법의 수학적 근거, 음수 처리 전략, 그리고 RTL 수준의 구현 방법을 다룬다. 1. 문제 정의: DSP48E2는 단일 27-bit × 18-bit 곱셈 ..." />
 <meta property="og:image:width" content="1146" />
 <meta property="og:image:height" content="600" />
-<meta property="og:image" content="https://hwkim-dev.github.io/pccx/_images/social_previews/summary_docs_v002_Architecture_dsp48e2_w4a8_c2c8aa0b.png" />
-<meta property="og:image:alt" content="pccx v002 는 1 개의 DSP48E2 슬라이스에서 2 개의 독립 MAC 연산 을 동시에 실행하기 위해, Port A 에 23-bit shift 듀얼 가중치 패킹 을 적용 합니다. 본 페이지는 해당 기법의 수학적 근거, 음수 처리 전략, 그리고 RTL 수준의 구현 방법을 정리합니다. 1. 문제 정의: DSP48E2 는 단일 27-bit × 18-..." />
-<meta name="description" content="pccx v002 는 1 개의 DSP48E2 슬라이스에서 2 개의 독립 MAC 연산 을 동시에 실행하기 위해, Port A 에 23-bit shift 듀얼 가중치 패킹 을 적용 합니다. 본 페이지는 해당 기법의 수학적 근거, 음수 처리 전략, 그리고 RTL 수준의 구현 방법을 정리합니다. 1. 문제 정의: DSP48E2 는 단일 27-bit × 18-..." />
+<meta property="og:image" content="https://hwkim-dev.github.io/pccx/_images/social_previews/summary_docs_v002_Architecture_dsp48e2_w4a8_4340b994.png" />
+<meta property="og:image:alt" content="pccx v002는 1개의 DSP48E2 슬라이스에서 2개의 독립 MAC 연산 을 동시에 실행하기 위해, Port A에 23-bit shift 듀얼 가중치 패킹 을 적용 한다. 본 문서에서는 해당 기법의 수학적 근거, 음수 처리 전략, 그리고 RTL 수준의 구현 방법을 다룬다. 1. 문제 정의: DSP48E2는 단일 27-bit × 18-bit 곱셈 ..." />
+<meta name="description" content="pccx v002는 1개의 DSP48E2 슬라이스에서 2개의 독립 MAC 연산 을 동시에 실행하기 위해, Port A에 23-bit shift 듀얼 가중치 패킹 을 적용 한다. 본 문서에서는 해당 기법의 수학적 근거, 음수 처리 전략, 그리고 RTL 수준의 구현 방법을 다룬다. 1. 문제 정의: DSP48E2는 단일 27-bit × 18-bit 곱셈 ..." />
 <meta name="twitter:card" content="summary_large_image" />
 <link rel="index" title="색인" href="../../../genindex.html"><link rel="search" title="검색" href="../../../search.html"><link rel="next" title="명령어 세트 아키텍처 (ISA)" href="../ISA/index.html"><link rel="prev" title="SFU 코어 (Complex Vector Operations)" href="sfu_core.html">
         <link rel="canonical" href="https://hwkim-dev.github.io/pccx/docs/v002/Architecture/dsp48e2_w4a8.html">
@@ -445,27 +445,27 @@
         <article role="main" id="furo-main-content">
           <section id="dsp48e2-w4a8">
 <h1>DSP48E2 W4A8 비트 패킹과 부호 복원<a class="headerlink" href="#dsp48e2-w4a8" title="Link to this heading">¶</a></h1>
-<p>pccx v002 는 <strong>1 개의 DSP48E2 슬라이스에서 2 개의 독립 MAC 연산</strong> 을
-동시에 실행하기 위해, Port A 에 <strong>23-bit shift 듀얼 가중치 패킹</strong> 을 적용
-합니다. 본 페이지는 해당 기법의 수학적 근거, 음수 처리 전략, 그리고
-RTL 수준의 구현 방법을 정리합니다.</p>
+<p>pccx v002는 <strong>1개의 DSP48E2 슬라이스에서 2개의 독립 MAC 연산</strong>을
+동시에 실행하기 위해, Port A에 <strong>23-bit shift 듀얼 가중치 패킹</strong>을 적용
+한다. 본 문서에서는 해당 기법의 수학적 근거, 음수 처리 전략, 그리고
+RTL 수준의 구현 방법을 다룬다.</p>
 <div class="admonition note">
 <p class="admonition-title">참고</p>
 <p>본 기법은 GEMM 시스톨릭 어레이와 GEMV 코어 양쪽에서 공통으로 사용되며,
-DSP48E2 의 정수형 연산 처리량을 이론상 <strong>2 배로</strong> 확장합니다. 비트 폭을
-W5/W6 로 늘리려 하면 guard 영역이 부족해져 <code class="docutils literal notranslate"><span class="pre">N_max</span></code> 가 급격히 감소
-하므로, W4A8 구성이 KV260 에서의 최적 균형점입니다.</p>
+DSP48E2의 정수형 연산 처리량을 이론상 <strong>2배로</strong> 확장한다. 비트 폭을
+W5/W6으로 늘리려 하면 guard 영역이 부족해져 <code class="docutils literal notranslate"><span class="pre">N_max</span></code>가 급격히 감소
+하므로, W4A8 구성이 KV260에서의 최적 균형점이다.</p>
 </div>
 <section id="id1">
 <h2>1. 문제 정의<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h2>
-<p>DSP48E2 는 단일 <strong>27-bit × 18-bit 곱셈 + 48-bit 누적</strong> 을 제공합니다.</p>
+<p>DSP48E2는 단일 <strong>27-bit × 18-bit 곱셈 + 48-bit 누적</strong>을 제공한다.</p>
 <div class="math-wrapper docutils container">
 <div class="math notranslate nohighlight">
 \[P[47:0] \leftarrow P[47:0] + A[26:0] \times B[17:0]\]</div>
 </div>
 <p>W4A8 양자화에서 가중치 W 는 4-bit, 액티베이션 A 는 8-bit 이므로 Port A
-와 Port B 에 상당한 <strong>잉여 비트 공간</strong> 이 존재합니다. 이 잉여 공간을 활용해
-<strong>하나의 DSP 로 두 개의 독립 MAC</strong> 를 수행하는 듀얼 채널 패킹을 적용합니다.</p>
+와 Port B에 상당한 <strong>잉여 비트 공간</strong>이 존재한다. 이 잉여 공간을 활용해
+<strong>하나의 DSP로 두 개의 독립 MAC</strong>를 수행하는 듀얼 채널 패킹을 적용한다.</p>
 </section>
 <section id="id2">
 <h2>2. 비트 패킹 레이아웃<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h2>
@@ -473,10 +473,10 @@ W5/W6 로 늘리려 하면 guard 영역이 부족해져 <code class="docutils li
 <a class="reference internal image-reference" href="../../../_images/Processing_Elements_GEMM_4_v002.png"><img alt="DSP48E2 Port A / Port B 의 W4A8 듀얼 채널 패킹 레이아웃" src="../../../_images/Processing_Elements_GEMM_4_v002.png" style="width: 95%;" />
 </a>
 <figcaption>
-<p><span class="caption-number">그림 9 </span><span class="caption-text"><strong>Figure W4A8-Layout.</strong> Port A (27-bit) 는 상위 4-bit 에 W₁, 하위 4-bit
-에 W₂ 를 배치하고 그 사이 19-bit 를 guard 로 비웁니다. Port B (18-bit)
-는 상위 10-bit 를 <code class="docutils literal notranslate"><span class="pre">A₁[7]</span></code> 의 부호 확장으로, 하위 8-bit 에 액티베이션
-<code class="docutils literal notranslate"><span class="pre">A₁</span></code> 을 싣습니다.</span><a class="headerlink" href="#id10" title="Link to this image">¶</a></p>
+<p><span class="caption-number">그림 9 </span><span class="caption-text"><strong>Figure W4A8-Layout.</strong> Port A(27-bit)는 상위 4-bit에 W₁, 하위 4-bit
+에 W₂를 배치하고 그 사이 19-bit를 guard로 비운다. Port B(18-bit)
+는 상위 10-bit를 <code class="docutils literal notranslate"><span class="pre">A₁[7]</span></code>의 부호 확장으로, 하위 8-bit에 액티베이션
+<code class="docutils literal notranslate"><span class="pre">A₁</span></code>을 싣는다.</span><a class="headerlink" href="#id10" title="Link to this image">¶</a></p>
 </figcaption>
 </figure>
 <section id="port-a-weight-27-bit">
@@ -541,7 +541,7 @@ W5/W6 로 늘리려 하면 guard 영역이 부족해져 <code class="docutils li
 </section>
 <section id="id3">
 <h3>2.3 곱셈 결과의 비트 분리<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h3>
-<p>Port A 와 Port B 의 곱 결과는 다음과 같이 두 영역으로 자연히 분리됩니다.</p>
+<p>Port A와 Port B의 곱 결과는 다음과 같이 두 영역으로 자연히 분리된다.</p>
 <div class="math-wrapper docutils container">
 <div class="math notranslate nohighlight">
 \[A \times B = (W_1 \cdot 2^{23} + W_2) \times A_1
@@ -555,8 +555,8 @@ W5/W6 로 늘리려 하면 guard 영역이 부족해져 <code class="docutils li
 </section>
 <section id="id4">
 <h2>3. 안전 누적 한계<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h2>
-<p>하위 23-bit 공간에서 <code class="docutils literal notranslate"><span class="pre">W₂</span> <span class="pre">·</span> <span class="pre">A₁</span></code> 이 guard 영역을 침범하지 않고 누적
-가능한 최대 사이클 수는 다음과 같이 유도됩니다.</p>
+<p>하위 23-bit 공간에서 <code class="docutils literal notranslate"><span class="pre">W₂</span> <span class="pre">·</span> <span class="pre">A₁</span></code>이 guard 영역을 침범하지 않고 누적
+가능한 최대 사이클 수는 다음과 같이 유도된다.</p>
 <div class="math-wrapper docutils container">
 <div class="math notranslate nohighlight">
 \[|W_2 \cdot A_1|_{\max} = 2^3 \cdot 2^7 = 2^{10}\]</div>
@@ -570,15 +570,15 @@ W5/W6 로 늘리려 하면 guard 영역이 부족해져 <code class="docutils li
 동일 논리로 상위 25-bit 에서도 <code class="docutils literal notranslate"><span class="pre">W₁</span> <span class="pre">·</span> <span class="pre">A₁</span></code> 이 안전하게 축적됩니다.</p>
 <div class="admonition important">
 <p class="admonition-title">중요</p>
-<p>K &gt; 4,096 인 레이어는 <strong>타일 분할(K-split)</strong> 후 여러 누적 세션으로 처리
-해야 합니다. 분할 단위는 드라이버/컴파일러 레벨에서 결정됩니다.</p>
+<p>K &gt; 4,096인 레이어는 <strong>타일 분할(K-split)</strong> 후 여러 누적 세션으로 처리
+해야 한다. 분할 단위는 드라이버/컴파일러 레벨에서 결정된다.</p>
 </div>
 </section>
 <section id="borrow">
 <h2>4. 음수 누적과 Borrow 현상<a class="headerlink" href="#borrow" title="Link to this heading">¶</a></h2>
-<p>하위 결과가 음수가 되면, 2 의 보수 하드웨어인 DSP48E2 는 48-bit 레지스터
-내에서 sign extension 을 수행합니다. 이로 인해 <strong>상위 비트 영역에서
-“1 을 빌려가는(borrow)” 현상</strong> 이 발생합니다.</p>
+<p>하위 결과가 음수가 되면, 2의 보수 하드웨어인 DSP48E2는 48-bit 레지스터
+내에서 sign extension을 수행한다. 이로 인해 <strong>상위 비트 영역에서
+“1을 빌려가는(borrow)” 현상</strong>이 발생한다.</p>
 <section id="id5">
 <h3>4.1 수학적 분석<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h3>
 <p>하위 결과의 총합을 <code class="docutils literal notranslate"><span class="pre">-X</span></code> 라 하면, 48-bit 2 의 보수 표현 하에서:</p>
@@ -594,30 +594,30 @@ W5/W6 로 늘리려 하면 guard 영역이 부족해져 <code class="docutils li
 <p>따라서:</p>
 <ul class="simple">
 <li><p><strong>하위 23-bit</strong> <code class="docutils literal notranslate"><span class="pre">acc[22:0]</span></code> : <code class="docutils literal notranslate"><span class="pre">2²³</span> <span class="pre">−</span> <span class="pre">X</span></code> — 올바른 2 의 보수 음수값.</p></li>
-<li><p><strong>상위 25-bit</strong> <code class="docutils literal notranslate"><span class="pre">acc[47:23]</span></code>: <code class="docutils literal notranslate"><span class="pre">(∑Uᵢ)</span> <span class="pre">−</span> <span class="pre">1</span></code> — 1 이 차감된 상태.</p></li>
+<li><p><strong>상위 25-bit</strong> <code class="docutils literal notranslate"><span class="pre">acc[47:23]</span></code>: `` (∑Uᵢ) − 1`` — 1 이 차감된 상태.</p></li>
 </ul>
 <div class="tip admonition">
 <p class="admonition-title">핵심 관찰</p>
-<p><strong>데이터는 손상되지 않습니다.</strong> 상위 비트의 감산은 sign extension 에
-의한 수학적으로 정확한 borrow 이며, 단 1 사이클 후처리로 완벽 복원
-가능합니다.</p>
+<p><strong>데이터는 손상되지 않는다.</strong> 상위 비트의 감산은 sign extension에
+의한 수학적으로 정확한 borrow이며, 단 1사이클 후처리로 완벽 복원
+가능하다.</p>
 </div>
 </section>
 <section id="id6">
 <h3>4.2 부호 복원 로직<a class="headerlink" href="#id6" title="Link to this heading">¶</a></h3>
-<p>하위 결과의 부호는 <code class="docutils literal notranslate"><span class="pre">acc[22]</span></code> 단 1 비트로 판별됩니다.</p>
+<p>하위 결과의 부호는 <code class="docutils literal notranslate"><span class="pre">acc[22]</span></code> 단 1비트로 판별된다.</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">acc[22]</span> <span class="pre">==</span> <span class="pre">1</span></code> : 하위 음수 → 상위에서 1 을 빌려감 → 복원 필요.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">acc[22]</span> <span class="pre">==</span> <span class="pre">0</span></code> : 하위 양수 → 복원 불필요.</p></li>
 </ul>
-<p>전체 누적이 완료된 직후 <strong>최종 추출 사이클 1 회</strong> 에만 복원을 수행합니다.</p>
+<p>전체 누적이 완료된 직후 <strong>최종 추출 사이클 1회</strong>에만 복원을 수행한다.</p>
 <figure class="align-center" id="id11">
 <a class="reference internal image-reference" href="../../../_images/Processing_Elements_GEMM_5_v002.png"><img alt="부호 복원 Verilog 코드" src="../../../_images/Processing_Elements_GEMM_5_v002.png" style="width: 75%;" />
 </a>
 <figcaption>
-<p><span class="caption-number">그림 10 </span><span class="caption-text"><strong>Figure Sign-Recover.</strong> 누적 완료 사이클(<code class="docutils literal notranslate"><span class="pre">accumulate_done</span></code>) 에
-<code class="docutils literal notranslate"><span class="pre">acc[22]</span></code> 를 기준으로 상위 채널에 1 을 가산 복원하고, 하위 채널은
-23-bit 2 의 보수 결과를 그대로 저장합니다.</span><a class="headerlink" href="#id11" title="Link to this image">¶</a></p>
+<p><span class="caption-number">그림 10 </span><span class="caption-text"><strong>Figure Sign-Recover.</strong> 누적 완료 사이클(<code class="docutils literal notranslate"><span class="pre">accumulate_done</span></code>)에
+<code class="docutils literal notranslate"><span class="pre">acc[22]</span></code>를 기준으로 상위 채널에 1을 가산 복원하고, 하위 채널은
+23-bit 2의 보수 결과를 그대로 저장한다.</span><a class="headerlink" href="#id11" title="Link to this image">¶</a></p>
 </figcaption>
 </figure>
 <div class="highlight-verilog notranslate"><div class="highlight"><pre><span></span><span class="c1">// 하위 23-bit 연산 결과의 부호 비트 (1: 음수, 0: 양수)</span>
@@ -684,16 +684,16 @@ W5/W6 로 늘리려 하면 guard 영역이 부족해져 <code class="docutils li
 <li><p><strong>W 폭 확장 불가</strong>: W5/W6 로 확장하면 guard bits 부족으로 <code class="docutils literal notranslate"><span class="pre">N_max</span></code> 가
 급격히 감소. KV260 의 DSP48E2 특성상 W4A8 이 최적.</p></li>
 <li><p><strong>부호 있는 활성화 전제</strong>: A 가 unsigned 이면 guard 전략이 달라짐.
-현재 설계는 INT8 signed activation 을 가정.</p></li>
-<li><p><strong>Scale 공유 제약</strong>: W₁ 과 W₂ 는 동일한 A 와 곱해지므로, <strong>같은 출력 위치</strong>
-의 두 채널을 공유하는 구조에서만 직접 활용 가능. GEMM 의 M 방향 타일링
-과 자연스럽게 정합됩니다.</p></li>
+현재 설계는 INT8 signed activation을 가정한다.</p></li>
+<li><p><strong>Scale 공유 제약</strong>: W₁과 W₂는 동일한 A와 곱해지므로, <strong>같은 출력 위치</strong>
+의 두 채널을 공유하는 구조에서만 직접 활용 가능하다. GEMM의 M 방향 타일링
+과 자연스럽게 정합된다.</p></li>
 </ul>
 <div class="admonition seealso">
 <p class="admonition-title">더 보기</p>
-<p>이 기법을 사용하는 실제 PE 구현은 <a class="reference internal" href="gemm_core.html"><span class="doc">GEMM 코어 (시스톨릭 어레이)</span></a> 와 <a class="reference internal" href="gemv_core.html"><span class="doc">GEMV 코어</span></a>
+<p>이 기법을 사용하는 실제 PE 구현은 <a class="reference internal" href="gemm_core.html"><span class="doc">GEMM 코어 (시스톨릭 어레이)</span></a>와 <a class="reference internal" href="gemv_core.html"><span class="doc">GEMV 코어</span></a>
 에서 확인할 수 있으며, 이로 인한 상위 레벨의 속도 향상은
-<a class="reference internal" href="rationale.html"><span class="doc">v001 → v002 설계 근거</span></a> 의 “3.125 배” 분석을 참조하세요.</p>
+<a class="reference internal" href="rationale.html"><span class="doc">v001 → v002 설계 근거</span></a>의 “3.125배” 분석을 참조한다.</p>
 </div>
 </section>
 </section>

@@ -7,12 +7,12 @@
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://hwkim-dev.github.io/pccx/docs/v002/Verification/index.html" />
 <meta property="og:site_name" content="pccx — Parallel Compute Core eXecutor" />
-<meta property="og:description" content="Planned scope: The full section will cover: Verification plan — per-module functional coverage targets and sign-off criteria., Testbench architecture — UVM / cocotb harness layout, reference model,..." />
+<meta property="og:description" content="This section tracks the unit-level verification harness that accompanies the v002 RTL. Functional / formal / silicon checks at the system level are planned but not yet in place — their scope is lis..." />
 <meta property="og:image:width" content="1146" />
 <meta property="og:image:height" content="600" />
-<meta property="og:image" content="https://hwkim-dev.github.io/pccx/_images/social_previews/summary_docs_v002_Verification_index_bfe8b19b.png" />
-<meta property="og:image:alt" content="Planned scope: The full section will cover: Verification plan — per-module functional coverage targets and sign-off criteria., Testbench architecture — UVM / cocotb harness layout, reference model,..." />
-<meta name="description" content="Planned scope: The full section will cover: Verification plan — per-module functional coverage targets and sign-off criteria., Testbench architecture — UVM / cocotb harness layout, reference model,..." />
+<meta property="og:image" content="https://hwkim-dev.github.io/pccx/_images/social_previews/summary_docs_v002_Verification_index_ac539e95.png" />
+<meta property="og:image:alt" content="This section tracks the unit-level verification harness that accompanies the v002 RTL. Functional / formal / silicon checks at the system level are planned but not yet in place — their scope is lis..." />
+<meta name="description" content="This section tracks the unit-level verification harness that accompanies the v002 RTL. Functional / formal / silicon checks at the system level are planned but not yet in place — their scope is lis..." />
 <meta name="twitter:card" content="summary_large_image" />
 <link rel="index" title="Index" href="../../../genindex.html"><link rel="search" title="Search" href="../../../search.html"><link rel="next" title="Devices" href="../../Devices/index.html"><link rel="prev" title="NPU Controller Modules" href="../RTL/controller.html">
         <link rel="canonical" href="https://hwkim-dev.github.io/pccx/docs/v002/Verification/index.html">
@@ -445,15 +445,118 @@
         <article role="main" id="furo-main-content">
           <section id="verification">
 <h1>Verification<a class="headerlink" href="#verification" title="Link to this heading">¶</a></h1>
-<div class="note admonition">
-<p class="admonition-title">Placeholder</p>
-<p>This section is intentionally a stub for now. It will host the
-verification plan, testbench architecture, coverage goals, and
-formal-property results for pccx v002 as they land.</p>
+<p>This section tracks the <strong>unit-level verification harness</strong> that
+accompanies the v002 RTL. Functional / formal / silicon checks at the
+system level are planned but not yet in place — their scope is listed at
+the end of this page.</p>
+<section id="current-test-suite">
+<h2>1. Current test suite<a class="headerlink" href="#current-test-suite" title="Link to this heading">¶</a></h2>
+<p>All tests run under <strong>Vivado xsim</strong> via the unified runner
+<code class="file docutils literal notranslate"><span class="pre">hw/sim/run_verification.sh</span></code> in the RTL repo. Each test generates a
+<code class="docutils literal notranslate"><span class="pre">.pccx</span></code> trace that pccx-lab can visualise on the Timeline.</p>
+<div class="table-wrapper colwidths-given docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 35.0%" />
+<col style="width: 50.0%" />
+<col style="width: 15.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Testbench</p></th>
+<th class="head"><p>Scope</p></th>
+<th class="head"><p>Status</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">tb_GEMM_dsp_packer_sign_recovery</span></code></p></td>
+<td><p>Dual-channel W4A8 pack + post-MAC sign recovery, 1024 cycles</p></td>
+<td><p>PASS</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">tb_mat_result_normalizer</span></code></p></td>
+<td><p>BF16 alignment / exponent delay, 256 cycles</p></td>
+<td><p>PASS</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">tb_GEMM_weight_dispatcher</span></code></p></td>
+<td><p>HP weight stream → INT4 tile dispatch, 128 cycles</p></td>
+<td><p>PASS</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">tb_FROM_mat_result_packer</span></code></p></td>
+<td><p>32 × 16-bit staggered capture → 128-bit AXIS pack, 4 cycles</p></td>
+<td><p>PASS</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">tb_barrel_shifter_BF16</span></code></p></td>
+<td><p>BF16 mantissa barrel shift, 512 cycles</p></td>
+<td><p>PASS</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">tb_ctrl_npu_decoder</span></code></p></td>
+<td><p>64-bit VLIW decode → typed structs, 6 cycles</p></td>
+<td><p>PASS</p></td>
+</tr>
+</tbody>
+</table>
 </div>
-<section id="planned-scope">
-<h2>Planned scope<a class="headerlink" href="#planned-scope" title="Link to this heading">¶</a></h2>
-<p>The full section will cover:</p>
+<section id="running-the-suite">
+<h3>Running the suite<a class="headerlink" href="#running-the-suite" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>pccx-FPGA-NPU-LLM-kv260/hw/sim
+bash<span class="w"> </span>run_verification.sh
+</pre></div>
+</div>
+<p>The script is idempotent — each tb writes to its own
+<code class="file docutils literal notranslate"><span class="pre">hw/sim/work/&lt;tb_name&gt;/</span></code> directory so concurrent runs do not
+stomp on each other. A one-line PASS / FAIL summary prints at the
+end along with the path of each emitted <code class="docutils literal notranslate"><span class="pre">.pccx</span></code> trace.</p>
+<div class="note admonition">
+<p class="admonition-title">Last verified against</p>
+<p>Commit <code class="docutils literal notranslate"><span class="pre">773bd82</span></code> &#64; <code class="docutils literal notranslate"><span class="pre">hwkim-dev/pccx-FPGA-NPU-LLM-kv260</span></code>
+(2026-04-21). Six testbenches PASS; <code class="docutils literal notranslate"><span class="pre">tb_GEMM_fmap_staggered_delay</span></code>
+is parked — see <code class="docutils literal notranslate"><span class="pre">run_verification.sh</span></code> for the reason.</p>
+</div>
+</section>
+</section>
+<section id="gaps-tracked-as-open-items">
+<h2>2. Gaps (tracked as open items)<a class="headerlink" href="#gaps-tracked-as-open-items" title="Link to this heading">¶</a></h2>
+<div class="table-wrapper colwidths-given docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 70.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Area</p></th>
+<th class="head"><p>Planned next step</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>System-level smoke</strong></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">tb_NPU_top_smoke</span></code> — AXI-Lite decode → MEMSET → MEMCPY →
+GEMV → MEMCPY readback, golden compare against <code class="docutils literal notranslate"><span class="pre">llm-lite</span></code>
+reference. Blocked on the ACP fanout / writeback wiring (see
+<a class="reference internal" href="../RTL/npu_top.html"><span class="doc">NPU Top-Level</span></a>).</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>CVO bridge</strong></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">tb_cvo_bridge</span></code> — cvo_uop → READ burst → CVO echo → WRITE
+burst; covers the L2 port-B direct-address path once the
+arbiter lands.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>mem_dispatcher uop table</strong></p></td>
+<td><p>Regression guard for MEMSET + LOAD + STORE + CVO routing.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Driver-RTL cross check</strong></p></td>
+<td><p>Host-only test: encode via <code class="docutils literal notranslate"><span class="pre">uca_*</span></code> API, dump 64-bit VLIW,
+cross-check against <code class="docutils literal notranslate"><span class="pre">isa_pkg.sv</span></code> bit layout.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Formal</strong></p></td>
+<td><p>SymbiYosys / JasperGold properties for the ISA decoder and
+memory arbitration (future).</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="planned-scope-system-level">
+<h2>3. Planned scope (system level)<a class="headerlink" href="#planned-scope-system-level" title="Link to this heading">¶</a></h2>
+<p>Once the unit-level gaps above are closed, the full verification
+section will cover:</p>
 <ul class="simple">
 <li><p><strong>Verification plan</strong> — per-module functional coverage targets and
 sign-off criteria.</p></li>
@@ -550,7 +653,12 @@ bring-up scripts, and golden-trace comparison against the
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#">Verification</a><ul>
-<li><a class="reference internal" href="#planned-scope">Planned scope</a></li>
+<li><a class="reference internal" href="#current-test-suite">1. Current test suite</a><ul>
+<li><a class="reference internal" href="#running-the-suite">Running the suite</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#gaps-tracked-as-open-items">2. Gaps (tracked as open items)</a></li>
+<li><a class="reference internal" href="#planned-scope-system-level">3. Planned scope (system level)</a></li>
 </ul>
 </li>
 </ul>

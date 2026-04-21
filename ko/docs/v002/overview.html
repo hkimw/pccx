@@ -7,12 +7,12 @@
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://hwkim-dev.github.io/pccx/docs/v002/overview.html" />
 <meta property="og:site_name" content="pccx — Parallel Compute Core eXecutor" />
-<meta property="og:description" content="Status Architecture Target Precision 1. 프로젝트 목표: pccx (Parallel Compute Core eXecutor) v002 는 Xilinx Kria KV260 SoM을 1차 타겟으로 하여, 베어메탈 환경에서 양자화된 Transformer 기반 LLM 을 가속하는 범용 NPU 아키텍처입니다. 핵심 설계 철학:,,..." />
+<meta property="og:description" content="Status Architecture Target Precision 1. 프로젝트 목표: pccx (Parallel Compute Core eXecutor) v002 는 Xilinx Kria KV260 SoM을 1차 타깃으로 삼아 베어메탈 환경에서 양자화된 Transformer 기반 LLM을 가속하는 범용 NPU 아키텍처이다. 핵심 설계 철학:,, 원칙..." />
 <meta property="og:image:width" content="1146" />
 <meta property="og:image:height" content="600" />
-<meta property="og:image" content="https://hwkim-dev.github.io/pccx/_images/social_previews/summary_docs_v002_overview_a5cf3235.png" />
-<meta property="og:image:alt" content="Status Architecture Target Precision 1. 프로젝트 목표: pccx (Parallel Compute Core eXecutor) v002 는 Xilinx Kria KV260 SoM을 1차 타겟으로 하여, 베어메탈 환경에서 양자화된 Transformer 기반 LLM 을 가속하는 범용 NPU 아키텍처입니다. 핵심 설계 철학:,,..." />
-<meta name="description" content="Status Architecture Target Precision 1. 프로젝트 목표: pccx (Parallel Compute Core eXecutor) v002 는 Xilinx Kria KV260 SoM을 1차 타겟으로 하여, 베어메탈 환경에서 양자화된 Transformer 기반 LLM 을 가속하는 범용 NPU 아키텍처입니다. 핵심 설계 철학:,,..." />
+<meta property="og:image" content="https://hwkim-dev.github.io/pccx/_images/social_previews/summary_docs_v002_overview_d7405217.png" />
+<meta property="og:image:alt" content="Status Architecture Target Precision 1. 프로젝트 목표: pccx (Parallel Compute Core eXecutor) v002 는 Xilinx Kria KV260 SoM을 1차 타깃으로 삼아 베어메탈 환경에서 양자화된 Transformer 기반 LLM을 가속하는 범용 NPU 아키텍처이다. 핵심 설계 철학:,, 원칙..." />
+<meta name="description" content="Status Architecture Target Precision 1. 프로젝트 목표: pccx (Parallel Compute Core eXecutor) v002 는 Xilinx Kria KV260 SoM을 1차 타깃으로 삼아 베어메탈 환경에서 양자화된 Transformer 기반 LLM을 가속하는 범용 NPU 아키텍처이다. 핵심 설계 철학:,, 원칙..." />
 <meta name="twitter:card" content="summary_large_image" />
 <link rel="index" title="색인" href="../../genindex.html"><link rel="search" title="검색" href="../../search.html"><link rel="next" title="하드웨어 아키텍처" href="Architecture/index.html"><link rel="prev" title="pccx v002 아키텍처" href="index.html">
         <link rel="canonical" href="https://hwkim-dev.github.io/pccx/docs/v002/overview.html">
@@ -448,9 +448,9 @@
 <p><img alt="Status" src="https://img.shields.io/badge/Status-Active_Development-yellow" /> <img alt="Architecture" src="https://img.shields.io/badge/Architecture-Heterogeneous_NPU-purple" /> <img alt="Target" src="https://img.shields.io/badge/Target-Kria_KV260-orange" /> <img alt="Precision" src="https://img.shields.io/badge/Precision-W4A8-green" /></p>
 <section id="id2">
 <h2>1. 프로젝트 목표<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h2>
-<p><strong>pccx (Parallel Compute Core eXecutor) v002</strong> 는 Xilinx Kria KV260 SoM을
-1차 타겟으로 하여, 베어메탈 환경에서 양자화된 Transformer 기반 LLM 을
-가속하는 범용 NPU 아키텍처입니다.</p>
+<p><strong>pccx (Parallel Compute Core eXecutor) v002</strong>는 Xilinx Kria KV260 SoM을
+1차 타깃으로 삼아 베어메탈 환경에서 양자화된 Transformer 기반 LLM을
+가속하는 범용 NPU 아키텍처이다.</p>
 <section id="id3">
 <h3>핵심 설계 철학<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h3>
 <div class="table-wrapper colwidths-given docutils container">
@@ -467,18 +467,18 @@
 <tbody>
 <tr class="row-even"><td><p><strong>범용성 (Generality)</strong></p></td>
 <td><p>특정 모델(Gemma 3N E4B)에 종속되지 않고, 다양한 Transformer 계열
-모델을 지원할 수 있도록 <strong>디바이스-독립적인 명령어 세트(ISA)</strong> 와
-<strong>분리형(Decoupled) 데이터플로우</strong> 를 제공합니다.</p></td>
+모델을 지원할 수 있도록 <strong>디바이스 독립적인 명령어 집합(ISA)</strong>과
+<strong>분리형(Decoupled) 데이터플로우</strong>를 지원한다.</p></td>
 </tr>
 <tr class="row-odd"><td><p><strong>확장성 (Scalability)</strong></p></td>
 <td><p>시스톨릭 어레이의 크기, GEMV·SFU 코어의 수, 로컬 캐시 용량 등
-주요 파라미터가 <strong>generate 파라미터</strong> 로 노출되어, 타겟 디바이스의
-리소스 예산에 맞게 재합성 가능합니다.</p></td>
+주요 파라미터가 <strong>generate 파라미터</strong>로 노출되어, 타겟 디바이스의
+리소스 예산에 맞게 재합성이 가능하다.</p></td>
 </tr>
 <tr class="row-even"><td><p><strong>메모리 중심 설계</strong></p></td>
 <td><p>물리적으로 L2 캐시를 아키텍처의 중심에 배치하여, GEMM·GEMV·CVO 가
-<strong>동일한 액티베이션 소스</strong> 를 공유하도록 합니다. 이를 통해 레이어
-간 재배치(shuffle) 비용을 제거합니다.</p></td>
+<strong>동일한 액티베이션 소스</strong>를 공유하게 함으로써 레이어
+간 재배치(shuffle) 비용을 제거한다.</p></td>
 </tr>
 </tbody>
 </table>
@@ -491,8 +491,8 @@
 (GEMV-dominated)</strong> 워크로드입니다. 반면 프리필(Prefill) 단계는 GEMM
 지배적입니다. pccx v002 는 두 단계 모두를 단일 아키텍처 상에서 효율적으로
 실행하도록 <strong>행렬 코어(GEMM)</strong> 와 <strong>벡터 코어(GEMV)</strong> 를 물리적으로 분리
-배치하고, <strong>Complex Vector Operation(CVO)</strong> 을 담당하는 <strong>SFU</strong> 를 별도로
-두어 파이프라인 스톨을 방지합니다.</p>
+배치하고, <strong>Complex Vector Operation(CVO)</strong>을 담당하는 <strong>SFU</strong>를 별도로
+두어 파이프라인 스톨을 방지한다.</p>
 <section id="id5">
 <h3>성능 목표<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h3>
 <div class="table-wrapper colwidths-given docutils container">
@@ -532,8 +532,8 @@
 </section>
 <section id="v001">
 <h2>3. v001 과의 주요 차이점<a class="headerlink" href="#v001" title="Link to this heading">¶</a></h2>
-<p>v001 → v002 전환 배경과 3.125 배 처리량 향상 분석은
-<a class="reference internal" href="Architecture/rationale.html"><span class="doc">v001 → v002 설계 근거</span></a> 에서 상세히 다룹니다. 요약:</p>
+<p>v001 → v002 전환 배경과 3.125배 처리량 향상 분석은
+<a class="reference internal" href="Architecture/rationale.html"><span class="doc">v001 → v002 설계 근거</span></a>에서 상세히 다룬다. 요약:</p>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
@@ -591,7 +591,7 @@
 </section>
 <section id="id6">
 <h2>4. 에코시스템 계층<a class="headerlink" href="#id6" title="Link to this heading">¶</a></h2>
-<p>pccx 는 이식성을 보장하기 위해 세 개의 엄격히 분리된 레이어로 구성됩니다.</p>
+<p>pccx는 이식성을 보장하기 위해 세 개의 엄격히 분리된 계층으로 구성된다.</p>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>

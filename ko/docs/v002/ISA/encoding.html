@@ -7,12 +7,12 @@
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://hwkim-dev.github.io/pccx/docs/v002/ISA/encoding.html" />
 <meta property="og:site_name" content="pccx — Parallel Compute Core eXecutor" />
-<meta property="og:description" content="1. 포맷 개요: pccx v002 의 모든 명령어는 64 bit 고정 길이 이며, 다음과 같은 최상위 구조를 갖습니다.,,, 비트, 필드, 설명,,,[63:60], opcode, 4-bit. 최대 16 종, 현재 5 종 사용.,,[59:0], instruction body, 60-bit. 오피코드별 세부 레이아웃 (§ 3).,,,, 2. 오피코드 테..." />
+<meta property="og:description" content="1. 포맷 개요: pccx v002의 모든 명령어는 64 bit 고정 길이 이며, 다음과 같은 최상위 구조를 갖는다.,,, 비트, 필드, 설명,,,[63:60], opcode, 4-bit. 최대 16 종, 현재 5 종 사용.,,[59:0], instruction body, 60-bit. 오피코드별 세부 레이아웃 (§ 3).,,,, 2. 오피코드 테이블..." />
 <meta property="og:image:width" content="1146" />
 <meta property="og:image:height" content="600" />
-<meta property="og:image" content="https://hwkim-dev.github.io/pccx/_images/social_previews/summary_docs_v002_ISA_encoding_e55842f8.png" />
-<meta property="og:image:alt" content="1. 포맷 개요: pccx v002 의 모든 명령어는 64 bit 고정 길이 이며, 다음과 같은 최상위 구조를 갖습니다.,,, 비트, 필드, 설명,,,[63:60], opcode, 4-bit. 최대 16 종, 현재 5 종 사용.,,[59:0], instruction body, 60-bit. 오피코드별 세부 레이아웃 (§ 3).,,,, 2. 오피코드 테..." />
-<meta name="description" content="1. 포맷 개요: pccx v002 의 모든 명령어는 64 bit 고정 길이 이며, 다음과 같은 최상위 구조를 갖습니다.,,, 비트, 필드, 설명,,,[63:60], opcode, 4-bit. 최대 16 종, 현재 5 종 사용.,,[59:0], instruction body, 60-bit. 오피코드별 세부 레이아웃 (§ 3).,,,, 2. 오피코드 테..." />
+<meta property="og:image" content="https://hwkim-dev.github.io/pccx/_images/social_previews/summary_docs_v002_ISA_encoding_b90926f0.png" />
+<meta property="og:image:alt" content="1. 포맷 개요: pccx v002의 모든 명령어는 64 bit 고정 길이 이며, 다음과 같은 최상위 구조를 갖는다.,,, 비트, 필드, 설명,,,[63:60], opcode, 4-bit. 최대 16 종, 현재 5 종 사용.,,[59:0], instruction body, 60-bit. 오피코드별 세부 레이아웃 (§ 3).,,,, 2. 오피코드 테이블..." />
+<meta name="description" content="1. 포맷 개요: pccx v002의 모든 명령어는 64 bit 고정 길이 이며, 다음과 같은 최상위 구조를 갖는다.,,, 비트, 필드, 설명,,,[63:60], opcode, 4-bit. 최대 16 종, 현재 5 종 사용.,,[59:0], instruction body, 60-bit. 오피코드별 세부 레이아웃 (§ 3).,,,, 2. 오피코드 테이블..." />
 <meta name="twitter:card" content="summary_large_image" />
 <link rel="index" title="색인" href="../../../genindex.html"><link rel="search" title="검색" href="../../../search.html"><link rel="next" title="명령어 상세 인코딩" href="instructions.html"><link rel="prev" title="명령어 세트 아키텍처 (ISA)" href="index.html">
         <link rel="canonical" href="https://hwkim-dev.github.io/pccx/docs/v002/ISA/encoding.html">
@@ -447,8 +447,8 @@
 <h1>명령어 인코딩<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h1>
 <section id="id2">
 <h2>1. 포맷 개요<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h2>
-<p>pccx v002 의 모든 명령어는 <strong>64 bit 고정 길이</strong> 이며, 다음과 같은 최상위
-구조를 갖습니다.</p>
+<p>pccx v002의 모든 명령어는 <strong>64 bit 고정 길이</strong>이며, 다음과 같은 최상위
+구조를 갖는다.</p>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
@@ -529,8 +529,8 @@
 </section>
 <section id="id4">
 <h2>3. 디코딩 플로우<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h2>
-<p>명령어는 AXI-Lite 의 CMD_IN FIFO 로 호스트가 write 하며, 다음 경로로
-디코딩됩니다.</p>
+<p>명령어는 AXI-Lite의 CMD_IN FIFO로 호스트가 기록하며, 다음 경로로
+디코딩된다.</p>
 <pre  class="mermaid">
         flowchart TB
   CMD[[AXI-Lite&lt;br/&gt;CMD_IN FIFO]] --&gt; DEC[&quot;Decoder&lt;br/&gt;(ctrl_npu_decode)&lt;br/&gt;opcode[63:60] 분기&quot;]
@@ -544,7 +544,7 @@
     </pre></section>
 <section id="op">
 <h2>4. μop 분해<a class="headerlink" href="#op" title="Link to this heading">¶</a></h2>
-<p>각 오피코드는 디스패처 내부에서 다음 μop 들로 분해됩니다.</p>
+<p>각 오피코드는 디스패처 내부에서 다음 μop들로 분해된다.</p>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
@@ -578,8 +578,8 @@
 </section>
 <section id="id5">
 <h2>5. 메모리 라우팅 인코딩<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h2>
-<p>MEMCPY 의 <code class="docutils literal notranslate"><span class="pre">from_device</span></code> + <code class="docutils literal notranslate"><span class="pre">to_device</span></code> 조합은 Control Unit 내부에서 8-bit
-route enum (<code class="docutils literal notranslate"><span class="pre">data_route_e</span></code>) 으로 확장됩니다.</p>
+<p>MEMCPY의 <code class="docutils literal notranslate"><span class="pre">from_device</span></code> + <code class="docutils literal notranslate"><span class="pre">to_device</span></code> 조합은 Control Unit 내부에서 8-bit
+route enum(<code class="docutils literal notranslate"><span class="pre">data_route_e</span></code>)으로 확장된다.</p>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
@@ -632,7 +632,7 @@ route enum (<code class="docutils literal notranslate"><span class="pre">data_ro
 </section>
 <section id="id6">
 <h2>6. 포인터 / 파라미터 레지스터<a class="headerlink" href="#id6" title="Link to this heading">¶</a></h2>
-<p>ISA 는 6-bit pointer 를 통해 소형 Constant Cache 항목을 참조합니다.</p>
+<p>ISA는 6-bit pointer를 통해 소형 Constant Cache 항목을 참조한다.</p>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
@@ -662,8 +662,8 @@ route enum (<code class="docutils literal notranslate"><span class="pre">data_ro
 </tbody>
 </table>
 </div>
-<p>포인터 항목은 <strong>MEMSET</strong> 명령어로 사전 초기화됩니다.
-(<a class="reference internal" href="dataflow.html"><span class="doc">명령어별 데이터플로우</span></a> 의 MEMSET 섹션 참조)</p>
+<p>포인터 항목은 <strong>MEMSET</strong> 명령어로 사전 초기화된다.
+(<a class="reference internal" href="dataflow.html"><span class="doc">명령어별 데이터플로우</span></a>의 MEMSET 섹션 참조)</p>
 </section>
 <section id="id7">
 <h2>7. 어드레스 공간<a class="headerlink" href="#id7" title="Link to this heading">¶</a></h2>
@@ -692,8 +692,8 @@ route enum (<code class="docutils literal notranslate"><span class="pre">data_ro
 </tbody>
 </table>
 </div>
-<p>엔트리 크기는 디바이스 레이어에서 정의되며 (KV260 기준 128-bit word),
-17-bit × 16 byte = <strong>2 MB</strong> 의 선형 L2 주소 공간을 표현합니다.</p>
+<p>엔트리 크기는 디바이스 레이어에서 정의되며(KV260 기준 128-bit word),
+17-bit × 16 byte = <strong>2 MB</strong>의 선형 L2 주소 공간을 표현한다.</p>
 </section>
 </section>
 

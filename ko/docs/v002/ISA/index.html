@@ -7,12 +7,12 @@
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://hwkim-dev.github.io/pccx/docs/v002/ISA/index.html" />
 <meta property="og:site_name" content="pccx — Parallel Compute Core eXecutor" />
-<meta property="og:description" content="pccx v002 의 ISA 는 고정 길이 64-bit VLIW 스타일 이며, 5 개의 오피코드 (GEMV, GEMM, MEMCPY, MEMSET, CVO) 로 구성됩니다. 설계 원칙은 다음과 같습니다: 하드웨어 독립성: 명령어 인코딩은 특정 디바이스 리소스 예산과 무관., CISC 스타일 매크로: 단일 명령어가 수천 사이클의 MAC 시퀀스를 기동.,..." />
+<meta property="og:description" content="pccx v002의 ISA는 고정 길이 64-bit VLIW 스타일 이며, 5개의 오피코드 (GEMV, GEMM, MEMCPY, MEMSET, CVO)로 구성된다. 설계 원칙은 다음과 같다: 하드웨어 독립성: 명령어 인코딩은 특정 디바이스 리소스 예산과 무관., CISC 스타일 매크로: 단일 명령어가 수천 사이클의 MAC 시퀀스를 기동., 디스패치 중..." />
 <meta property="og:image:width" content="1146" />
 <meta property="og:image:height" content="600" />
-<meta property="og:image" content="https://hwkim-dev.github.io/pccx/_images/social_previews/summary_docs_v002_ISA_index_b478718e.png" />
-<meta property="og:image:alt" content="pccx v002 의 ISA 는 고정 길이 64-bit VLIW 스타일 이며, 5 개의 오피코드 (GEMV, GEMM, MEMCPY, MEMSET, CVO) 로 구성됩니다. 설계 원칙은 다음과 같습니다: 하드웨어 독립성: 명령어 인코딩은 특정 디바이스 리소스 예산과 무관., CISC 스타일 매크로: 단일 명령어가 수천 사이클의 MAC 시퀀스를 기동.,..." />
-<meta name="description" content="pccx v002 의 ISA 는 고정 길이 64-bit VLIW 스타일 이며, 5 개의 오피코드 (GEMV, GEMM, MEMCPY, MEMSET, CVO) 로 구성됩니다. 설계 원칙은 다음과 같습니다: 하드웨어 독립성: 명령어 인코딩은 특정 디바이스 리소스 예산과 무관., CISC 스타일 매크로: 단일 명령어가 수천 사이클의 MAC 시퀀스를 기동.,..." />
+<meta property="og:image" content="https://hwkim-dev.github.io/pccx/_images/social_previews/summary_docs_v002_ISA_index_bad76346.png" />
+<meta property="og:image:alt" content="pccx v002의 ISA는 고정 길이 64-bit VLIW 스타일 이며, 5개의 오피코드 (GEMV, GEMM, MEMCPY, MEMSET, CVO)로 구성된다. 설계 원칙은 다음과 같다: 하드웨어 독립성: 명령어 인코딩은 특정 디바이스 리소스 예산과 무관., CISC 스타일 매크로: 단일 명령어가 수천 사이클의 MAC 시퀀스를 기동., 디스패치 중..." />
+<meta name="description" content="pccx v002의 ISA는 고정 길이 64-bit VLIW 스타일 이며, 5개의 오피코드 (GEMV, GEMM, MEMCPY, MEMSET, CVO)로 구성된다. 설계 원칙은 다음과 같다: 하드웨어 독립성: 명령어 인코딩은 특정 디바이스 리소스 예산과 무관., CISC 스타일 매크로: 단일 명령어가 수천 사이클의 MAC 시퀀스를 기동., 디스패치 중..." />
 <meta name="twitter:card" content="summary_large_image" />
 <link rel="index" title="색인" href="../../../genindex.html"><link rel="search" title="검색" href="../../../search.html"><link rel="next" title="명령어 인코딩" href="encoding.html"><link rel="prev" title="DSP48E2 W4A8 비트 패킹과 부호 복원" href="../Architecture/dsp48e2_w4a8.html">
         <link rel="canonical" href="https://hwkim-dev.github.io/pccx/docs/v002/ISA/index.html">
@@ -445,8 +445,8 @@
         <article role="main" id="furo-main-content">
           <section id="isa">
 <h1>명령어 세트 아키텍처 (ISA)<a class="headerlink" href="#isa" title="Link to this heading">¶</a></h1>
-<p>pccx v002 의 ISA 는 <strong>고정 길이 64-bit VLIW 스타일</strong> 이며, 5 개의 오피코드
-(GEMV, GEMM, MEMCPY, MEMSET, CVO) 로 구성됩니다. 설계 원칙은 다음과 같습니다:</p>
+<p>pccx v002의 ISA는 <strong>고정 길이 64-bit VLIW 스타일</strong>이며, 5개의 오피코드
+(GEMV, GEMM, MEMCPY, MEMSET, CVO)로 구성된다. 설계 원칙은 다음과 같다:</p>
 <ul class="simple">
 <li><p><strong>하드웨어 독립성</strong>: 명령어 인코딩은 특정 디바이스 리소스 예산과 무관.</p></li>
 <li><p><strong>CISC 스타일 매크로</strong>: 단일 명령어가 수천 사이클의 MAC 시퀀스를 기동.</p></li>
@@ -462,20 +462,20 @@
 </div>
 <div class="tip admonition">
 <p class="admonition-title">오프라인 가이드북 (PDF) 다운로드</p>
-<p>동일한 표·동일한 값으로 조판된 오프라인 가이드북이 PDF 로 제공됩니다.
-HTML 포털과 달리 인쇄·아카이브·사인오프용 용도로 적합합니다.</p>
+<p>동일한 표·동일한 값으로 조판된 오프라인 가이드북이 PDF로 제공된다.
+HTML 포털과 달리 인쇄·아카이브·사인오프용 용도로 적합하다.</p>
 <p><a class="reference download internal" download="" href="../../../_downloads/4e43d4e156dc78e9e88d562dfb366755/pccx-isa-v002.pdf"><code class="xref download docutils literal notranslate"><span class="pre">pccx</span> <span class="pre">v002</span> <span class="pre">ISA</span> <span class="pre">가이드북</span> <span class="pre">(PDF)</span></code></a></p>
-<p>PDF 는 저장소 루트의 <code class="docutils literal notranslate"><span class="pre">main.tex</span></code> 로부터 재생성되며, 오프라인 본은
-해당 LaTeX 소스가 단일 작성 창구입니다. 웹 포털은 계속해서 살아있는
-레퍼런스 역할을 맡습니다.</p>
+<p>PDF는 저장소 루트의 <code class="docutils literal notranslate"><span class="pre">main.tex</span></code>로부터 재생성되며, 오프라인 본은
+해당 LaTeX 소스가 단일 작성 창구이다. 웹 포털은 계속해서 살아있는
+레퍼런스 역할을 맡는다.</p>
 </div>
 <div class="admonition note">
 <p class="admonition-title">참고</p>
 <p>ISA 타입 정의의 권위 있는 소스는 v002 RTL 리포의
 <code class="file docutils literal notranslate"><span class="pre">hw/rtl/NPU_Controller/NPU_Control_Unit/ISA_PACKAGE/isa_pkg.sv</span></code>
-입니다 (외부: <a class="reference external" href="https://github.com/hwkim-dev/pccx-FPGA-NPU-LLM-kv260">hwkim-dev/pccx-FPGA-NPU-LLM-kv260</a>). 아래 페이지의
-인코딩 표는 해당 패키지와 1:1 일치해야 합니다 — <a class="reference internal" href="../RTL/isa_pkg.html"><span class="doc">ISA 타입 패키지</span></a>
-참고.</p>
+이다(외부: <a class="reference external" href="https://github.com/hwkim-dev/pccx-FPGA-NPU-LLM-kv260">hwkim-dev/pccx-FPGA-NPU-LLM-kv260</a>). 아래 페이지의
+인코딩 표는 해당 패키지와 1:1 일치해야 한다 — <a class="reference internal" href="../RTL/isa_pkg.html"><span class="doc">ISA 타입 패키지</span></a>
+참조.</p>
 </div>
 </section>
 

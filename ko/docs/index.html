@@ -7,12 +7,12 @@
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://hwkim-dev.github.io/pccx/docs/index.html" />
 <meta property="og:site_name" content="pccx — Parallel Compute Core eXecutor" />
-<meta property="og:description" content="License Architecture Target Precision 공지: 현재 활발히 개발 중입니다&gt; pccx는 리소스 제약이 있는 엣지 디바이스에서 트랜스포머 기반 대규모 언어 모델(LLM)을 가속하도록 설계된 확장 가능하고 모듈화된 신경망 처리 장치(NPU) 아키텍처입니다. 1. 아키텍처 개요: pccx는 디바이스에 독립적인 하드웨어-소프트..." />
+<meta property="og:description" content="License Architecture Target Precision 공지: 현재 활발히 개발 중이다&gt; pccx는 리소스 제약이 있는 엣지 환경에서 트랜스포머 기반 대규모 언어 모델(LLM) 가속을 위해 설계된 확장 가능하고 모듈화된 신경망 처리 장치(NPU) 아키텍처다. 1. 아키텍처 개요: pccx는 디바이스 독립성을 갖춘 하드웨어-소프트웨어 ..." />
 <meta property="og:image:width" content="1146" />
 <meta property="og:image:height" content="600" />
-<meta property="og:image" content="https://hwkim-dev.github.io/pccx/_images/social_previews/summary_docs_index_54e61199.png" />
-<meta property="og:image:alt" content="License Architecture Target Precision 공지: 현재 활발히 개발 중입니다&gt; pccx는 리소스 제약이 있는 엣지 디바이스에서 트랜스포머 기반 대규모 언어 모델(LLM)을 가속하도록 설계된 확장 가능하고 모듈화된 신경망 처리 장치(NPU) 아키텍처입니다. 1. 아키텍처 개요: pccx는 디바이스에 독립적인 하드웨어-소프트..." />
-<meta name="description" content="License Architecture Target Precision 공지: 현재 활발히 개발 중입니다&gt; pccx는 리소스 제약이 있는 엣지 디바이스에서 트랜스포머 기반 대규모 언어 모델(LLM)을 가속하도록 설계된 확장 가능하고 모듈화된 신경망 처리 장치(NPU) 아키텍처입니다. 1. 아키텍처 개요: pccx는 디바이스에 독립적인 하드웨어-소프트..." />
+<meta property="og:image" content="https://hwkim-dev.github.io/pccx/_images/social_previews/summary_docs_index_f357ab8b.png" />
+<meta property="og:image:alt" content="License Architecture Target Precision 공지: 현재 활발히 개발 중이다&gt; pccx는 리소스 제약이 있는 엣지 환경에서 트랜스포머 기반 대규모 언어 모델(LLM) 가속을 위해 설계된 확장 가능하고 모듈화된 신경망 처리 장치(NPU) 아키텍처다. 1. 아키텍처 개요: pccx는 디바이스 독립성을 갖춘 하드웨어-소프트웨어 ..." />
+<meta name="description" content="License Architecture Target Precision 공지: 현재 활발히 개발 중이다&gt; pccx는 리소스 제약이 있는 엣지 환경에서 트랜스포머 기반 대규모 언어 모델(LLM) 가속을 위해 설계된 확장 가능하고 모듈화된 신경망 처리 장치(NPU) 아키텍처다. 1. 아키텍처 개요: pccx는 디바이스 독립성을 갖춘 하드웨어-소프트웨어 ..." />
 <meta name="twitter:card" content="summary_large_image" />
 <link rel="index" title="색인" href="../genindex.html"><link rel="search" title="검색" href="../search.html"><link rel="next" title="로드맵 (Two-Track)" href="roadmap.html"><link rel="prev" title="pccx 문서" href="../index.html">
         <link rel="canonical" href="https://hwkim-dev.github.io/pccx/docs/index.html">
@@ -447,38 +447,38 @@
 <h1>pccx: 병렬 컴퓨트 코어 익스큐터<a class="headerlink" href="#pccx" title="Link to this heading">¶</a></h1>
 <p><img alt="License" src="https://img.shields.io/badge/License-Apache_2.0-blue.svg" /> <img alt="Architecture" src="https://img.shields.io/badge/Architecture-Scalable_NPU-purple" /> <img alt="Target" src="https://img.shields.io/badge/Target-Edge_AI-orange" /> <img alt="Precision" src="https://img.shields.io/badge/Precision-W4A8_Promotion-green" /></p>
 <blockquote>
-<div><p><strong>공지: 현재 활발히 개발 중입니다</strong> &gt; pccx는 리소스 제약이 있는 엣지 디바이스에서
-트랜스포머 기반 대규모 언어 모델(LLM)을 가속하도록 설계된
-확장 가능하고 모듈화된 신경망 처리 장치(NPU) 아키텍처입니다.</p>
+<div><p><strong>공지: 현재 활발히 개발 중이다</strong> &gt; pccx는 리소스 제약이 있는 엣지 환경에서
+트랜스포머 기반 대규모 언어 모델(LLM) 가속을 위해 설계된
+확장 가능하고 모듈화된 신경망 처리 장치(NPU) 아키텍처다.</p>
 </div></blockquote>
 <hr class="docutils" />
 <section id="id1">
 <h2>1. 아키텍처 개요<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h2>
-<p>pccx는 디바이스에 독립적인 하드웨어-소프트웨어 공동 설계 프레임워크입니다.
-대상 디바이스의 특정 물리적 리소스 예산에 맞게 코어 아키텍처를 확장하여
-엣지 하드웨어의 메모리 대역폭과 컴퓨트 병목 현상을 해결하는 데 집중합니다.</p>
+<p>pccx는 디바이스 독립성을 갖춘 하드웨어-소프트웨어 공동 설계 프레임워크다.
+타겟 디바이스의 제한된 물리적 리소스에 맞춰 코어 아키텍처를 스케일링함으로써
+엣지 환경 특유의 메모리 대역폭 및 연산 병목 현상 해소에 주력한다.</p>
 <section id="id2">
 <h3>1.1 에코시스템 구조<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h3>
-<p>이 프로젝트는 최대한의 이식성과 확장성을 보장하기 위해 세 개의 레이어로 엄격히 분리됩니다:</p>
+<p>이 프로젝트는 극대화된 이식성과 확장성을 확보하기 위해 세 개의 레이어로 엄격히 분리된다:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">/architecture</span></code> <strong>(로직 레이어)</strong> — 핵심 RTL(레지스터 전송 레벨) 로직과
-생성 파라미터를 포함합니다.</p>
+<li><p><code class="docutils literal notranslate"><span class="pre">/architecture</span></code> <strong>(로직 레이어)</strong> — 핵심 RTL(Register Transfer Level) 로직과
+생성 파라미터를 포함한다.</p>
 <ul>
-<li><p>논리 파이프라인, 명령어 스케줄링, <strong>커스텀 64비트 ISA</strong> 를 정의합니다.</p></li>
-<li><p>이 레이어는 특정 하드웨어 벤더나 인터페이스 프로토콜과 무관합니다.</p></li>
+<li><p>논리 데이터 파이프라인, 명령어 스케줄러 및 <strong>커스텀 64비트 ISA</strong>를 정의한다.</p></li>
+<li><p>특정 하드웨어 벤더나 인터페이스 프로토콜에 종속되지 않는다.</p></li>
 </ul>
 </li>
-<li><p><code class="docutils literal notranslate"><span class="pre">/device</span></code> <strong>(구현 레이어)</strong> — 특정 하드웨어 타겟에 pccx 아키텍처를 매핑합니다.</p>
+<li><p><code class="docutils literal notranslate"><span class="pre">/device</span></code> <strong>(구현 레이어)</strong> — 특정 하드웨어 환경에 pccx 아키텍처를 매핑한다.</p>
 <ul>
-<li><p>사용 가능한 리소스 예산(예: DSP 수, 로컬 메모리 크기)에 따라
-컴퓨트 코어 수, 시스톨릭 어레이 크기, 메모리 포트 너비를 조정합니다.</p></li>
+<li><p>가용 리소스 예산(예: DSP 슬라이스 수, 로컬 메모리 용량)에 따라
+연산 코어의 수, 시스톨릭 어레이 규격, 메모리 포트 대역폭을 동적으로 조율한다.</p></li>
 </ul>
 </li>
-<li><p><code class="docutils literal notranslate"><span class="pre">/driver</span></code> <strong>(소프트웨어 레이어)</strong> — C/C++ 하드웨어 추상화 레이어(HAL)와
-고수준 API를 제공합니다.</p>
+<li><p><code class="docutils literal notranslate"><span class="pre">/driver</span></code> <strong>(소프트웨어 레이어)</strong> — C/C++ 기반의 하드웨어 추상화 계층(HAL)과
+고수준 API를 제공한다.</p>
 <ul>
-<li><p>명령어 디스패칭과 메모리 매핑을 관리하며, 고수준 AI 모델과 pccx 하드웨어 사이의
-브릿지 역할을 합니다.</p></li>
+<li><p>명령어 디스패치 및 메모리 매핑을 전담하며, 고차원 AI 모델 프레임워크와 pccx 하드웨어를
+연결하는 브릿지 역할을 수행한다.</p></li>
 </ul>
 </li>
 </ul>
@@ -489,46 +489,46 @@
 <h2>2. 주요 기술 기능<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h2>
 <section id="isa">
 <h3>2.1 분리형 데이터플로우 &amp; 커스텀 ISA<a class="headerlink" href="#isa" title="Link to this heading">¶</a></h3>
-<p>이 아키텍처는 행렬 및 벡터 연산에 최적화된 <strong>커스텀 64비트 ISA</strong> 를 활용합니다.
-파이프라인 스톨을 제거하고 처리량을 극대화하기 위해 명령어 디코딩과 실행을 분리하는
-<strong>분리형 데이터플로우</strong> 파이프라인을 채택합니다.</p>
+<p>이 아키텍처는 행렬 및 벡터 연산에 최적화된 <strong>커스텀 64비트 ISA</strong>를 채택했다.
+명령어 디코딩과 실행 단계를 분리하는 <strong>분리형(Decoupled) 데이터플로우</strong> 구조를 도입하여
+파이프라인 스톨(stall)을 근본적으로 제거하고 시스템 처리량을 극대화한다.</p>
 </section>
-<section id="w4a8">
-<h3>2.2 W4A8 동적 정밀도 승격<a class="headerlink" href="#w4a8" title="Link to this heading">¶</a></h3>
-<p>효율성과 정확도를 모두 유지하기 위해:</p>
+<section id="w4a8-dynamic-precision-promotion">
+<h3>2.2 W4A8 동적 정밀도 상향 (Dynamic Precision Promotion)<a class="headerlink" href="#w4a8-dynamic-precision-promotion" title="Link to this heading">¶</a></h3>
+<p>연산 효율성과 모델 정확도를 동시에 충족하기 위해 다음 기법을 적용한다:</p>
 <ul class="simple">
-<li><p><strong>컴퓨트:</strong> 병렬 2D 시스톨릭 어레이가 고밀도 INT4(가중치) × INT8(활성화) 연산을 실행합니다.</p></li>
-<li><p><strong>승격:</strong> 비선형 연산(Softmax, RMSNorm, GeLU) 중에 수치 정밀도를 유지하기 위해
-복합 벡터 연산(CVO) 코어 내에서 자동으로 BF16 / FP32로 정밀도를 승격합니다.</p></li>
+<li><p><strong>연산:</strong> 병렬 2D 시스톨릭 어레이가 고밀도 INT4(가중치) × INT8(활성값) 행렬 곱을 수행한다.</p></li>
+<li><p><strong>상향:</strong> 비선형 함수(Softmax, RMSNorm, GeLU 등) 연산 시 수치적 정밀도를 잃지 않도록
+복합 벡터 연산(CVO) 코어 내부에서 자동으로 데이터 포맷을 BF16 또는 FP32로 승격시켜 처리한다.</p></li>
 </ul>
 </section>
 <section id="id4">
-<h3>2.3 계층적 메모리 구조<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h3>
+<h3>2.3 계층적 메모리 아키텍처<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h3>
 <ul class="simple">
-<li><p><strong>행렬 코어:</strong> 확장 가능한 어레이 크기의 GEMM 연산 전용.</p></li>
-<li><p><strong>벡터 코어:</strong> GEMV 및 요소별 연산을 처리합니다.</p></li>
-<li><p><strong>공유 인터커넥트:</strong> 중재 오버헤드 없이 코어와 로컬 캐시 간의 동시 접근을 허용하는
-유연한 데이터 버스 시스템.</p></li>
+<li><p><strong>매트릭스 코어:</strong> 확장성을 지닌 어레이 크기를 바탕으로 GEMM 연산만을 전담한다.</p></li>
+<li><p><strong>벡터 코어:</strong> GEMV 및 Element-wise 연산을 효율적으로 분담하여 처리한다.</p></li>
+<li><p><strong>공용 인터커넥트:</strong> 중재 오버헤드 없이 각 코어와 로컬 캐시 간 동시 엑세스를 지원하는
+유연한 데이터 버스 구조를 갖췄다.</p></li>
 </ul>
 </section>
 </section>
 <hr class="docutils" />
 <section id="id5">
 <h2>3. 문서<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h2>
-<p>자세한 기술 사양은 <a class="reference internal" href="v002/index.html"><span class="doc">pccx v002 아키텍처</span></a> 의 다음 섹션에서 확인할 수 있습니다:</p>
+<p>상세한 기술 스펙은 <a class="reference internal" href="v002/index.html"><span class="doc">pccx v002 아키텍처</span></a> 문서를 참조한다:</p>
 <ol class="arabic simple">
-<li><p><a class="reference internal" href="v002/ISA/index.html"><span class="doc">명령어 세트 아키텍처 (ISA)</span></a> — 64비트 커스텀 명령어 세트 사양.</p></li>
-<li><p><a class="reference internal" href="v002/Architecture/index.html"><span class="doc">하드웨어 아키텍처</span></a> — 하드웨어 아키텍처 및 플로어플랜.</p></li>
-<li><p><a class="reference internal" href="v002/Drivers/index.html"><span class="doc">소프트웨어 스택</span></a> — pccx 드라이버 및 SDK 문서.</p></li>
+<li><p><a class="reference internal" href="v002/ISA/index.html"><span class="doc">명령어 세트 아키텍처 (ISA)</span></a> — 64비트 커스텀 명령어 집합(ISA) 명세.</p></li>
+<li><p><a class="reference internal" href="v002/Architecture/index.html"><span class="doc">하드웨어 아키텍처</span></a> — 하드웨어 아키텍처 및 물리적 플로어플랜 설계.</p></li>
+<li><p><a class="reference internal" href="v002/Drivers/index.html"><span class="doc">소프트웨어 스택</span></a> — pccx 드라이버 및 SDK 가이드런스.</p></li>
 </ol>
-<p>v001 아키텍처는 <a class="reference internal" href="archive/experimental_v001/index.html"><span class="doc">아카이브: v001 실험적 아키텍처</span></a> 에 아카이브되어 있습니다.</p>
+<p>v001 레퍼런스 아키텍처는 <a class="reference internal" href="archive/experimental_v001/index.html"><span class="doc">아카이브: v001 실험적 아키텍처</span></a> 에 보존되어 있다.</p>
 </section>
 <hr class="docutils" />
 <section id="id6">
 <h2>4. 라이선스<a class="headerlink" href="#id6" title="Link to this heading">¶</a></h2>
-<p>이 프로젝트는 <strong>Apache License 2.0</strong> 하에 라이선스가 부여됩니다.
-오픈소스 하드웨어 개발을 위한 안전한 생태계를 보장하면서
-아키텍처를 특허 관련 위험으로부터 보호하며 자유로운 사용과 수정을 제공합니다.</p>
+<p>본 프로젝트는 <strong>Apache License 2.0</strong> 라이선스를 적용받는다.
+개방형 하드웨어 파편화 방지와 생태계 보호를 지향하는 동시에, 특허 소송의 위험으로부터
+아키텍처를 보호하여 학계 및 산업계 연구자들이 자유롭게 목적에 맞게 수정하고 사용할 수 있도록 한다.</p>
 </section>
 <hr class="docutils" />
 <section id="id7">
@@ -541,11 +541,11 @@
 <div class="sd-card-title sd-font-weight-bold docutils">
 <svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-cpu sd-mr-2" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.75 8h6.5a.75.75 0 0 1 .75.75v6.5a.75.75 0 0 1-.75.75h-6.5a.75.75 0 0 1-.75-.75v-6.5A.75.75 0 0 1 8.75 8Zm.75 6.5h5v-5h-5Z"></path><path d="M15.25 1a.75.75 0 0 1 .75.75V4h2.25c.966 0 1.75.784 1.75 1.75V8h2.25a.75.75 0 0 1 0 1.5H20v5h2.25a.75.75 0 0 1 0 1.5H20v2.25A1.75 1.75 0 0 1 18.25 20H16v2.25a.75.75 0 0 1-1.5 0V20h-5v2.25a.75.75 0 0 1-1.5 0V20H5.75A1.75 1.75 0 0 1 4 18.25V16H1.75a.75.75 0 0 1 0-1.5H4v-5H1.75a.75.75 0 0 1 0-1.5H4V5.75C4 4.784 4.784 4 5.75 4H8V1.75a.75.75 0 0 1 1.5 0V4h5V1.75a.75.75 0 0 1 .75-.75Zm3 17.5a.25.25 0 0 0 .25-.25V5.75a.25.25 0 0 0-.25-.25H5.75a.25.25 0 0 0-.25.25v12.5c0 .138.112.25.25.25Z"></path></svg> RTL 구현체</div>
 <p class="sd-card-text"><strong>github.com/hwkim-dev/pccx-FPGA-NPU-LLM-kv260</strong></p>
-<p class="sd-card-text">활성 <strong>v002</strong> SystemVerilog 원본 — ISA 패키지, 컨트롤러,
-컴퓨트 코어 (GEMM / GEMV / CVO), 메모리 계층. 타겟 디바이스는
-Xilinx Kria <strong>KV260</strong> (Zynq UltraScale+ ZU5EV).</p>
-<p class="sd-card-text">이 사이트의 모든 v002 RTL 레퍼런스 페이지는 해당 <code class="docutils literal notranslate"><span class="pre">.sv</span></code> 파일로
-직접 연결됩니다.</p>
+<p class="sd-card-text">활성 상태의 <strong>v002</strong> SystemVerilog 컴포넌트 — ISA 패키지, 제어 유닛,
+연산 파이프라인 (GEMM / GEMV / CVO), 및 메모리 스토리지 계층 구성을 관장한다.
+운영 타겟 하드웨어는 Xilinx Kria <strong>KV260</strong> (Zynq UltraScale+ ZU5EV)이다.</p>
+<p class="sd-card-text">본 문서 사이트의 모든 v002 RTL 참조 페이지는
+GitHub 프로젝트의 최신 <code class="docutils literal notranslate"><span class="pre">.sv</span></code> 코드로 직접 라우팅된다.</p>
 </div>
 <a class="sd-stretched-link sd-hide-link-text reference external" href="https://github.com/hwkim-dev/pccx-FPGA-NPU-LLM-kv260"><span>pccx-FPGA-NPU-LLM-kv260 저장소를 GitHub 에서 열기</span></a></div>
 </div>
@@ -557,7 +557,7 @@ Xilinx Kria <strong>KV260</strong> (Zynq UltraScale+ ZU5EV).</p>
 <div class="sd-card-body docutils">
 <div class="sd-card-title sd-font-weight-bold docutils">
 <svg version="1.1" width="1.0em" height="1.0em" class="sd-octicon sd-octicon-book sd-mr-1" viewBox="0 0 16 16" aria-hidden="true"><path d="M0 1.75A.75.75 0 0 1 .75 1h4.253c1.227 0 2.317.59 3 1.501A3.743 3.743 0 0 1 11.006 1h4.245a.75.75 0 0 1 .75.75v10.5a.75.75 0 0 1-.75.75h-4.507a2.25 2.25 0 0 0-1.591.659l-.622.621a.75.75 0 0 1-1.06 0l-.622-.621A2.25 2.25 0 0 0 5.258 13H.75a.75.75 0 0 1-.75-.75Zm7.251 10.324.004-5.073-.002-2.253A2.25 2.25 0 0 0 5.003 2.5H1.5v9h3.757a3.75 3.75 0 0 1 1.994.574ZM8.755 4.75l-.004 7.322a3.752 3.752 0 0 1 1.992-.572H14.5v-9h-3.495a2.25 2.25 0 0 0-2.25 2.25Z"></path></svg> 문서 소스</div>
-<p class="sd-card-text"><strong>github.com/hwkim-dev/pccx</strong> — 이 사이트를 빌드하는 Sphinx 프로젝트.</p>
+<p class="sd-card-text"><strong>github.com/hwkim-dev/pccx</strong> — 본 문서 사이트를 빌드하기 위한 Sphinx 프로젝트.</p>
 </div>
 <a class="sd-stretched-link sd-hide-link-text reference external" href="https://github.com/hwkim-dev/pccx"><span>pccx 문서 저장소를 GitHub 에서 열기</span></a></div>
 </div>
@@ -652,8 +652,8 @@ Xilinx Kria <strong>KV260</strong> (Zynq UltraScale+ ZU5EV).</p>
 </li>
 <li><a class="reference internal" href="#id3">2. 주요 기술 기능</a><ul>
 <li><a class="reference internal" href="#isa">2.1 분리형 데이터플로우 &amp; 커스텀 ISA</a></li>
-<li><a class="reference internal" href="#w4a8">2.2 W4A8 동적 정밀도 승격</a></li>
-<li><a class="reference internal" href="#id4">2.3 계층적 메모리 구조</a></li>
+<li><a class="reference internal" href="#w4a8-dynamic-precision-promotion">2.2 W4A8 동적 정밀도 상향 (Dynamic Precision Promotion)</a></li>
+<li><a class="reference internal" href="#id4">2.3 계층적 메모리 아키텍처</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#id5">3. 문서</a></li>

@@ -7,12 +7,12 @@
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://hwkim-dev.github.io/pccx/docs/v002/Architecture/kv_cache.html" />
 <meta property="og:site_name" content="pccx — Parallel Compute Core eXecutor" />
-<meta property="og:description" content="자기회귀 디코딩 단계의 실질적 성능 한계는 연산량이 아니라 KV 캐시의 메모리 대역폭 입니다. 본 페이지는 Gemma 3N E4B 타겟에서 pccx v002 가 KV 캐시를 어떻게 다루는지, 그리고 RTL / 드라이버 레벨에서 적용되는 3 대 지침을 정리합니다. 1. GEMV 지배성과 메모리 장벽: 디코딩(토큰 1 개 생성) 단계에서 연산량의 85 ~..." />
+<meta property="og:description" content="자기회귀 디코딩 단계의 실질적 성능 한계는 연산량이 아니라 KV 캐시의 메모리 대역폭 이다. 본 문서에서는 Gemma 3N E4B 타겟에서 pccx v002가 KV 캐시를 어떻게 관리하는지, 그리고 RTL / 드라이버 계층에서 적용되는 3대 지침을 다룬다. 1. GEMV 지배성과 메모리 장벽: 디코딩(토큰 1개 생성) 단계에서 연산량의 85 ~ 98%..." />
 <meta property="og:image:width" content="1146" />
 <meta property="og:image:height" content="600" />
-<meta property="og:image" content="https://hwkim-dev.github.io/pccx/_images/social_previews/summary_docs_v002_Architecture_kv_cache_5e56ee45.png" />
-<meta property="og:image:alt" content="자기회귀 디코딩 단계의 실질적 성능 한계는 연산량이 아니라 KV 캐시의 메모리 대역폭 입니다. 본 페이지는 Gemma 3N E4B 타겟에서 pccx v002 가 KV 캐시를 어떻게 다루는지, 그리고 RTL / 드라이버 레벨에서 적용되는 3 대 지침을 정리합니다. 1. GEMV 지배성과 메모리 장벽: 디코딩(토큰 1 개 생성) 단계에서 연산량의 85 ~..." />
-<meta name="description" content="자기회귀 디코딩 단계의 실질적 성능 한계는 연산량이 아니라 KV 캐시의 메모리 대역폭 입니다. 본 페이지는 Gemma 3N E4B 타겟에서 pccx v002 가 KV 캐시를 어떻게 다루는지, 그리고 RTL / 드라이버 레벨에서 적용되는 3 대 지침을 정리합니다. 1. GEMV 지배성과 메모리 장벽: 디코딩(토큰 1 개 생성) 단계에서 연산량의 85 ~..." />
+<meta property="og:image" content="https://hwkim-dev.github.io/pccx/_images/social_previews/summary_docs_v002_Architecture_kv_cache_9b85651c.png" />
+<meta property="og:image:alt" content="자기회귀 디코딩 단계의 실질적 성능 한계는 연산량이 아니라 KV 캐시의 메모리 대역폭 이다. 본 문서에서는 Gemma 3N E4B 타겟에서 pccx v002가 KV 캐시를 어떻게 관리하는지, 그리고 RTL / 드라이버 계층에서 적용되는 3대 지침을 다룬다. 1. GEMV 지배성과 메모리 장벽: 디코딩(토큰 1개 생성) 단계에서 연산량의 85 ~ 98%..." />
+<meta name="description" content="자기회귀 디코딩 단계의 실질적 성능 한계는 연산량이 아니라 KV 캐시의 메모리 대역폭 이다. 본 문서에서는 Gemma 3N E4B 타겟에서 pccx v002가 KV 캐시를 어떻게 관리하는지, 그리고 RTL / 드라이버 계층에서 적용되는 3대 지침을 다룬다. 1. GEMV 지배성과 메모리 장벽: 디코딩(토큰 1개 생성) 단계에서 연산량의 85 ~ 98%..." />
 <meta name="twitter:card" content="summary_large_image" />
 <link rel="index" title="색인" href="../../../genindex.html"><link rel="search" title="검색" href="../../../search.html"><link rel="next" title="GEMM 코어 (시스톨릭 어레이)" href="gemm_core.html"><link rel="prev" title="메모리 계층" href="memory_hierarchy.html">
         <link rel="canonical" href="https://hwkim-dev.github.io/pccx/docs/v002/Architecture/kv_cache.html">
@@ -446,16 +446,16 @@
           <section id="kv">
 <h1>KV 캐시 최적화 전략<a class="headerlink" href="#kv" title="Link to this heading">¶</a></h1>
 <p>자기회귀 디코딩 단계의 실질적 성능 한계는 <strong>연산량이 아니라 KV 캐시의
-메모리 대역폭</strong> 입니다. 본 페이지는 Gemma 3N E4B 타겟에서 pccx v002 가
-KV 캐시를 어떻게 다루는지, 그리고 RTL / 드라이버 레벨에서 적용되는
-3 대 지침을 정리합니다.</p>
+메모리 대역폭</strong>이다. 본 문서에서는 Gemma 3N E4B 타겟에서 pccx v002가
+KV 캐시를 어떻게 관리하는지, 그리고 RTL / 드라이버 계층에서 적용되는
+3대 지침을 다룬다.</p>
 <section id="gemv">
 <h2>1. GEMV 지배성과 메모리 장벽<a class="headerlink" href="#gemv" title="Link to this heading">¶</a></h2>
-<p>디코딩(토큰 1 개 생성) 단계에서 연산량의 <strong>85 ~ 98 % 이상이 GEMV</strong> 이며,
-GQA Attention 부분만이 시퀀스 길이 <code class="docutils literal notranslate"><span class="pre">L</span></code> 에 비례하는 GEMM 을 수행합니다.
-따라서 GEMV 유효 가동률이 TPS 에 직결됩니다.</p>
+<p>디코딩(토큰 1개 생성) 단계에서 연산량의 <strong>85 ~ 98% 이상이 GEMV</strong>이며,
+GQA Attention 부분만이 시퀀스 길이 <code class="docutils literal notranslate"><span class="pre">L</span></code>에 비례하는 GEMM을 수행한다.
+따라서 GEMV 유효 가동률이 TPS에 직결된다.</p>
 <p>반면 KV 캐시는 레이어마다 누적·재사용되므로, 시퀀스가 길어질수록 <strong>매 토큰
-마다 읽어야 할 메모리 총량</strong> 이 선형으로 증가합니다.</p>
+마다 읽어야 할 메모리 총량</strong>이 선형으로 증가한다.</p>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
@@ -490,20 +490,20 @@ GQA Attention 부분만이 시퀀스 길이 <code class="docutils literal notran
 </tbody>
 </table>
 </div>
-<p>32 K 컨텍스트 기준 1.31 GB 를 매 토큰마다 DDR4 에서 읽어야 하므로,
-실효 대역폭 ~10 GB/s 에서 토큰 당 ~131 ms 의 메모리 전송 시간만으로도
-TPS 가 8 이하로 떨어집니다.</p>
+<p>32K 컨텍스트 기준 1.31 GB를 매 토큰마다 DDR4에서 읽어야 하므로,
+실효 대역폭 ~10 GB/s에서 토큰 당 ~131 ms의 메모리 전송 시간만으로도
+TPS가 8 이하로 떨어진다.</p>
 <div class="admonition note">
 <p class="admonition-title">참고</p>
-<p>Gemma 3N 의 <strong>Cross-Layer Sharing</strong> 최적화(35 층 중 20 층만 KV 저장) 를
-반영해도 토큰 당 40 KB 수준입니다. 이 값이 KV260 등 엣지 디바이스에서
-<code class="docutils literal notranslate"><span class="pre">L</span> <span class="pre">=</span> <span class="pre">32</span> <span class="pre">K</span></code> 를 직접 수용할 수 없는 본질적 원인입니다.</p>
+<p>Gemma 3N의 <strong>Cross-Layer Sharing</strong> 최적화(35층 중 20층만 KV 저장)를
+반영해도 토큰 당 40 KB 수준이다. 이 값이 KV260 등 엣지 장치에서
+<code class="docutils literal notranslate"><span class="pre">L</span> <span class="pre">=</span> <span class="pre">32</span> <span class="pre">K</span></code>를 직접 수용할 수 없는 본질적 원인이다.</p>
 </div>
 </section>
 <section id="id1">
 <h2>2. 하드웨어 레벨 3 대 지침<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h2>
-<p>pccx v002 는 RTL / NPU 메모리 컨트롤러 / 드라이버 계층에 다음 세 가지
-기법을 우선 반영합니다.</p>
+<p>pccx v002는 RTL / NPU 메모리 컨트롤러 / 드라이버 계층에 다음 세 가지
+기법을 우선 반영한다.</p>
 <pre  class="mermaid">
         flowchart TB
   KV[&quot;토큰 당 40 KB&lt;br/&gt;KV 엔트리&quot;]
@@ -538,11 +538,10 @@ TPS 가 8 이하로 떨어집니다.</p>
 <li><p><strong>Attention Sink</strong> (프롬프트 선두 몇 개 토큰) + <strong>Local Window</strong> (최근
 대화) 만 남기고 중간 토큰은 주기적으로 <strong>폐기(eviction)</strong> 하는 정책을
 드라이버 레벨에서 관리.</p></li>
-<li><p>Google <strong>Turbo Quant</strong> 류 실시간 재양자화와 결합 시, KV 의 유효 크기를
-추가로 축소 가능.</p></li>
+<li><p>Google <strong>Turbo Quant</strong> 류 실시간 재양자화와 결합 시, KV의 유효 크기를
+추가로 축소할 수 있다.</p></li>
 <li><p>Eviction 단위는 드라이버의 KV ring 인덱스 갱신으로 표현되며, 하드웨어는
-“어느 인덱스까지 유효한가” 만 보고 실제 폐기 없이 논리적 삭제로 처리
-합니다.</p></li>
+“어느 인덱스까지 유효한가”만 확인하고 실제 폐기 없이 논리적 삭제로 처리한다.</p></li>
 </ul>
 </section>
 <section id="maximum-size-limit">
@@ -637,8 +636,8 @@ TPS 가 8 이하로 떨어집니다.</p>
 <section id="id4">
 <h2>5. 열린 과제<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h2>
 <ul class="simple">
-<li><p><strong>정확도 영향 측정</strong>: INT4 KV 의 task-level 정확도 편차를 Gemma 3N
-eval suite 로 추적해야 합니다.</p></li>
+<li><p><strong>정확도 영향 측정</strong>: INT4 KV의 task-level 정확도 편차를 Gemma 3N
+eval suite를 통해 추적해야 한다.</p></li>
 <li><p><strong>Eviction 정책의 모델 의존성</strong>: Attention Sink 수 / 윈도우 크기는
 모델 고유 튜닝 값이며, 드라이버 설정 API 로 노출 필요.</p></li>
 <li><p><strong>동적 재양자화 레이턴시</strong>: Turbo Quant 류의 주기적 재양자화가 추가

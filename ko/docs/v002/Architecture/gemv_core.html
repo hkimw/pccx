@@ -7,12 +7,12 @@
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://hwkim-dev.github.io/pccx/docs/v002/Architecture/gemv_core.html" />
 <meta property="og:site_name" content="pccx — Parallel Compute Core eXecutor" />
-<meta property="og:description" content="GEMV 코어는 LLM 자기회귀 디코딩(Autoregressive Decoding) 단계의 지배적 연산인 행렬 × 벡터(``y = W x``) 를 담당합니다. 배치 1 · 시퀀스 1 의 디코딩에서는 전체 FLOPs 의 85 ~ 98 % 이상이 GEMV 이므로, GEMV 처리량이 초당 토큰 생성률(TPS) 에 직접 비례 합니다. 1. 연산 대상: GEM..." />
+<meta property="og:description" content="GEMV 코어는 LLM 자기회귀 디코딩(Autoregressive Decoding) 단계의 지배적 연산인 행렬 × 벡터(``y = W x``) 를 담당한다. 배치 1 · 시퀀스 1의 디코딩에서는 전체 FLOPs의 85 ~ 98% 이상이 GEMV이므로, GEMV 처리량이 초당 토큰 생성률(TPS)에 직접 비례 한다. 1. 연산 대상: GEMV의 입력은 ..." />
 <meta property="og:image:width" content="1146" />
 <meta property="og:image:height" content="600" />
-<meta property="og:image" content="https://hwkim-dev.github.io/pccx/_images/social_previews/summary_docs_v002_Architecture_gemv_core_8b2ef52f.png" />
-<meta property="og:image:alt" content="GEMV 코어는 LLM 자기회귀 디코딩(Autoregressive Decoding) 단계의 지배적 연산인 행렬 × 벡터(``y = W x``) 를 담당합니다. 배치 1 · 시퀀스 1 의 디코딩에서는 전체 FLOPs 의 85 ~ 98 % 이상이 GEMV 이므로, GEMV 처리량이 초당 토큰 생성률(TPS) 에 직접 비례 합니다. 1. 연산 대상: GEM..." />
-<meta name="description" content="GEMV 코어는 LLM 자기회귀 디코딩(Autoregressive Decoding) 단계의 지배적 연산인 행렬 × 벡터(``y = W x``) 를 담당합니다. 배치 1 · 시퀀스 1 의 디코딩에서는 전체 FLOPs 의 85 ~ 98 % 이상이 GEMV 이므로, GEMV 처리량이 초당 토큰 생성률(TPS) 에 직접 비례 합니다. 1. 연산 대상: GEM..." />
+<meta property="og:image" content="https://hwkim-dev.github.io/pccx/_images/social_previews/summary_docs_v002_Architecture_gemv_core_587a5501.png" />
+<meta property="og:image:alt" content="GEMV 코어는 LLM 자기회귀 디코딩(Autoregressive Decoding) 단계의 지배적 연산인 행렬 × 벡터(``y = W x``) 를 담당한다. 배치 1 · 시퀀스 1의 디코딩에서는 전체 FLOPs의 85 ~ 98% 이상이 GEMV이므로, GEMV 처리량이 초당 토큰 생성률(TPS)에 직접 비례 한다. 1. 연산 대상: GEMV의 입력은 ..." />
+<meta name="description" content="GEMV 코어는 LLM 자기회귀 디코딩(Autoregressive Decoding) 단계의 지배적 연산인 행렬 × 벡터(``y = W x``) 를 담당한다. 배치 1 · 시퀀스 1의 디코딩에서는 전체 FLOPs의 85 ~ 98% 이상이 GEMV이므로, GEMV 처리량이 초당 토큰 생성률(TPS)에 직접 비례 한다. 1. 연산 대상: GEMV의 입력은 ..." />
 <meta name="twitter:card" content="summary_large_image" />
 <link rel="index" title="색인" href="../../../genindex.html"><link rel="search" title="검색" href="../../../search.html"><link rel="next" title="SFU 코어 (Complex Vector Operations)" href="sfu_core.html"><link rel="prev" title="GEMM 코어 (시스톨릭 어레이)" href="gemm_core.html">
         <link rel="canonical" href="https://hwkim-dev.github.io/pccx/docs/v002/Architecture/gemv_core.html">
@@ -446,28 +446,28 @@
           <section id="gemv">
 <h1>GEMV 코어<a class="headerlink" href="#gemv" title="Link to this heading">¶</a></h1>
 <p>GEMV 코어는 LLM <strong>자기회귀 디코딩(Autoregressive Decoding)</strong> 단계의
-지배적 연산인 <strong>행렬 × 벡터(``y = W x``)</strong> 를 담당합니다. 배치 1 ·
-시퀀스 1 의 디코딩에서는 전체 FLOPs 의 85 ~ 98 % 이상이 GEMV 이므로,
-GEMV 처리량이 <strong>초당 토큰 생성률(TPS) 에 직접 비례</strong> 합니다.</p>
+지배적 연산인 <strong>행렬 × 벡터(``y = W x``)</strong>를 담당한다. 배치 1 ·
+시퀀스 1의 디코딩에서는 전체 FLOPs의 85 ~ 98% 이상이 GEMV이므로,
+GEMV 처리량이 <strong>초당 토큰 생성률(TPS)에 직접 비례</strong>한다.</p>
 <div class="admonition important">
 <p class="admonition-title">중요</p>
-<p>2 차원 시스톨릭 어레이 하나만으로 디코딩을 수행하면 유효 가동률이
-<code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">/</span> <span class="pre">32</span></code> (= 단일 행만 활성) 까지 떨어집니다. pccx v002 는 이를 해결하기
-위해 <strong>GEMV 전용 1D 벡터 코어</strong> 를 GEMM 과 병렬로 두고, 두 경로가 동일
-L2 Cache 를 공유하는 이기종(heterogeneous) 구조를 채택했습니다.</p>
+<p>2차원 시스톨릭 어레이 하나만으로 디코딩을 수행하면 유효 가동률이
+<code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">/</span> <span class="pre">32</span></code> (= 단일 행만 활성)까지 떨어진다. pccx v002는 이를 해결하기
+위해 <strong>GEMV 전용 1D 벡터 코어</strong>를 GEMM과 병렬로 두고, 두 경로가 동일
+L2 Cache를 공유하는 이기종(heterogeneous) 구조를 채택했다.</p>
 </div>
 <section id="id1">
 <h2>1. 연산 대상<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h2>
-<p>GEMV 의 입력은 <strong>길이 N 의 액티베이션 벡터</strong> 와 <strong>N × N 크기의 가중치
-행렬</strong> 입니다.</p>
+<p>GEMV의 입력은 <strong>길이 N의 액티베이션 벡터</strong>와 <strong>N × N 크기의 가중치
+행렬</strong>이다.</p>
 <figure class="align-center" id="id6">
 <a class="reference internal image-reference" href="../../../_images/Processing_Elements_GEMV_2_v002.png"><img alt="GEMV 연산 대상 — Activation 벡터 × Weight 행렬" src="../../../_images/Processing_Elements_GEMV_2_v002.png" style="width: 80%;" />
 </a>
 <figcaption>
-<p><span class="caption-number">그림 7 </span><span class="caption-text"><strong>Figure GEMV-Operands.</strong> Activation 은 1 × N 행 벡터, Weight 는
-N × N 행렬이며 두 피연산자의 내적 결과가 새 길이 N 의 출력 벡터를
-구성합니다. Attention 의 <code class="docutils literal notranslate"><span class="pre">Q·Kᵀ</span></code>, FFN 의 projection 에 모두 동일한
-형태가 적용됩니다.</span><a class="headerlink" href="#id6" title="Link to this image">¶</a></p>
+<p><span class="caption-number">그림 7 </span><span class="caption-text"><strong>Figure GEMV-Operands.</strong> Activation은 1 × N 행 벡터, Weight는
+N × N 행렬이며 두 피연산자의 내적 결과가 새 길이 N의 출력 벡터를
+구성한다. Attention의 <code class="docutils literal notranslate"><span class="pre">Q·Kᵀ</span></code>, FFN의 projection에 모두 동일한
+형태가 적용된다.</span><a class="headerlink" href="#id6" title="Link to this image">¶</a></p>
 </figcaption>
 </figure>
 </section>
@@ -514,19 +514,19 @@ N × N 행렬이며 두 피연산자의 내적 결과가 새 길이 N 의 출력
 <a class="reference internal image-reference" href="../../../_images/Processing_Elements_GEMV_1_v002.png"><img alt="GEMV 코어 파이프라인과 reduction tree" src="../../../_images/Processing_Elements_GEMV_1_v002.png" style="width: 90%;" />
 </a>
 <figcaption>
-<p><span class="caption-number">그림 8 </span><span class="caption-text"><strong>Figure GEMV-Core.</strong> Activation 1 행과 Weight 1 열을 <strong>Pre-Process</strong>
-블록에서 dequantize 하여, 32 개 LUT 기반 곱셈기가 (W × A) 를 단일
-사이클에 병렬 수행합니다. 32 개의 부분곱은 5 단계 reduction adder
-tree (Stage 1: DSP48E2 16 슬라이스, Stage 2–5: LUT) 를 거쳐 스칼라로
-축약되며, <strong>Post-Process</strong> 블록에서 스케일·bias 를 적용한 뒤
-REGISTER 에 기록됩니다.</span><a class="headerlink" href="#id7" title="Link to this image">¶</a></p>
+<p><span class="caption-number">그림 8 </span><span class="caption-text"><strong>Figure GEMV-Core.</strong> Activation 1행과 Weight 1열을 <strong>Pre-Process</strong>
+블록에서 dequantize하여, 32개 LUT 기반 곱셈기가 (W × A)를 단일
+사이클에 병렬 수행한다. 32개의 부분곱은 5단계 reduction adder
+tree(Stage 1: DSP48E2 16 슬라이스, Stage 2–5: LUT)를 거쳐 스칼라로
+축약되며, <strong>Post-Process</strong> 블록에서 스케일·bias를 적용한 뒤
+REGISTER에 기록된다.</span><a class="headerlink" href="#id7" title="Link to this image">¶</a></p>
 </figcaption>
 </figure>
 <section id="weight-streaming">
 <h3>3.1 Weight Streaming<a class="headerlink" href="#weight-streaming" title="Link to this heading">¶</a></h3>
 <p>디코딩 단계에서는 각 레이어 가중치가 <strong>매 토큰마다 한 번만</strong> 사용되어
-재사용이 없습니다. 따라서 GEMV 는 GEMM 과 달리 <strong>Weight Streaming</strong> 전략을
-적용합니다.</p>
+재사용이 없다. 따라서 GEMV는 GEMM과 달리 <strong>Weight Streaming</strong> 전략을
+적용한다.</p>
 <ul class="simple">
 <li><p>HP2/HP3 포트에서 가중치를 연속 스트리밍.</p></li>
 <li><p>Weight Buffer 를 경유해 각 코어의 <strong>W-side Pre-Process</strong> 에 직접 주입.</p></li>
@@ -535,8 +535,8 @@ REGISTER 에 기록됩니다.</span><a class="headerlink" href="#id7" title="Lin
 </section>
 <section id="activation">
 <h3>3.2 Activation 재사용<a class="headerlink" href="#activation" title="Link to this heading">¶</a></h3>
-<p>액티베이션 벡터 <code class="docutils literal notranslate"><span class="pre">x</span></code> 는 L2 Cache 에 상주하며, 여러 GEMV 코어가 <strong>동일한
-벡터를 브로드캐스트</strong> 해 소비합니다.</p>
+<p>액티베이션 벡터 <code class="docutils literal notranslate"><span class="pre">x</span></code>는 L2 Cache에 상주하며, 여러 GEMV 코어가 <strong>동일한
+벡터를 브로드캐스트</strong>해 소비한다.</p>
 <ol class="arabic simple">
 <li><p>L2 → L1 Cache 로 액티베이션 타일 프리로드.</p></li>
 <li><p><strong>Pre-Process</strong> 블록이 INT8 → BF16 dequantize 와 scale 수행.</p></li>
@@ -547,8 +547,8 @@ REGISTER 에 기록됩니다.</span><a class="headerlink" href="#id7" title="Lin
 </section>
 <section id="reduction-tree">
 <h3>3.3 Reduction Tree<a class="headerlink" href="#reduction-tree" title="Link to this heading">¶</a></h3>
-<p>코어 당 32 개의 부분곱을 아래 5 단계 트리로 스칼라 한 개까지 축약하며,
-각 단계마다 파이프라인 레지스터를 삽입해 400 MHz 타이밍을 확보합니다.</p>
+<p>코어 당 32개의 부분곱을 아래 5단계 트리로 스칼라 한 개까지 축약하며,
+각 단계마다 파이프라인 레지스터를 삽입해 400 MHz 타이밍을 확보한다.</p>
 <pre  class="mermaid">
         flowchart TB
   MAC[&quot;32 × partial products&lt;br/&gt;(LUT-based W × A)&quot;]
@@ -566,8 +566,8 @@ REGISTER 에 기록됩니다.</span><a class="headerlink" href="#id7" title="Lin
 <section id="id4">
 <h3>3.4 누적 &amp; 포스트프로세싱<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h3>
 <ul class="simple">
-<li><p>Reduction 결과는 <strong>Result Accumulator</strong> 에 저장되어, 다음 가중치 열과
-순차적으로 합산되어 행 전체의 부분합을 완성합니다.</p></li>
+<li><p>Reduction 결과는 <strong>Result Accumulator</strong>에 저장되어, 다음 가중치 열과
+순차적으로 합산되어 행 전체의 부분합을 완성한다.</p></li>
 <li><p>Post-Process 에서 weight-scale / activation-scale / bias 를 적용.</p></li>
 <li><p>최종 INT8 재양자화 결과를 L2 Cache 또는 SFU 직결 FIFO 로 전송.</p></li>
 </ul>
@@ -575,8 +575,8 @@ REGISTER 에 기록됩니다.</span><a class="headerlink" href="#id7" title="Lin
 </section>
 <section id="id5">
 <h2>4. 병렬화 전략<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h2>
-<p>4 개의 GEMV 코어는 두 가지 병렬화 모드를 지원합니다. ISA 의
-<code class="docutils literal notranslate"><span class="pre">parallel_lane</span></code> (5-bit) 필드로 활성 코어 수와 파티션 방향이 지정됩니다.</p>
+<p>4개의 GEMV 코어는 두 가지 병렬화 모드를 지원한다. ISA의
+<code class="docutils literal notranslate"><span class="pre">parallel_lane</span></code> (5-bit) 필드로 활성 코어 수와 파티션 방향이 지정된다.</p>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
@@ -603,7 +603,7 @@ row 방향으로 스트라이프 됨. 액티베이션은 공유.</p></td>
 </section>
 <section id="lookup-table">
 <h2>5. 내장 Lookup Table<a class="headerlink" href="#lookup-table" title="Link to this heading">¶</a></h2>
-<p>GEMV 코어는 W4 dequantize 와 MAC 을 하나의 LUT 사전 연산으로 병합.</p>
+<p>GEMV 코어는 W4 dequantize와 MAC을 하나의 LUT 사전 연산으로 병합한다.</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">GEMV_generate_lut.sv</span></code> (v001 계승) 가 BF16 액티베이션 <code class="docutils literal notranslate"><span class="pre">A</span></code> 1 개와
 INT4 가중치의 가능한 16 개 값 (-8 ~ +7) 에 대해 <strong>16 개 사전
@@ -617,15 +617,15 @@ MAC 한 번에 해당하는 값이 Stage 1 누적 DSP 로 바로 흘러간다.</
 </section>
 <section id="softmax-normalize">
 <h2>6. Softmax / Normalize 와의 연동<a class="headerlink" href="#softmax-normalize" title="Link to this heading">¶</a></h2>
-<p>GEMV 출력은 주로 아래 두 패턴으로 소비됩니다.</p>
+<p>GEMV 출력은 주로 아래 두 패턴으로 소비된다.</p>
 <ol class="arabic simple">
 <li><p><strong>Attention</strong>: <code class="docutils literal notranslate"><span class="pre">Q·Kᵀ</span></code> → <code class="docutils literal notranslate"><span class="pre">CVO_EXP</span></code> / <code class="docutils literal notranslate"><span class="pre">REDUCE_SUM</span></code> (SFU)
 → <code class="docutils literal notranslate"><span class="pre">V·softmax</span></code> (다시 GEMV)</p></li>
 <li><p><strong>FFN Projection</strong>: GEMV → <code class="docutils literal notranslate"><span class="pre">CVO_GELU</span></code> / <code class="docutils literal notranslate"><span class="pre">CVO_SCALE</span></code> (SFU)
 → 다음 GEMV</p></li>
 </ol>
-<p>GEMV ↔ SFU 경로는 L2 Cache 를 경유하지 않고 <strong>직결 FIFO</strong> 로 연결되어
-왕복 레이턴시를 제거합니다. 자세한 내용은 <a class="reference internal" href="sfu_core.html"><span class="doc">SFU 코어 (Complex Vector Operations)</span></a> 를 참조하세요.</p>
+<p>GEMV ↔ SFU 경로는 L2 Cache를 경유하지 않고 <strong>직결 FIFO</strong>로 연결되어
+왕복 레이턴시를 제거한다. 자세한 내용은 <a class="reference internal" href="sfu_core.html"><span class="doc">SFU 코어 (Complex Vector Operations)</span></a>를 참조한다.</p>
 </section>
 </section>
 

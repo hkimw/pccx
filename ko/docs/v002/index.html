@@ -7,12 +7,12 @@
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://hwkim-dev.github.io/pccx/docs/v002/index.html" />
 <meta property="og:site_name" content="pccx — Parallel Compute Core eXecutor" />
-<meta property="og:description" content="Parallel Compute Core eXecutor — 두 번째 세대 pccx v002 는 엣지 디바이스에서 Transformer 기반 대규모 언어 모델(LLM)의 자기회귀 디코딩(Autoregressive Decoding) 을 가속하기 위해 설계된 이기종(heterogeneous) NPU 아키텍처의 두 번째 세대입니다. v001의 GEMM 편중 ..." />
+<meta property="og:description" content="Parallel Compute Core eXecutor — 두 번째 세대 pccx v002 는 엣지 디바이스에서 Transformer 기반 대규모 언어 모델(LLM)의 자기회귀 디코딩(Autoregressive Decoding) 을 가속하기 위해 설계된 이기종(heterogeneous) NPU 아키텍처의 두 번째 세대이다. v001의 GEMM 편중 설..." />
 <meta property="og:image:width" content="1146" />
 <meta property="og:image:height" content="600" />
 <meta property="og:image" content="https://hwkim-dev.github.io/pccx/_images/social_previews/summary_docs_v002_index_aaccd8ef.png" />
-<meta property="og:image:alt" content="Parallel Compute Core eXecutor — 두 번째 세대 pccx v002 는 엣지 디바이스에서 Transformer 기반 대규모 언어 모델(LLM)의 자기회귀 디코딩(Autoregressive Decoding) 을 가속하기 위해 설계된 이기종(heterogeneous) NPU 아키텍처의 두 번째 세대입니다. v001의 GEMM 편중 ..." />
-<meta name="description" content="Parallel Compute Core eXecutor — 두 번째 세대 pccx v002 는 엣지 디바이스에서 Transformer 기반 대규모 언어 모델(LLM)의 자기회귀 디코딩(Autoregressive Decoding) 을 가속하기 위해 설계된 이기종(heterogeneous) NPU 아키텍처의 두 번째 세대입니다. v001의 GEMM 편중 ..." />
+<meta property="og:image:alt" content="Parallel Compute Core eXecutor — 두 번째 세대 pccx v002 는 엣지 디바이스에서 Transformer 기반 대규모 언어 모델(LLM)의 자기회귀 디코딩(Autoregressive Decoding) 을 가속하기 위해 설계된 이기종(heterogeneous) NPU 아키텍처의 두 번째 세대이다. v001의 GEMM 편중 설..." />
+<meta name="description" content="Parallel Compute Core eXecutor — 두 번째 세대 pccx v002 는 엣지 디바이스에서 Transformer 기반 대규모 언어 모델(LLM)의 자기회귀 디코딩(Autoregressive Decoding) 을 가속하기 위해 설계된 이기종(heterogeneous) NPU 아키텍처의 두 번째 세대이다. v001의 GEMM 편중 설..." />
 <meta name="twitter:card" content="summary_large_image" />
 <link rel="index" title="색인" href="../../genindex.html"><link rel="search" title="검색" href="../../search.html"><link rel="next" title="개요" href="overview.html"><link rel="prev" title="로드맵 (Two-Track)" href="../roadmap.html">
         <link rel="canonical" href="https://hwkim-dev.github.io/pccx/docs/v002/index.html">
@@ -446,12 +446,12 @@
           <section id="pccx-v002">
 <h1>pccx v002 아키텍처<a class="headerlink" href="#pccx-v002" title="Link to this heading">¶</a></h1>
 <p class="rubric">Parallel Compute Core eXecutor — 두 번째 세대</p>
-<p><strong>pccx v002</strong> 는 엣지 디바이스에서 Transformer 기반 대규모 언어 모델(LLM)의
-<strong>자기회귀 디코딩(Autoregressive Decoding)</strong> 을 가속하기 위해 설계된
-이기종(heterogeneous) NPU 아키텍처의 두 번째 세대입니다. v001의 GEMM 편중
-설계를 전면 재검토하여, GEMV·CVO·GEMM 이 <strong>동일한 액티베이션 버스를 공유</strong>
+<p><strong>pccx v002</strong>는 엣지 디바이스에서 Transformer 기반 대규모 언어 모델(LLM)의
+<strong>자기회귀 디코딩(Autoregressive Decoding)</strong>을 가속하기 위해 설계된
+이기종(heterogeneous) NPU 아키텍처의 두 번째 세대이다. v001의 GEMM 편중
+설계를 전면 재검토하여, GEMV·CVO·GEMM이 <strong>동일한 액티베이션 버스를 공유</strong>
 하도록 L2 캐시를 아키텍처의 기하학적 중심에 배치하고, <strong>데이터 이동 경로를
-최소화</strong> 하도록 재설계되었습니다.</p>
+최소화</strong>하도록 재설계되었다.</p>
 <hr class="docutils" />
 <div class="toctree-wrapper compound">
 <p class="caption" role="heading"><span class="caption-text">개요</span></p>
@@ -533,7 +533,9 @@
 <p class="caption" role="heading"><span class="caption-text">검증</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="Verification/index.html">검증</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="Verification/index.html#id2">계획된 범위</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Verification/index.html#id2">1. 현재 테스트 스위트</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Verification/index.html#id4">2. 갭 (공개 항목으로 관리)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Verification/index.html#id5">3. 계획된 범위 (시스템 레벨)</a></li>
 </ul>
 </li>
 </ul>
