@@ -462,7 +462,7 @@
 <strong>“does this actually run?”</strong>  Each row links to a reproducible
 artefact (captured <code class="docutils literal notranslate"><span class="pre">.pccx</span></code> trace, Vivado utilisation report, or
 board-log excerpt) so the numbers can be independently verified.</p>
-<p>When a measurement is not yet in hand the row is <strong>⏳ pending</strong> with
+<p>When a measurement is not yet in hand the row is <strong>pending</strong> with
 the gating task explicitly called out — never a speculative figure.</p>
 <section id="measured-reproducible">
 <h2>Measured (reproducible)<a class="headerlink" href="#measured-reproducible" title="Link to this heading">¶</a></h2>
@@ -483,27 +483,27 @@ the gating task explicitly called out — never a speculative figure.</p>
 </thead>
 <tbody>
 <tr class="row-even"><td><p>Sail model type-check</p></td>
-<td><p>✅ clean</p></td>
+<td><p>clean</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">formal/sail/</span></code> (64-bit / 4-bit opcode)</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">check</span></code> (&lt; 5 s)</p></td>
 </tr>
 <tr class="row-odd"><td><p>pccx-core test suite</p></td>
-<td><p>✅ 7/7 ISA + 16 analyzer tests</p></td>
+<td><p>7/7 ISA + 16 analyzer tests</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">cargo</span> <span class="pre">test</span> <span class="pre">-p</span> <span class="pre">pccx-core</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">cargo</span> <span class="pre">test</span></code> from pccx-lab root</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">.pccx</span></code> binary format decode round-trip</p></td>
-<td><p>✅ bit-exact</p></td>
+<td><p>bit-exact</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">pccx_format.rs</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">pccx_analyze</span> <span class="pre">sample.pccx</span></code></p></td>
 </tr>
 <tr class="row-odd"><td><p>Sphinx zero-warning build</p></td>
-<td><p>✅ EN + KO</p></td>
+<td><p>EN + KO</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">_ext/*.py</span></code> + <code class="docutils literal notranslate"><span class="pre">docs/**</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">strict</span></code></p></td>
 </tr>
 <tr class="row-even"><td><p>Golden-diff regression gate (self-calibrated)</p></td>
-<td><p>✅ 8 / 8 steps + 128 / 128 steps within ±15 %</p></td>
+<td><p>8 / 8 steps + 128 / 128 steps within ±15 %</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">samples/*.ref.jsonl</span></code> in pccx-lab</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">pccx_golden_diff</span> <span class="pre">--check</span> <span class="pre">samples/gemma3n_16tok_smoke.ref.jsonl</span> <span class="pre">samples/gemma3n_16tok_smoke.pccx</span></code></p></td>
 </tr>
@@ -528,32 +528,32 @@ the gating task explicitly called out — never a speculative figure.</p>
 </thead>
 <tbody>
 <tr class="row-even"><td><p>End-to-end Gemma-3N E4B decode tok/s</p></td>
-<td><p>⏳ pending board run</p></td>
+<td><p>pending board run</p></td>
 <td><p>§4.1 RTL dispatcher + Global_Scheduler wiring
 ({doc}`../v002/Architecture/index`)</p></td>
 </tr>
 <tr class="row-odd"><td><p>KV260 resource usage (LUT / DSP / URAM / BRAM)</p></td>
-<td><p>⏳ pending Vivado impl</p></td>
+<td><p>pending Vivado impl</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">pccx_analyze</span> <span class="pre">--run-synth</span> <span class="pre">&lt;rtl_repo&gt;</span></code> landing
 ({doc}`../Lab/cli`)</p></td>
 </tr>
 <tr class="row-even"><td><p>Timing closure &#64; 400 MHz core / 250 MHz AXI</p></td>
-<td><p>⏳ pending Vivado impl</p></td>
+<td><p>pending Vivado impl</p></td>
 <td><p>Gate as above</p></td>
 </tr>
 <tr class="row-odd"><td><p>Layer-by-layer golden-model diff (vs PyTorch reference)</p></td>
-<td><p>⏳ pending <code class="docutils literal notranslate"><span class="pre">tools/pytorch_reference.py</span></code> landing</p></td>
+<td><p>pending <code class="docutils literal notranslate"><span class="pre">tools/pytorch_reference.py</span></code> landing</p></td>
 <td><p>Scaffold (<code class="docutils literal notranslate"><span class="pre">pccx_golden_diff</span></code> CLI + <code class="docutils literal notranslate"><span class="pre">.ref.jsonl</span></code> schema)
 already landed — see the measured row above.  PyTorch side
 will replace self-calibrated references with semantically-
 grounded expectations.</p></td>
 </tr>
 <tr class="row-even"><td><p>P99 decode latency under sustained load</p></td>
-<td><p>⏳ pending board capture</p></td>
+<td><p>pending board capture</p></td>
 <td><p>Requires 512-token run on real DDR traffic.</p></td>
 </tr>
 <tr class="row-odd"><td><p>7 W TDP headroom under W4A8KV4 decode</p></td>
-<td><p>⏳ pending Vivado impl + board pmbus</p></td>
+<td><p>pending Vivado impl + board pmbus</p></td>
 <td><p>Gates same as resource usage.</p></td>
 </tr>
 </tbody>
@@ -603,7 +603,7 @@ the source link and a permanent <code class="docutils literal notranslate"><span
 <li><p><code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">strict</span></code> passes, CI re-deploys the page.</p></li>
 </ol>
 <p>No speculative numbers.  Every row either links to a reproducible
-artefact or is marked <strong>⏳ pending</strong> with a named gate.</p>
+artefact or is marked <strong>pending</strong> with a named gate.</p>
 <div class="toctree-wrapper compound">
 </div>
 </section>
