@@ -31,7 +31,7 @@ npx tauri dev
 - **AI Copilot 패널** (오른쪽 도킹, `Ctrl+\`` 로 토글)
 - **Bottom Panel** (Log / Console / Telemetry, `Ctrl+J` 로 토글)
 
-우측 상단 활동 바에서 🧠 아이콘은 Copilot, 📈 아이콘은 Telemetry 입니다.
+우측 상단 활동 바에서 Copilot 및 Telemetry 토글이 있습니다.
 모든 아이콘 버튼에는 `aria-label` 이 부여되어 있어 스크린 리더로
 사용할 수 있습니다 (WCAG 2.2 SC 2.1.1 / 2.4.3).
 

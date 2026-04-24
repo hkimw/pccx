@@ -32,8 +32,7 @@ On launch you will see:
 - **AI Copilot panel** (docked right; `Ctrl+\`` to toggle).
 - **Bottom Panel** (Log / Console / Telemetry; `Ctrl+J` to toggle).
 
-The right-hand activity bar surfaces the Copilot (🧠) and Telemetry
-(📈) quick-toggles. Every icon-only button carries an `aria-label`
+The right-hand activity bar surfaces the Copilot and Telemetry quick-toggles. Every icon-only button carries an `aria-label`
 so the shell is fully screen-reader navigable (WCAG 2.2 SC 2.1.1 /
 2.4.3).
 

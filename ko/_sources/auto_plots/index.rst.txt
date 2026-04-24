@@ -14,6 +14,10 @@ English for numerics).
 See ``CLAUDE.md`` §6 (Plotting Conventions) for authoring rules.
 
 
+.. raw:: html
+
+  <div id='sg-tag-list' class='sphx-glr-tag-list'></div>
+
 
 .. raw:: html
 
