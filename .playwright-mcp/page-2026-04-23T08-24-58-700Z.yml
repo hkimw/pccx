@@ -1,0 +1,348 @@
+- generic [active] [ref=e1]:
+  - link "Skip to content" [ref=e2] [cursor=pointer]:
+    - /url: "#furo-main-content"
+  - generic [ref=e3]:
+    - banner [ref=e4]:
+      - img [ref=e8] [cursor=pointer]
+      - link "pccx" [ref=e11] [cursor=pointer]:
+        - /url: ../../index.html
+        - generic [ref=e12]: pccx
+      - button "Toggle Light / Dark / Auto color theme" [ref=e15] [cursor=pointer]:
+        - img [ref=e16]
+    - complementary [ref=e18]:
+      - generic [ref=e20]:
+        - link "pccx" [ref=e21] [cursor=pointer]:
+          - /url: ../../index.html
+          - generic [ref=e22]: pccx
+        - group "Language" [ref=e23]:
+          - link "EN" [ref=e24]:
+            - /url: /pccx/en/docs/v002/index.html
+          - generic [ref=e25]: ·
+          - link "한국어" [ref=e26] [cursor=pointer]:
+            - /url: /pccx/ko/docs/v002/index.html
+        - navigation "Project repositories" [ref=e27]:
+          - link "RTL" [ref=e28] [cursor=pointer]:
+            - /url: https://github.com/hwkim-dev/pccx-FPGA-NPU-LLM-kv260
+            - img [ref=e29]
+            - generic [ref=e33]: RTL
+          - link "Lab" [ref=e34] [cursor=pointer]:
+            - /url: /pccx/en/lab/
+            - img [ref=e35]
+            - generic [ref=e37]: Lab
+          - link "Docs" [ref=e38] [cursor=pointer]:
+            - /url: https://github.com/hwkim-dev/pccx
+            - img [ref=e39]
+            - generic [ref=e41]: Docs
+          - link "Blog" [ref=e42] [cursor=pointer]:
+            - /url: https://hwkim-dev.github.io/hwkim-dev/
+            - img [ref=e43]
+            - generic [ref=e46]: Blog
+        - search [ref=e47]:
+          - textbox "Search" [ref=e48]
+        - generic [ref=e50]:
+          - heading "Introduction" [ref=e51]
+          - list [ref=e52]:
+            - listitem [ref=e53]:
+              - 'link "pccx: Parallel Compute Core eXecutor" [ref=e54] [cursor=pointer]':
+                - /url: ../index.html
+            - listitem [ref=e55]:
+              - link "Quickstart" [ref=e56] [cursor=pointer]:
+                - /url: ../quickstart.html
+            - listitem [ref=e57]:
+              - link "Evidence" [ref=e58] [cursor=pointer]:
+                - /url: ../Evidence/index.html
+              - img [ref=e61] [cursor=pointer]
+            - listitem [ref=e63]:
+              - link "Roadmap (Two-Track)" [ref=e64] [cursor=pointer]:
+                - /url: ../roadmap.html
+          - heading "v002 Architecture" [ref=e65]
+          - list [ref=e66]:
+            - listitem [ref=e67]:
+              - link "pccx v002 Architecture" [ref=e68] [cursor=pointer]:
+                - /url: "#"
+              - img [ref=e71] [cursor=pointer]
+              - list [ref=e73]:
+                - listitem [ref=e74]:
+                  - link "Overview" [ref=e75] [cursor=pointer]:
+                    - /url: overview.html
+                - listitem [ref=e76]:
+                  - link "Hardware Architecture" [ref=e77] [cursor=pointer]:
+                    - /url: Architecture/index.html
+                  - img [ref=e80] [cursor=pointer]
+                - listitem [ref=e82]:
+                  - link "Instruction Set Architecture (ISA)" [ref=e83] [cursor=pointer]:
+                    - /url: ISA/index.html
+                  - img [ref=e86] [cursor=pointer]
+                - listitem [ref=e88]:
+                  - link "Formal Model — Sail" [ref=e89] [cursor=pointer]:
+                    - /url: Formal/index.html
+                  - img [ref=e92] [cursor=pointer]
+                - listitem [ref=e94]:
+                  - link "Software Stack" [ref=e95] [cursor=pointer]:
+                    - /url: Drivers/index.html
+                  - img [ref=e98] [cursor=pointer]
+                - listitem [ref=e100]:
+                  - link "Target Models" [ref=e101] [cursor=pointer]:
+                    - /url: Models/index.html
+                  - img [ref=e104] [cursor=pointer]
+                - listitem [ref=e106]:
+                  - link "RTL Source Reference (v002)" [ref=e107] [cursor=pointer]:
+                    - /url: RTL/index.html
+                  - img [ref=e110] [cursor=pointer]
+                - listitem [ref=e112]:
+                  - link "Verification" [ref=e113] [cursor=pointer]:
+                    - /url: Verification/index.html
+          - heading "Target Hardware" [ref=e114]
+          - list [ref=e115]:
+            - listitem [ref=e116]:
+              - link "Devices" [ref=e117] [cursor=pointer]:
+                - /url: ../Devices/index.html
+              - img [ref=e120] [cursor=pointer]
+          - heading "pccx-lab Handbook" [ref=e122]
+          - list [ref=e123]:
+            - listitem [ref=e124]:
+              - link "pccx-lab Handbook" [ref=e125] [cursor=pointer]:
+                - /url: ../Lab/index.html
+              - img [ref=e128] [cursor=pointer]
+          - heading "Archive" [ref=e130]
+          - list [ref=e131]:
+            - listitem [ref=e132]:
+              - link "Archive" [ref=e133] [cursor=pointer]:
+                - /url: ../archive/index.html
+              - img [ref=e136] [cursor=pointer]
+          - heading "Toolchain Demos" [ref=e138]
+          - list [ref=e139]:
+            - listitem [ref=e140]:
+              - link "Toolchain Demos" [ref=e141] [cursor=pointer]:
+                - /url: ../samples/index.html
+              - img [ref=e144] [cursor=pointer]
+          - heading "Tools" [ref=e146]
+          - list [ref=e147]:
+            - listitem [ref=e148]:
+              - link "pccx-lab — Simulator & AI Profiler" [ref=e149] [cursor=pointer]:
+                - /url: https://hwkim-dev.github.io/pccx/en/lab/
+    - generic [ref=e151]:
+      - generic [ref=e152]:
+        - generic [ref=e153]:
+          - link "View this page" [ref=e155] [cursor=pointer]:
+            - /url: https://github.com/hwkim-dev/pccx/blob/main/docs/docs/v002/index.rst?plain=true
+            - img [ref=e156]
+            - generic [ref=e158]: View this page
+          - link "Edit this page" [ref=e160] [cursor=pointer]:
+            - /url: https://github.com/hwkim-dev/pccx/edit/main/docs/docs/v002/index.rst
+            - img [ref=e161]
+            - generic [ref=e163]: Edit this page
+        - main [ref=e164]:
+          - generic [ref=e165]:
+            - heading "pccx v002 Architecture" [level=1] [ref=e166]
+            - paragraph [ref=e167]: Parallel Compute Core eXecutor — Second Generation
+            - paragraph [ref=e168]:
+              - strong [ref=e169]: pccx v002
+              - text: is the second generation of a heterogeneous NPU architecture designed to accelerate
+              - strong [ref=e170]: autoregressive decoding
+              - text: "of Transformer-based large language models (LLMs) on edge devices. It takes a hard look at the GEMM-centric v001 design and restructures the data path around a single shared activation bus: GEMV, CVO, and GEMM now pull activations from the same L2 cache, which sits at the geometric center of the floorplan. The result is"
+              - strong [ref=e171]: shorter, more regular data movement
+              - text: across every compute path.
+            - separator [ref=e172]
+            - generic [ref=e173]:
+              - heading "Overview" [ref=e174]
+              - list [ref=e175]:
+                - listitem [ref=e176]:
+                  - link "Overview" [ref=e177] [cursor=pointer]:
+                    - /url: overview.html
+                  - list [ref=e178]:
+                    - listitem [ref=e179]:
+                      - link "1. Project Goal" [ref=e180] [cursor=pointer]:
+                        - /url: overview.html#project-goal
+                    - listitem [ref=e181]:
+                      - link "2. Target Workload" [ref=e182] [cursor=pointer]:
+                        - /url: overview.html#target-workload
+                    - listitem [ref=e183]:
+                      - link "3. Key Differences from v001" [ref=e184] [cursor=pointer]:
+                        - /url: overview.html#key-differences-from-v001
+                    - listitem [ref=e185]:
+                      - link "4. Ecosystem Layers" [ref=e186] [cursor=pointer]:
+                        - /url: overview.html#ecosystem-layers
+                    - listitem [ref=e187]:
+                      - link "5. Documentation Map" [ref=e188] [cursor=pointer]:
+                        - /url: overview.html#documentation-map
+            - generic [ref=e189]:
+              - heading "Hardware Architecture" [ref=e190]
+              - list [ref=e191]:
+                - listitem [ref=e192]:
+                  - link "Hardware Architecture" [ref=e193] [cursor=pointer]:
+                    - /url: Architecture/index.html
+                  - list [ref=e194]:
+                    - listitem [ref=e195]:
+                      - 'link "Design Rationale: v001 → v002" [ref=e196] [cursor=pointer]':
+                        - /url: Architecture/rationale.html
+                    - listitem [ref=e197]:
+                      - link "Top-Level Architecture" [ref=e198] [cursor=pointer]:
+                        - /url: Architecture/top_level.html
+                    - listitem [ref=e199]:
+                      - link "Physical Floorplan" [ref=e200] [cursor=pointer]:
+                        - /url: Architecture/floorplan.html
+                    - listitem [ref=e201]:
+                      - link "Memory Hierarchy" [ref=e202] [cursor=pointer]:
+                        - /url: Architecture/memory_hierarchy.html
+                    - listitem [ref=e203]:
+                      - link "KV Cache Optimization Strategy" [ref=e204] [cursor=pointer]:
+                        - /url: Architecture/kv_cache.html
+                    - listitem [ref=e205]:
+                      - link "GEMM Core (Systolic Array)" [ref=e206] [cursor=pointer]:
+                        - /url: Architecture/gemm_core.html
+                    - listitem [ref=e207]:
+                      - link "GEMV Core" [ref=e208] [cursor=pointer]:
+                        - /url: Architecture/gemv_core.html
+                    - listitem [ref=e209]:
+                      - link "SFU Core (Complex Vector Operations)" [ref=e210] [cursor=pointer]:
+                        - /url: Architecture/sfu_core.html
+                    - listitem [ref=e211]:
+                      - link "DSP48E2 W4A8 Bit Packing and Sign Recovery" [ref=e212] [cursor=pointer]:
+                        - /url: Architecture/dsp48e2_w4a8.html
+            - generic [ref=e213]:
+              - heading "Instruction Set Architecture (ISA)" [ref=e214]
+              - list [ref=e215]:
+                - listitem [ref=e216]:
+                  - link "Instruction Set Architecture (ISA)" [ref=e217] [cursor=pointer]:
+                    - /url: ISA/index.html
+                  - list [ref=e218]:
+                    - listitem [ref=e219]:
+                      - link "Instruction Encoding" [ref=e220] [cursor=pointer]:
+                        - /url: ISA/encoding.html
+                    - listitem [ref=e221]:
+                      - link "Per-Instruction Encoding" [ref=e222] [cursor=pointer]:
+                        - /url: ISA/instructions.html
+                    - listitem [ref=e223]:
+                      - link "Per-Instruction Dataflow" [ref=e224] [cursor=pointer]:
+                        - /url: ISA/dataflow.html
+            - generic [ref=e225]:
+              - heading "Formal Model (Sail)" [ref=e226]
+              - list [ref=e227]:
+                - listitem [ref=e228]:
+                  - link "Formal Model — Sail" [ref=e229] [cursor=pointer]:
+                    - /url: Formal/index.html
+                  - list [ref=e230]:
+                    - listitem [ref=e231]:
+                      - link "Why Sail" [ref=e232] [cursor=pointer]:
+                        - /url: Formal/index.html#why-sail
+                    - listitem [ref=e233]:
+                      - link "Project layout" [ref=e234] [cursor=pointer]:
+                        - /url: Formal/index.html#project-layout
+                    - listitem [ref=e235]:
+                      - link "Scope snapshot" [ref=e236] [cursor=pointer]:
+                        - /url: Formal/index.html#scope-snapshot
+                    - listitem [ref=e237]:
+                      - link "Running the model" [ref=e238] [cursor=pointer]:
+                        - /url: Formal/index.html#running-the-model
+                    - listitem [ref=e239]:
+                      - link "Cite this page" [ref=e240] [cursor=pointer]:
+                        - /url: Formal/index.html#cite-this-page
+            - generic [ref=e241]:
+              - heading "Software Stack" [ref=e242]
+              - list [ref=e243]:
+                - listitem [ref=e244]:
+                  - link "Software Stack" [ref=e245] [cursor=pointer]:
+                    - /url: Drivers/index.html
+                  - list [ref=e246]:
+                    - listitem [ref=e247]:
+                      - link "C API Overview" [ref=e248] [cursor=pointer]:
+                        - /url: Drivers/api.html
+            - generic [ref=e249]:
+              - heading "Target Models" [ref=e250]
+              - list [ref=e251]:
+                - listitem [ref=e252]:
+                  - link "Target Models" [ref=e253] [cursor=pointer]:
+                    - /url: Models/index.html
+                  - list [ref=e254]:
+                    - listitem [ref=e255]:
+                      - link "Gemma 3N E4B — Overview" [ref=e256] [cursor=pointer]:
+                        - /url: Models/gemma3n_overview.html
+                    - listitem [ref=e257]:
+                      - link "Gemma 3N E4B — Operator-Level Pipeline" [ref=e258] [cursor=pointer]:
+                        - /url: Models/gemma3n_pipeline.html
+                    - listitem [ref=e259]:
+                      - link "Gemma 3N — Attention and RoPE Constraints" [ref=e260] [cursor=pointer]:
+                        - /url: Models/gemma3n_attention_rope.html
+                    - listitem [ref=e261]:
+                      - link "Gemma 3N — LAuReL and PLE Calibration Modules" [ref=e262] [cursor=pointer]:
+                        - /url: Models/gemma3n_ple_laurel.html
+                    - listitem [ref=e263]:
+                      - link "Gemma 3N — FFN Gaussian Top-K Sparsity" [ref=e264] [cursor=pointer]:
+                        - /url: Models/gemma3n_ffn_sparsity.html
+                    - listitem [ref=e265]:
+                      - link "Gemma 3N E4B on pccx v002 — Execution and Scheduling" [ref=e266] [cursor=pointer]:
+                        - /url: Models/gemma3n_execution.html
+            - generic [ref=e267]:
+              - heading "RTL Source" [ref=e268]
+              - list [ref=e269]:
+                - listitem [ref=e270]:
+                  - link "RTL Source Reference (v002)" [ref=e271] [cursor=pointer]:
+                    - /url: RTL/index.html
+                  - list [ref=e272]:
+                    - listitem [ref=e273]:
+                      - link "ISA Type Package" [ref=e274] [cursor=pointer]:
+                        - /url: RTL/isa_pkg.html
+                    - listitem [ref=e275]:
+                      - link "NPU Top-Level" [ref=e276] [cursor=pointer]:
+                        - /url: RTL/npu_top.html
+                    - listitem [ref=e277]:
+                      - link "Compute Core Modules" [ref=e278] [cursor=pointer]:
+                        - /url: RTL/compute_cores.html
+                    - listitem [ref=e279]:
+                      - link "NPU Controller Modules" [ref=e280] [cursor=pointer]:
+                        - /url: RTL/controller.html
+            - generic [ref=e281]:
+              - heading "Verification" [ref=e282]
+              - list [ref=e283]:
+                - listitem [ref=e284]:
+                  - link "Verification" [ref=e285] [cursor=pointer]:
+                    - /url: Verification/index.html
+                  - list [ref=e286]:
+                    - listitem [ref=e287]:
+                      - link "1. Current test suite" [ref=e288] [cursor=pointer]:
+                        - /url: Verification/index.html#current-test-suite
+                    - listitem [ref=e289]:
+                      - link "2. Gaps (tracked as open items)" [ref=e290] [cursor=pointer]:
+                        - /url: Verification/index.html#gaps-tracked-as-open-items
+                    - listitem [ref=e291]:
+                      - link "3. Planned scope (system level)" [ref=e292] [cursor=pointer]:
+                        - /url: Verification/index.html#planned-scope-system-level
+      - contentinfo [ref=e293]:
+        - generic [ref=e294]:
+          - link "Next Overview" [ref=e295] [cursor=pointer]:
+            - /url: overview.html
+            - generic [ref=e296]:
+              - generic [ref=e298]: Next
+              - generic [ref=e299]: Overview
+            - img [ref=e300]
+          - link "Previous Roadmap (Two-Track)" [ref=e302] [cursor=pointer]:
+            - /url: ../roadmap.html
+            - img [ref=e303]
+            - generic [ref=e305]:
+              - generic [ref=e307]: Previous
+              - generic [ref=e308]: Roadmap (Two-Track)
+        - generic [ref=e309]:
+          - generic [ref=e310]:
+            - generic [ref=e311]: Copyright © 2026, hwkim
+            - text: Made with
+            - link "Furo" [ref=e312] [cursor=pointer]:
+              - /url: https://github.com/pradyunsg/furo
+            - generic [ref=e313]: Last updated on 2026-04-23
+          - generic [ref=e315]:
+            - link "RTL implementation — github.com/hwkim-dev/pccx-FPGA-NPU-LLM-kv260" [ref=e316] [cursor=pointer]:
+              - /url: https://github.com/hwkim-dev/pccx-FPGA-NPU-LLM-kv260
+              - img [ref=e317]
+              - text: RTL
+            - link "pccx-lab — simulator & AI profiler" [ref=e321] [cursor=pointer]:
+              - /url: https://hwkim-dev.github.io/pccx/en/lab/
+              - img [ref=e322]
+              - text: Lab
+            - link "Docs repository — github.com/hwkim-dev/pccx" [ref=e324] [cursor=pointer]:
+              - /url: https://github.com/hwkim-dev/pccx
+              - img [ref=e325]
+              - text: Docs
+            - link "Author portfolio — hwkim-dev.github.io/hwkim-dev" [ref=e327] [cursor=pointer]:
+              - /url: https://hwkim-dev.github.io/hwkim-dev/
+              - img [ref=e328]
+              - text: Blog

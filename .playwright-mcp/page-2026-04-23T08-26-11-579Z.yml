@@ -1,0 +1,392 @@
+- generic [active] [ref=e1]:
+  - link "Skip to content" [ref=e2] [cursor=pointer]:
+    - /url: "#furo-main-content"
+  - generic [ref=e3]:
+    - banner [ref=e4]:
+      - img [ref=e8] [cursor=pointer]
+      - link "pccx" [ref=e11] [cursor=pointer]:
+        - /url: ../../index.html
+        - generic [ref=e12]: pccx
+      - generic [ref=e13]:
+        - button "Toggle Light / Dark / Auto color theme" [ref=e15] [cursor=pointer]:
+          - img [ref=e16]
+        - img [ref=e20] [cursor=pointer]
+    - complementary [ref=e22]:
+      - generic [ref=e24]:
+        - link "pccx" [ref=e25] [cursor=pointer]:
+          - /url: ../../index.html
+          - generic [ref=e26]: pccx
+        - group "Language" [ref=e27]:
+          - link "EN" [ref=e28]:
+            - /url: /pccx/en/docs/Evidence/index.html
+          - generic [ref=e29]: ·
+          - link "한국어" [ref=e30] [cursor=pointer]:
+            - /url: /pccx/ko/docs/Evidence/index.html
+        - navigation "Project repositories" [ref=e31]:
+          - link "RTL" [ref=e32] [cursor=pointer]:
+            - /url: https://github.com/hwkim-dev/pccx-FPGA-NPU-LLM-kv260
+            - img [ref=e33]
+            - generic [ref=e37]: RTL
+          - link "Lab" [ref=e38] [cursor=pointer]:
+            - /url: /pccx/en/lab/
+            - img [ref=e39]
+            - generic [ref=e41]: Lab
+          - link "Docs" [ref=e42] [cursor=pointer]:
+            - /url: https://github.com/hwkim-dev/pccx
+            - img [ref=e43]
+            - generic [ref=e45]: Docs
+          - link "Blog" [ref=e46] [cursor=pointer]:
+            - /url: https://hwkim-dev.github.io/hwkim-dev/
+            - img [ref=e47]
+            - generic [ref=e50]: Blog
+        - search [ref=e51]:
+          - textbox "Search" [ref=e52]
+        - generic [ref=e54]:
+          - heading "Introduction" [ref=e55]
+          - list [ref=e56]:
+            - listitem [ref=e57]:
+              - 'link "pccx: Parallel Compute Core eXecutor" [ref=e58] [cursor=pointer]':
+                - /url: ../index.html
+            - listitem [ref=e59]:
+              - link "Quickstart" [ref=e60] [cursor=pointer]:
+                - /url: ../quickstart.html
+            - listitem [ref=e61]:
+              - link "Evidence" [ref=e62] [cursor=pointer]:
+                - /url: "#"
+              - img [ref=e65] [cursor=pointer]
+              - list
+            - listitem [ref=e67]:
+              - link "Roadmap (Two-Track)" [ref=e68] [cursor=pointer]:
+                - /url: ../roadmap.html
+          - heading "v002 Architecture" [ref=e69]
+          - list [ref=e70]:
+            - listitem [ref=e71]:
+              - link "pccx v002 Architecture" [ref=e72] [cursor=pointer]:
+                - /url: ../v002/index.html
+              - img [ref=e75] [cursor=pointer]
+          - heading "Target Hardware" [ref=e77]
+          - list [ref=e78]:
+            - listitem [ref=e79]:
+              - link "Devices" [ref=e80] [cursor=pointer]:
+                - /url: ../Devices/index.html
+              - img [ref=e83] [cursor=pointer]
+          - heading "pccx-lab Handbook" [ref=e85]
+          - list [ref=e86]:
+            - listitem [ref=e87]:
+              - link "pccx-lab Handbook" [ref=e88] [cursor=pointer]:
+                - /url: ../Lab/index.html
+              - img [ref=e91] [cursor=pointer]
+          - heading "Archive" [ref=e93]
+          - list [ref=e94]:
+            - listitem [ref=e95]:
+              - link "Archive" [ref=e96] [cursor=pointer]:
+                - /url: ../archive/index.html
+              - img [ref=e99] [cursor=pointer]
+          - heading "Toolchain Demos" [ref=e101]
+          - list [ref=e102]:
+            - listitem [ref=e103]:
+              - link "Toolchain Demos" [ref=e104] [cursor=pointer]:
+                - /url: ../samples/index.html
+              - img [ref=e107] [cursor=pointer]
+          - heading "Tools" [ref=e109]
+          - list [ref=e110]:
+            - listitem [ref=e111]:
+              - link "pccx-lab — Simulator & AI Profiler" [ref=e112] [cursor=pointer]:
+                - /url: https://hwkim-dev.github.io/pccx/en/lab/
+    - generic [ref=e113]:
+      - generic [ref=e114]:
+        - generic [ref=e115]:
+          - generic [ref=e116]:
+            - link "View this page" [ref=e118] [cursor=pointer]:
+              - /url: https://github.com/hwkim-dev/pccx/blob/main/docs/docs/Evidence/index.rst?plain=true
+              - img [ref=e119]
+              - generic [ref=e121]: View this page
+            - link "Edit this page" [ref=e123] [cursor=pointer]:
+              - /url: https://github.com/hwkim-dev/pccx/edit/main/docs/docs/Evidence/index.rst
+              - img [ref=e124]
+              - generic [ref=e126]: Edit this page
+          - main [ref=e127]:
+            - generic [ref=e128]:
+              - heading "Evidence" [level=1] [ref=e129]
+              - paragraph [ref=e130]: “설계” → “검증된 시스템”
+              - paragraph [ref=e131]:
+                - text: "This page answers the single question a skeptical reviewer asks:"
+                - strong [ref=e132]: “does this actually run?”
+                - text: Each row links to a reproducible artefact (captured
+                - code [ref=e133]: .pccx
+                - text: trace, Vivado utilisation report, or board-log excerpt) so the numbers can be independently verified.
+              - paragraph [ref=e134]:
+                - text: When a measurement is not yet in hand the row is
+                - strong [ref=e135]: ⏳ pending
+                - text: with the gating task explicitly called out — never a speculative figure.
+              - generic [ref=e136]:
+                - heading "Measured (reproducible)" [level=2] [ref=e137]
+                - table [ref=e139]:
+                  - rowgroup [ref=e145]:
+                    - row "Metric Value Source Reproducer" [ref=e146]:
+                      - columnheader "Metric" [ref=e147]:
+                        - paragraph [ref=e148]: Metric
+                      - columnheader "Value" [ref=e149]:
+                        - paragraph [ref=e150]: Value
+                      - columnheader "Source" [ref=e151]:
+                        - paragraph [ref=e152]: Source
+                      - columnheader "Reproducer" [ref=e153]:
+                        - paragraph [ref=e154]: Reproducer
+                  - rowgroup [ref=e155]:
+                    - row "Sail model type-check ✅ clean formal/sail/ (64-bit / 4-bit opcode) make check (< 5 s)" [ref=e156]:
+                      - cell "Sail model type-check" [ref=e157]:
+                        - paragraph [ref=e158]: Sail model type-check
+                      - cell "✅ clean" [ref=e159]:
+                        - paragraph [ref=e160]: ✅ clean
+                      - cell "formal/sail/ (64-bit / 4-bit opcode)" [ref=e161]:
+                        - paragraph [ref=e162]:
+                          - code [ref=e163]: formal/sail/
+                          - text: (64-bit / 4-bit opcode)
+                      - cell "make check (< 5 s)" [ref=e164]:
+                        - paragraph [ref=e165]:
+                          - code [ref=e166]: make check
+                          - text: (< 5 s)
+                    - row "pccx-core test suite ✅ 7/7 ISA + 16 analyzer tests cargo test -p pccx-core cargo test from pccx-lab root" [ref=e167]:
+                      - cell "pccx-core test suite" [ref=e168]:
+                        - paragraph [ref=e169]: pccx-core test suite
+                      - cell "✅ 7/7 ISA + 16 analyzer tests" [ref=e170]:
+                        - paragraph [ref=e171]: ✅ 7/7 ISA + 16 analyzer tests
+                      - cell "cargo test -p pccx-core" [ref=e172]:
+                        - paragraph [ref=e173]:
+                          - code [ref=e174]: cargo test -p pccx-core
+                      - cell "cargo test from pccx-lab root" [ref=e175]:
+                        - paragraph [ref=e176]:
+                          - code [ref=e177]: cargo test
+                          - text: from pccx-lab root
+                    - row ".pccx binary format decode round-trip ✅ bit-exact pccx_format.rs pccx_analyze sample.pccx" [ref=e178]:
+                      - cell ".pccx binary format decode round-trip" [ref=e179]:
+                        - paragraph [ref=e180]:
+                          - code [ref=e181]: .pccx
+                          - text: binary format decode round-trip
+                      - cell "✅ bit-exact" [ref=e182]:
+                        - paragraph [ref=e183]: ✅ bit-exact
+                      - cell "pccx_format.rs" [ref=e184]:
+                        - paragraph [ref=e185]:
+                          - code [ref=e186]: pccx_format.rs
+                      - cell "pccx_analyze sample.pccx" [ref=e187]:
+                        - paragraph [ref=e188]:
+                          - code [ref=e189]: pccx_analyze sample.pccx
+                    - row "Sphinx zero-warning build ✅ EN + KO _ext/*.py + docs/** make strict" [ref=e190]:
+                      - cell "Sphinx zero-warning build" [ref=e191]:
+                        - paragraph [ref=e192]: Sphinx zero-warning build
+                      - cell "✅ EN + KO" [ref=e193]:
+                        - paragraph [ref=e194]: ✅ EN + KO
+                      - cell "_ext/*.py + docs/**" [ref=e195]:
+                        - paragraph [ref=e196]:
+                          - code [ref=e197]: _ext/*.py
+                          - text: +
+                          - code [ref=e198]: docs/**
+                      - cell "make strict" [ref=e199]:
+                        - paragraph [ref=e200]:
+                          - code [ref=e201]: make strict
+                    - row "Golden-diff regression gate (self-calibrated) ✅ 8 / 8 steps + 128 / 128 steps within ±15 % samples/*.ref.jsonl in pccx-lab pccx_golden_diff --check samples/gemma3n_16tok_smoke.ref.jsonl samples/gemma3n_16tok_smoke.pccx" [ref=e202]:
+                      - cell "Golden-diff regression gate (self-calibrated)" [ref=e203]:
+                        - paragraph [ref=e204]: Golden-diff regression gate (self-calibrated)
+                      - cell "✅ 8 / 8 steps + 128 / 128 steps within ±15 %" [ref=e205]:
+                        - paragraph [ref=e206]: ✅ 8 / 8 steps + 128 / 128 steps within ±15 %
+                      - cell "samples/*.ref.jsonl in pccx-lab" [ref=e207]:
+                        - paragraph [ref=e208]:
+                          - code [ref=e209]: samples/*.ref.jsonl
+                          - text: in pccx-lab
+                      - cell "pccx_golden_diff --check samples/gemma3n_16tok_smoke.ref.jsonl samples/gemma3n_16tok_smoke.pccx" [ref=e210]:
+                        - paragraph [ref=e211]:
+                          - code [ref=e212]: pccx_golden_diff --check samples/gemma3n_16tok_smoke.ref.jsonl samples/gemma3n_16tok_smoke.pccx
+              - generic [ref=e213]:
+                - heading "Pending (board / synth)" [level=2] [ref=e214]
+                - table [ref=e216]:
+                  - rowgroup [ref=e221]:
+                    - row "Metric Status Gate" [ref=e222]:
+                      - columnheader "Metric" [ref=e223]:
+                        - paragraph [ref=e224]: Metric
+                      - columnheader "Status" [ref=e225]:
+                        - paragraph [ref=e226]: Status
+                      - columnheader "Gate" [ref=e227]:
+                        - paragraph [ref=e228]: Gate
+                  - rowgroup [ref=e229]:
+                    - 'row "End-to-end Gemma-3N E4B decode tok/s ⏳ pending board run §4.1 RTL dispatcher + Global_Scheduler wiring ({doc}`../v002/Architecture/index`)" [ref=e230]':
+                      - cell "End-to-end Gemma-3N E4B decode tok/s" [ref=e231]:
+                        - paragraph [ref=e232]: End-to-end Gemma-3N E4B decode tok/s
+                      - cell "⏳ pending board run" [ref=e233]:
+                        - paragraph [ref=e234]: ⏳ pending board run
+                      - 'cell "§4.1 RTL dispatcher + Global_Scheduler wiring ({doc}`../v002/Architecture/index`)" [ref=e235]':
+                        - paragraph [ref=e236]: "§4.1 RTL dispatcher + Global_Scheduler wiring ({doc}`../v002/Architecture/index`)"
+                    - 'row "KV260 resource usage (LUT / DSP / URAM / BRAM) ⏳ pending Vivado impl pccx_analyze --run-synth <rtl_repo> landing ({doc}`../Lab/cli`)" [ref=e237]':
+                      - cell "KV260 resource usage (LUT / DSP / URAM / BRAM)" [ref=e238]:
+                        - paragraph [ref=e239]: KV260 resource usage (LUT / DSP / URAM / BRAM)
+                      - cell "⏳ pending Vivado impl" [ref=e240]:
+                        - paragraph [ref=e241]: ⏳ pending Vivado impl
+                      - 'cell "pccx_analyze --run-synth <rtl_repo> landing ({doc}`../Lab/cli`)" [ref=e242]':
+                        - paragraph [ref=e243]:
+                          - code [ref=e244]: pccx_analyze --run-synth <rtl_repo>
+                          - text: "landing ({doc}`../Lab/cli`)"
+                    - row "Timing closure @ 400 MHz core / 250 MHz AXI ⏳ pending Vivado impl Gate as above" [ref=e245]:
+                      - cell "Timing closure @ 400 MHz core / 250 MHz AXI" [ref=e246]:
+                        - paragraph [ref=e247]: Timing closure @ 400 MHz core / 250 MHz AXI
+                      - cell "⏳ pending Vivado impl" [ref=e248]:
+                        - paragraph [ref=e249]: ⏳ pending Vivado impl
+                      - cell "Gate as above" [ref=e250]:
+                        - paragraph [ref=e251]: Gate as above
+                    - row "Layer-by-layer golden-model diff (vs PyTorch reference) ⏳ pending tools/pytorch_reference.py landing Scaffold (pccx_golden_diff CLI + .ref.jsonl schema) already landed — see the measured row above. PyTorch side will replace self-calibrated references with semantically- grounded expectations." [ref=e252]:
+                      - cell "Layer-by-layer golden-model diff (vs PyTorch reference)" [ref=e253]:
+                        - paragraph [ref=e254]: Layer-by-layer golden-model diff (vs PyTorch reference)
+                      - cell "⏳ pending tools/pytorch_reference.py landing" [ref=e255]:
+                        - paragraph [ref=e256]:
+                          - text: ⏳ pending
+                          - code [ref=e257]: tools/pytorch_reference.py
+                          - text: landing
+                      - cell "Scaffold (pccx_golden_diff CLI + .ref.jsonl schema) already landed — see the measured row above. PyTorch side will replace self-calibrated references with semantically- grounded expectations." [ref=e258]:
+                        - paragraph [ref=e259]:
+                          - text: Scaffold (
+                          - code [ref=e260]: pccx_golden_diff
+                          - text: CLI +
+                          - code [ref=e261]: .ref.jsonl
+                          - text: schema) already landed — see the measured row above. PyTorch side will replace self-calibrated references with semantically- grounded expectations.
+                    - row "P99 decode latency under sustained load ⏳ pending board capture Requires 512-token run on real DDR traffic." [ref=e262]:
+                      - cell "P99 decode latency under sustained load" [ref=e263]:
+                        - paragraph [ref=e264]: P99 decode latency under sustained load
+                      - cell "⏳ pending board capture" [ref=e265]:
+                        - paragraph [ref=e266]: ⏳ pending board capture
+                      - cell "Requires 512-token run on real DDR traffic." [ref=e267]:
+                        - paragraph [ref=e268]: Requires 512-token run on real DDR traffic.
+                    - row "7 W TDP headroom under W4A8KV4 decode ⏳ pending Vivado impl + board pmbus Gates same as resource usage." [ref=e269]:
+                      - cell "7 W TDP headroom under W4A8KV4 decode" [ref=e270]:
+                        - paragraph [ref=e271]: 7 W TDP headroom under W4A8KV4 decode
+                      - cell "⏳ pending Vivado impl + board pmbus" [ref=e272]:
+                        - paragraph [ref=e273]: ⏳ pending Vivado impl + board pmbus
+                      - cell "Gates same as resource usage." [ref=e274]:
+                        - paragraph [ref=e275]: Gates same as resource usage.
+              - generic [ref=e276]:
+                - heading "Baselines (for future comparison)" [level=2] [ref=e277]
+                - table [ref=e279]:
+                  - rowgroup [ref=e284]:
+                    - row "Baseline Target Method" [ref=e285]:
+                      - columnheader "Baseline" [ref=e286]:
+                        - paragraph [ref=e287]: Baseline
+                      - columnheader "Target" [ref=e288]:
+                        - paragraph [ref=e289]: Target
+                      - columnheader "Method" [ref=e290]:
+                        - paragraph [ref=e291]: Method
+                  - rowgroup [ref=e292]:
+                    - row "CPU (Ryzen 4500U, llama.cpp Q4_K_M) tok/s on Gemma-3N E4B llama.cpp with pinned thread count (4 × 2 GHz Zen 2)." [ref=e293]:
+                      - cell "CPU (Ryzen 4500U, llama.cpp Q4_K_M)" [ref=e294]:
+                        - paragraph [ref=e295]: CPU (Ryzen 4500U, llama.cpp Q4_K_M)
+                      - cell "tok/s on Gemma-3N E4B" [ref=e296]:
+                        - paragraph [ref=e297]: tok/s on Gemma-3N E4B
+                      - cell "llama.cpp with pinned thread count (4 × 2 GHz Zen 2)." [ref=e298]:
+                        - paragraph [ref=e299]:
+                          - code [ref=e300]: llama.cpp
+                          - text: with pinned thread count (4 × 2 GHz Zen 2).
+                    - row "GPU (RTX 4060, HF Transformers bf16) tok/s on Gemma-3N E4B PyTorch 2.4, generate() with KV cache on, batch = 1." [ref=e301]:
+                      - cell "GPU (RTX 4060, HF Transformers bf16)" [ref=e302]:
+                        - paragraph [ref=e303]: GPU (RTX 4060, HF Transformers bf16)
+                      - cell "tok/s on Gemma-3N E4B" [ref=e304]:
+                        - paragraph [ref=e305]: tok/s on Gemma-3N E4B
+                      - cell "PyTorch 2.4, generate() with KV cache on, batch = 1." [ref=e306]:
+                        - paragraph [ref=e307]: PyTorch 2.4, generate() with KV cache on, batch = 1.
+                    - row "On-device (pccx v002 @ KV260) tok/s on Gemma-3N E4B pccx_analyze --board kv260.local (queued)." [ref=e308]:
+                      - cell "On-device (pccx v002 @ KV260)" [ref=e309]:
+                        - paragraph [ref=e310]: On-device (pccx v002 @ KV260)
+                      - cell "tok/s on Gemma-3N E4B" [ref=e311]:
+                        - paragraph [ref=e312]: tok/s on Gemma-3N E4B
+                      - cell "pccx_analyze --board kv260.local (queued)." [ref=e313]:
+                        - paragraph [ref=e314]:
+                          - code [ref=e315]: pccx_analyze --board kv260.local
+                          - text: (queued).
+              - generic [ref=e316]:
+                - heading "How this page gets updated" [level=2] [ref=e317]
+                - list [ref=e318]:
+                  - listitem [ref=e319]:
+                    - paragraph [ref=e320]:
+                      - code [ref=e321]: pccx-FPGA-NPU-LLM-kv260
+                      - text: captures a new
+                      - code [ref=e322]: .pccx
+                      - text: or Vivado report.
+                  - listitem [ref=e323]:
+                    - paragraph [ref=e324]:
+                      - code [ref=e325]: pccx-lab
+                      - text: exports the relevant fields via
+                      - code [ref=e326]: pccx_analyze --json
+                      - text: .
+                  - listitem [ref=e327]:
+                    - paragraph [ref=e328]:
+                      - text: A commit to this repo lands the numbers in the tables above, with the source link and a permanent
+                      - code [ref=e329]: samples/
+                      - text: artefact.
+                  - listitem [ref=e330]:
+                    - paragraph [ref=e331]:
+                      - code [ref=e332]: make strict
+                      - text: passes, CI re-deploys the page.
+                - paragraph [ref=e333]:
+                  - text: No speculative numbers. Every row either links to a reproducible artefact or is marked
+                  - strong [ref=e334]: ⏳ pending
+                  - text: with a named gate.
+              - generic [ref=e335]:
+                - heading "Cite this page" [level=2] [ref=e336]
+                - generic [ref=e338]:
+                  - generic [ref=e339]: "@misc{pccx_evidence_2026, title = {pccx Evidence: reproducible measurement log for an open W4A8 NPU}, author = {Kim, Hwangwoo}, year = {2026}, howpublished = {\\url{https://hwkim-dev.github.io/pccx/en/docs/Evidence/index.html}}, note = {Tracks the \"설계 → 검증된 시스템\" closure plan. Part of pccx: \\url{https://hwkim-dev.github.io/pccx/}} }"
+                  - button "Copy to clipboard" [ref=e340] [cursor=pointer]:
+                    - img "Copy to clipboard" [ref=e341]
+        - contentinfo [ref=e345]:
+          - generic [ref=e346]:
+            - link "Next Roadmap (Two-Track)" [ref=e347] [cursor=pointer]:
+              - /url: ../roadmap.html
+              - generic [ref=e348]:
+                - generic [ref=e350]: Next
+                - generic [ref=e351]: Roadmap (Two-Track)
+              - img [ref=e352]
+            - link "Previous Quickstart" [ref=e354] [cursor=pointer]:
+              - /url: ../quickstart.html
+              - img [ref=e355]
+              - generic [ref=e357]:
+                - generic [ref=e359]: Previous
+                - generic [ref=e360]: Quickstart
+          - generic [ref=e361]:
+            - generic [ref=e362]:
+              - generic [ref=e363]: Copyright © 2026, hwkim
+              - text: Made with
+              - link "Furo" [ref=e364] [cursor=pointer]:
+                - /url: https://github.com/pradyunsg/furo
+              - generic [ref=e365]: Last updated on 2026-04-23
+            - generic [ref=e367]:
+              - link "RTL implementation — github.com/hwkim-dev/pccx-FPGA-NPU-LLM-kv260" [ref=e368] [cursor=pointer]:
+                - /url: https://github.com/hwkim-dev/pccx-FPGA-NPU-LLM-kv260
+                - img [ref=e369]
+                - text: RTL
+              - link "pccx-lab — simulator & AI profiler" [ref=e373] [cursor=pointer]:
+                - /url: https://hwkim-dev.github.io/pccx/en/lab/
+                - img [ref=e374]
+                - text: Lab
+              - link "Docs repository — github.com/hwkim-dev/pccx" [ref=e376] [cursor=pointer]:
+                - /url: https://github.com/hwkim-dev/pccx
+                - img [ref=e377]
+                - text: Docs
+              - link "Author portfolio — hwkim-dev.github.io/hwkim-dev" [ref=e379] [cursor=pointer]:
+                - /url: https://hwkim-dev.github.io/hwkim-dev/
+                - img [ref=e380]
+                - text: Blog
+      - complementary [ref=e383]:
+        - generic [ref=e384]:
+          - generic [ref=e385]: On this page
+          - list [ref=e388]:
+            - listitem [ref=e389]:
+              - list [ref=e390]:
+                - listitem [ref=e391]:
+                  - link "Measured (reproducible)" [ref=e392] [cursor=pointer]:
+                    - /url: "#measured-reproducible"
+                - listitem [ref=e393]:
+                  - link "Pending (board / synth)" [ref=e394] [cursor=pointer]:
+                    - /url: "#pending-board-synth"
+                - listitem [ref=e395]:
+                  - link "Baselines (for future comparison)" [ref=e396] [cursor=pointer]:
+                    - /url: "#baselines-for-future-comparison"
+                - listitem [ref=e397]:
+                  - link "How this page gets updated" [ref=e398] [cursor=pointer]:
+                    - /url: "#how-this-page-gets-updated"
+                - listitem [ref=e399]:
+                  - link "Cite this page" [ref=e400] [cursor=pointer]:
+                    - /url: "#cite-this-page"
