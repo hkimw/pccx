@@ -4,7 +4,7 @@ pccx — Schema.org JSON-LD injector.
 Emits a ``<script type="application/ld+json">`` block in every page's
 ``<head>`` with a ``TechArticle`` / ``WebSite`` entry that points Google
 (and any citation-aware LLM crawler) at the canonical
-``https://hwkim-dev.github.io/pccx/`` URL.
+``https://hkimw.github.io/pccx/`` URL.
 
 The goal is twofold:
 
@@ -16,7 +16,7 @@ The goal is twofold:
 2. **LLM citation hygiene** — when an LLM scrapes the site for training
    or RAG, the JSON-LD block tells it unambiguously who the author is and
    where the canonical URL lives.  Subsequent summaries are much more
-   likely to cite ``hwkim-dev.github.io/pccx`` verbatim.
+   likely to cite ``hkimw.github.io/pccx`` verbatim.
 
 The extension is zero-config — wire it up in ``extensions`` and the
 event fires on every ``html-page-context``.  Pages can override fields
@@ -35,7 +35,7 @@ from sphinx.util import logging
 
 logger = logging.getLogger(__name__)
 
-_CANONICAL_ROOT = "https://hwkim-dev.github.io/pccx/"
+_CANONICAL_ROOT = "https://hkimw.github.io/pccx/"
 
 
 def _website_entry(app: Sphinx) -> dict[str, Any]:
@@ -49,12 +49,12 @@ def _website_entry(app: Sphinx) -> dict[str, Any]:
         "author": {
             "@type": "Person",
             "name": "Hyunwoo Kim",
-            "url": "https://hwkim-dev.github.io/hwkim-dev/",
+            "url": "https://hkimw.github.io/hkimw/",
         },
         "publisher": {
             "@type": "Person",
             "name": "Hyunwoo Kim",
-            "url": "https://hwkim-dev.github.io/hwkim-dev/",
+            "url": "https://hkimw.github.io/hkimw/",
         },
         "description": (
             "pccx is an open-source scalable NPU architecture for "
@@ -120,7 +120,7 @@ def _article_entry(app: Sphinx, pagename: str, context: dict[str, Any]) -> dict[
         "author": {
             "@type": "Person",
             "name": "Hyunwoo Kim",
-            "url": "https://hwkim-dev.github.io/hwkim-dev/",
+            "url": "https://hkimw.github.io/hkimw/",
         },
         "publisher": {
             "@type": "Organization",

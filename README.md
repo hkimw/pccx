@@ -8,9 +8,9 @@
 [![Target](https://img.shields.io/badge/Target-Xilinx_Kria_KV260-red)](https://www.xilinx.com/products/som/kria/kv260-vision-starter-kit.html)
 [![Architecture](https://img.shields.io/badge/Architecture-v002_Active-purple)](#architecture)
 [![Precision](https://img.shields.io/badge/Precision-W4A8_→_BF16%2FFP32-green)](#precision)
-[![Docs](https://img.shields.io/badge/Docs-Online-brightgreen)](https://hwkim-dev.github.io/pccx/)
+[![Docs](https://img.shields.io/badge/Docs-Online-brightgreen)](https://hkimw.github.io/pccx/)
 
-**[Full Documentation →](https://hwkim-dev.github.io/pccx/)**
+**[Full Documentation →](https://hkimw.github.io/pccx/)**
 
 </div>
 
@@ -114,8 +114,8 @@ pccx/
 
 Two sibling repositories round out the pccx project:
 
-- **[hwkim-dev/pccx-FPGA-NPU-LLM-kv260](https://github.com/hwkim-dev/pccx-FPGA-NPU-LLM-kv260)** — active v002 SystemVerilog sources (CI-cloned into `codes/v002/`).
-- **[hwkim-dev/pccx-lab](https://github.com/hwkim-dev/pccx-lab)** — performance simulator and AI-integrated profiler (mounted under `/en/lab/` and `/ko/lab/` on the docs site).
+- **[hkimw/pccx-FPGA-NPU-LLM-kv260](https://github.com/hkimw/pccx-FPGA-NPU-LLM-kv260)** — active v002 SystemVerilog sources (CI-cloned into `codes/v002/`).
+- **[hkimw/pccx-lab](https://github.com/hkimw/pccx-lab)** — performance simulator and AI-integrated profiler (mounted under `/en/lab/` and `/ko/lab/` on the docs site).
 
 ---
 
@@ -136,8 +136,8 @@ begins once both tracks are stable.
 TPU grant lands). Both tracks run on the same KV260 bitstream harness —
 v003 branches off after v002 freeze.
 
-→ **[Full roadmap (EN)](https://hwkim-dev.github.io/pccx/en/docs/roadmap.html)**
-&nbsp;·&nbsp; [**한국어**](https://hwkim-dev.github.io/pccx/ko/docs/roadmap.html)
+→ **[Full roadmap (EN)](https://hkimw.github.io/pccx/en/docs/roadmap.html)**
+&nbsp;·&nbsp; [**한국어**](https://hkimw.github.io/pccx/ko/docs/roadmap.html)
 
 ---
 
@@ -147,8 +147,8 @@ v003 branches off after v002 freeze.
 
 Performance simulator and AI-integrated profiler, purpose-built for the pccx NPU. Pre-RTL bottleneck detection, UVM co-simulation, and LLM-driven testbench generation in one workflow.
 
-- Repository: https://github.com/hwkim-dev/pccx-lab
-- Documentation: https://hwkim-dev.github.io/pccx/en/lab/ (Korean: https://hwkim-dev.github.io/pccx/ko/lab/)
+- Repository: https://github.com/hkimw/pccx-lab
+- Documentation: https://hkimw.github.io/pccx/en/lab/ (Korean: https://hkimw.github.io/pccx/ko/lab/)
 - Status: Work in Progress
 
 ---
@@ -157,15 +157,15 @@ Performance simulator and AI-integrated profiler, purpose-built for the pccx NPU
 
 The full technical documentation — architecture deep-dives, ISA encoding tables, DSP48E2 bit-packing derivation, driver API, and embedded RTL source — is published at:
 
-### **[hwkim-dev.github.io/pccx/](https://hwkim-dev.github.io/pccx/)**
+### **[hkimw.github.io/pccx/](https://hkimw.github.io/pccx/)**
 
 Available in **English** and **한국어 (Korean)**.
 
 Highlights:
-- [Architecture Overview](https://hwkim-dev.github.io/pccx/en/docs/v002/Architecture/top_level.html) — block diagram, design rationale, 3.125× gain breakdown
-- [DSP48E2 W4A8 Derivation](https://hwkim-dev.github.io/pccx/en/docs/v002/Architecture/dsp48e2_w4a8.html) — dual-channel bit packing math
-- [Custom ISA Reference](https://hwkim-dev.github.io/pccx/en/docs/v002/ISA/index.html) — 64-bit VLIW encoding, opcode table, dataflow
-- [RTL Source Reference](https://hwkim-dev.github.io/pccx/en/docs/v002/RTL/index.html) — embedded SystemVerilog with live syntax highlighting
+- [Architecture Overview](https://hkimw.github.io/pccx/en/docs/v002/Architecture/top_level.html) — block diagram, design rationale, 3.125× gain breakdown
+- [DSP48E2 W4A8 Derivation](https://hkimw.github.io/pccx/en/docs/v002/Architecture/dsp48e2_w4a8.html) — dual-channel bit packing math
+- [Custom ISA Reference](https://hkimw.github.io/pccx/en/docs/v002/ISA/index.html) — 64-bit VLIW encoding, opcode table, dataflow
+- [RTL Source Reference](https://hkimw.github.io/pccx/en/docs/v002/RTL/index.html) — embedded SystemVerilog with live syntax highlighting
 
 ---
 
@@ -177,7 +177,7 @@ sudo apt-get install graphviz   # for Graphviz diagrams
 
 # Clone v002 RTL (required for literalinclude directives)
 git clone --depth 1 \
-  https://github.com/hwkim-dev/pccx-FPGA-NPU-LLM-kv260 \
+  https://github.com/hkimw/pccx-FPGA-NPU-LLM-kv260 \
   codes/v002
 
 # Build English site
@@ -214,6 +214,6 @@ Licensed under the **[Apache License 2.0](LICENSE)**.
 
 <div align="center">
 
-Built by [@hwkim-dev](https://hwkim-dev.github.io/hwkim-dev/) · [Documentation](https://hwkim-dev.github.io/pccx/) · [Issues](https://github.com/hwkim-dev/pccx/issues)
+Built by [@hkimw](https://hkimw.github.io/hkimw/) · [Documentation](https://hkimw.github.io/pccx/) · [Issues](https://github.com/hkimw/pccx/issues)
 
 </div>

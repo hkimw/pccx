@@ -13,7 +13,7 @@ A-slice (`LspMultiplexer` + `NoopBackend`) and B-slice (async companions,
 `BlockingBridge`, `SpawnConfig` / `LspSubprocess`) in Phase 2 M2.1.
 
 This page documents what is shippable today.  The richer façade will
-be refreshed as the concrete verible / rust-analyzer / Claude backends
+be refreshed as the concrete verible / rust-analyzer / cloud LLM backends
 land against the lsp provider traits.
 
 ## Static helpers (`pccx-ai-copilot`)
@@ -101,8 +101,8 @@ pub trait ContextCompressor {
     fn name(&self) -> &'static str;
 }
 
-/// Runs a single subagent task (log-grinder, research-scout,
-/// doc-drafter) and returns its reply.  Drives the parallel-subagent
+/// Runs a single subagent task (log analysis, research,
+/// doc drafting) and returns its reply.  Drives the parallel-subagent
 /// pattern pccx-ide and pccx-remote share.
 pub trait SubagentRunner {
     fn run(&self, task: &str, context: &str) -> anyhow::Result<String>;
@@ -174,7 +174,7 @@ trait via `tokio::task::spawn_blocking`.  External LSP servers
 follow-on slice.
 
 The `CompletionSource` enum distinguishes results from an upstream LSP,
-a Claude-Haiku fast predictor, a Claude-Sonnet deep predictor, or an
+a fast cloud predictor, a deep cloud predictor, or an
 AST-hash cache — the future AI pipeline feeds back into this enum so
 the UI can render provenance badges next to every suggestion.
 
@@ -205,12 +205,12 @@ single `invoke("copilot_investigate", …)` umbrella call.
   title        = {pccx-ai-copilot and pccx-lsp: current AI / IntelliSense surface of pccx-lab after Phase 1},
   author       = {Kim, Hyunwoo},
   year         = {2026},
-  howpublished = {\url{https://hwkim-dev.github.io/pccx/en/docs/Lab/copilot.html}},
-  note         = {Part of pccx: \url{https://hwkim-dev.github.io/pccx/}}
+  howpublished = {\url{https://hkimw.github.io/pccx/en/docs/Lab/copilot.html}},
+  note         = {Part of pccx: \url{https://hkimw.github.io/pccx/}}
 }
 ```
 
 The helpers documented here live at
-<https://github.com/hwkim-dev/pccx-lab/blob/main/crates/ai_copilot/src/lib.rs>;
+<https://github.com/hkimw/pccx-lab/blob/main/crates/ai_copilot/src/lib.rs>;
 the LSP façade at
-<https://github.com/hwkim-dev/pccx-lab/blob/main/crates/lsp/src/lib.rs>.
+<https://github.com/hkimw/pccx-lab/blob/main/crates/lsp/src/lib.rs>.

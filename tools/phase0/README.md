@@ -12,8 +12,8 @@ can run from a local shell.
 | Symbol | Meaning |
 |---|---|
 | USER | User-only (browser / credentials / local hardware) |
-| AUTO | Automatable (Claude / script) |
-| LINK | User-gated, but Claude can write the helper |
+| AUTO | Automatable (automation / script) |
+| LINK | User-gated, but automation can write the helper |
 
 ## Checklist
 

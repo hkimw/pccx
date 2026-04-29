@@ -61,7 +61,7 @@ pccx-lab 레포의 설계 문서 네 개
 
 ## 로드맵 포인터
 
-- pccx-lab 레포: <https://github.com/hwkim-dev/pccx-lab>
+- pccx-lab 레포: <https://github.com/hkimw/pccx-lab>
 - Phase 1 변경 이력: `crates/*/CHANGELOG.md`
 - 페이즈별 설계 문서: `docs/design/phase{1,2,3,4,5}_*.md`
 
@@ -72,8 +72,8 @@ pccx-lab 레포의 설계 문서 네 개
   title        = {pccx-lab research lineage (placeholder): registry rebuild underway after Phase 1 module exodus},
   author       = {Kim, Hyunwoo},
   year         = {2026},
-  howpublished = {\url{https://hwkim-dev.github.io/pccx/ko/docs/Lab/research.html}},
-  note         = {Part of pccx: \url{https://hwkim-dev.github.io/pccx/}}
+  howpublished = {\url{https://hkimw.github.io/pccx/ko/docs/Lab/research.html}},
+  note         = {Part of pccx: \url{https://hkimw.github.io/pccx/}}
 }
 ```
 

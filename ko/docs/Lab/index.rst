@@ -15,7 +15,7 @@ bottleneck 윈도 / waveform / Vivado 합성 리포트 / AI 구동 UVM 전략을
 문서화한다.
 
 사용자 지향 데스크톱 앱 자체는 별도
-`pccx-lab 사이트 <https://hwkim-dev.github.io/pccx/ko/lab/>`_ 참고.
+`pccx-lab 사이트 <https://hkimw.github.io/pccx/ko/lab/>`_ 참고.
 
 .. grid:: 1 1 2 2
    :gutter: 3 4 4 4

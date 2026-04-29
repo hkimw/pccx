@@ -26,7 +26,7 @@ ISA 타입 패키지
 .. admonition:: 마지막 검증 대상
    :class: note
 
-   커밋 ``773bd82`` @ ``hwkim-dev/pccx-FPGA-NPU-LLM-kv260`` (2026-04-21).
+   커밋 ``773bd82`` @ ``hkimw/pccx-FPGA-NPU-LLM-kv260`` (2026-04-21).
 
 .. seealso::
 

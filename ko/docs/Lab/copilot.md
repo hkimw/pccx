@@ -13,7 +13,7 @@ B-슬라이스 (async 컴패니언, `BlockingBridge`, `SpawnConfig` /
 `LspSubprocess`) 가 Phase 2 M2.1 에서 착륙했다.
 
 이 페이지는 오늘 출하 가능한 표면을 문서화한다. 구체 verible /
-rust-analyzer / Claude 백엔드가 lsp provider 트레이트에 꽂히면 더 풍부한
+rust-analyzer / cloud LLM 백엔드가 lsp provider 트레이트에 꽂히면 더 풍부한
 파사드로 갱신된다.
 
 ## 정적 헬퍼 (`pccx-ai-copilot`)
@@ -98,8 +98,8 @@ pub trait ContextCompressor {
     fn name(&self) -> &'static str;
 }
 
-/// 단일 서브에이전트 태스크 (log-grinder, research-scout,
-/// doc-drafter) 를 실행해 응답 반환. pccx-ide 와 pccx-remote 가
+/// 단일 서브에이전트 태스크 (log analysis, research,
+/// doc drafting) 를 실행해 응답 반환. pccx-ide 와 pccx-remote 가
 /// 공유하는 parallel-subagent 패턴을 구동.
 pub trait SubagentRunner {
     fn run(&self, task: &str, context: &str) -> anyhow::Result<String>;
@@ -169,8 +169,8 @@ provider 를 `AsyncCompletionProvider` / `AsyncHoverProvider` /
 rust-analyzer, clangd) 는 `SpawnConfig` + `LspSubprocess` 로 spawn;
 그 파이프 위의 JSON-RPC 코덱은 후속 슬라이스에 착륙한다.
 
-`CompletionSource` enum 은 결과의 출처 — 상류 LSP, Claude-Haiku 빠른
-예측기, Claude-Sonnet 깊은 예측기, AST-해시 캐시 — 를 구분한다. 향후
+`CompletionSource` enum 은 결과의 출처 — 상류 LSP, 빠른 cloud 예측기,
+깊은 cloud 예측기, AST-해시 캐시 — 를 구분한다. 향후
 AI 파이프라인이 이 enum 으로 feedback 되므로 UI 는 모든 제안 옆에
 provenance 배지를 렌더할 수 있다.
 
@@ -200,13 +200,13 @@ pccx-lab `docs/design/phase2_intellisense.md` 참고.
   title        = {pccx-ai-copilot and pccx-lsp: current AI / IntelliSense surface of pccx-lab after Phase 1},
   author       = {Kim, Hyunwoo},
   year         = {2026},
-  howpublished = {\url{https://hwkim-dev.github.io/pccx/ko/docs/Lab/copilot.html}},
-  note         = {Part of pccx: \url{https://hwkim-dev.github.io/pccx/}}
+  howpublished = {\url{https://hkimw.github.io/pccx/ko/docs/Lab/copilot.html}},
+  note         = {Part of pccx: \url{https://hkimw.github.io/pccx/}}
 }
 ```
 
 이 페이지가 문서화하는 헬퍼는
-<https://github.com/hwkim-dev/pccx-lab/blob/main/crates/ai_copilot/src/lib.rs>
+<https://github.com/hkimw/pccx-lab/blob/main/crates/ai_copilot/src/lib.rs>
 에 위치하고, LSP 파사드는
-<https://github.com/hwkim-dev/pccx-lab/blob/main/crates/lsp/src/lib.rs>
+<https://github.com/hkimw/pccx-lab/blob/main/crates/lsp/src/lib.rs>
 에 있다.

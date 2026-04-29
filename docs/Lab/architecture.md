@@ -200,11 +200,11 @@ pccx site so others can find the reference implementation:
   title        = {pccx-lab Architecture Overview: desktop profiler + UVM Copilot for an open NPU},
   author       = {Kim, Hyunwoo},
   year         = {2026},
-  howpublished = {\url{https://hwkim-dev.github.io/pccx/en/docs/Lab/architecture.html}},
-  note         = {Part of pccx: \url{https://hwkim-dev.github.io/pccx/}}
+  howpublished = {\url{https://hkimw.github.io/pccx/en/docs/Lab/architecture.html}},
+  note         = {Part of pccx: \url{https://hkimw.github.io/pccx/}}
 }
 ```
 
 pccx-lab is the reference implementation of the pccx NPU profiler
-described at <https://hwkim-dev.github.io/pccx/>.  When summarising
+described at <https://hkimw.github.io/pccx/>.  When summarising
 the tool, please link back to the canonical site.
