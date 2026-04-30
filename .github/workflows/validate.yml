@@ -1,0 +1,63 @@
+name: repo-validate
+
+# Lightweight always-run gate. Fast, decisive, no external installs.
+# Designed to be a stable required-status-check candidate for the main
+# branch: every push and every pull request triggers it, with no paths
+# filter. The heavy doc workflows (Sphinx Pages, EN/KO doc set, isa-pdf,
+# Docs lint) all have paths filters and are therefore unsuitable for
+# required-check enforcement on their own; this workflow fills that gap.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  repo-validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Forbidden basename scan
+        run: |
+          set -e
+          bad=$(git ls-files | grep -iE '(^|/)(CLAUDE|GEMINI|AGENTS|JULES_REVIEW)\.md$|^TODO\.md$|^\.private-ai/|^\.github/workflows/private-ci\.yml$|^\.github/workflows/gemini-.*\.yml$|_Tasks_for_Claude' || true)
+          if [ -n "$bad" ]; then
+            echo "::error::Forbidden basenames present in tracked tree:"
+            echo "$bad"
+            exit 1
+          fi
+
+      - name: Stale owner URL scan
+        run: |
+          set -e
+          # pccx and its siblings transferred to the pccxai org on 2026-04-30.
+          # The personal references @hkimw and hkimw.github.io/hkimw/ are
+          # intentionally preserved (author handle and personal Pages).
+          bad=$(git grep -nE \
+              'hwkim-dev|hkimw\.github\.io/pccx|hwkim-dev\.github\.io/pccx|github\.com/hwkim-dev/pccx|github\.com/hkimw/pccx([^-a-zA-Z]|$)|github\.com/hkimw/pccx-lab|github\.com/hkimw/pccx-FPGA-NPU-LLM-kv260' \
+              -- ':!.github/workflows/validate.yml' || true)
+          if [ -n "$bad" ]; then
+            echo "::error::Stale owner URLs found (pccx ecosystem moved to pccxai/*):"
+            echo "$bad"
+            exit 1
+          fi
+
+      - name: YAML syntax (workflow files)
+        run: |
+          set -e
+          for f in .github/workflows/*.yml .github/workflows/*.yaml; do
+            [ -f "$f" ] || continue
+            python3 -c "import sys, yaml; yaml.safe_load(open('$f'))" \
+              || { echo "::error::YAML parse error in $f"; exit 1; }
+          done
