@@ -117,6 +117,7 @@ exclude_patterns = [
     "codes/v002/README.md",
     "codes/v002/docs/**",
     "codes/v002/**/README.md",   # e.g. codes/v002/hw/vivado/README.md
+    "codes/v002/*.md",           # markdown directly under codes/v002/
     "codes/v002/**/*.md",        # any other markdown shipped by the RTL repo
     # sphinx-gallery writes ``sg_execution_times.rst`` at the srcdir root AND
     # inside each gallery_dirs. Neither is ever put in a toctree, so Sphinx
